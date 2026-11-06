@@ -94,3 +94,40 @@ h2.sec{font:700 24px/1.1 var(--display);letter-spacing:.02em;text-transform:uppe
 .notice{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:10px 14px;border-radius:10px;background:color-mix(in srgb,var(--warn) 13%,transparent);font-size:14px}
 .notice b{color:var(--warn)}
 
+/* triage cards */
+.group h2{font:700 20px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;margin:4px 0 4px;display:flex;align-items:center;gap:10px}
+.group h2 i{width:10px;height:10px;border-radius:2px;background:var(--c)}
+.group>p{margin:0 0 12px;color:var(--muted);font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:820px){.cards{grid-template-columns:1fr}}
+.card{background:var(--paper);border-radius:12px;padding:16px 18px;box-shadow:0 0 0 1px var(--line);border-left:4px solid var(--c)}
+.card .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.card h3{font-size:17px;font-weight:700;margin:0}
+.card .val{font:600 15px var(--mono)}
+.card .val small{color:var(--muted);font-weight:400}
+.card .rng{font-size:12px;color:var(--muted);margin-top:2px}
+.card .why{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.card .why li{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:baseline}
+.tag{font:600 11px/1 var(--mono);padding:4px 7px;border-radius:999px;white-space:nowrap;color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent)}
+.card h4{font:700 12px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.card ul.todo{margin:0;padding-left:18px;font-size:14px}
+.card ul.todo li{margin-bottom:4px}
+.card .more{margin-top:10px;font-size:13px}
+.card .more a{color:var(--accent);font-weight:600;text-decoration:none}
+.flagline{font-weight:600;font-size:14px;margin:8px 0 0}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:820px){.two{grid-template-columns:1fr}}
+.check{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:15px}
+.check li{display:grid;grid-template-columns:22px 1fr;gap:8px}
+.check li::before{content:"";width:16px;height:16px;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--muted);margin-top:3px}
+.watch{display:flex;flex-wrap:wrap;gap:8px}
+.watch span{padding:6px 10px;border-radius:8px;background:var(--bg);font-size:14px;font-weight:600}
+.watch span small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+table.fx{width:100%;border-collapse:collapse;font-size:14px}
+.fxwrap{overflow-x:auto}
+table.fx th{text-align:left;font:700 12px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+table.fx td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.fx td:first-child{font-weight:700;white-space:nowrap}
+table.fx td .note{color:var(--muted);font-size:13px;margin-top:4px;max-width:60ch}
+.eff{display:inline-flex;gap:4px;align-items:center;margin:0 6px 6px 0;padding:3px 8px;border-radius:6px;font-size:13px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 11%,transparent)}
+
