@@ -567,3 +567,9 @@ function renderSheet(){const m=BYID[S.sel]||M[0],x=S.vals[m.id],[lo,hi]=ri(m),d=
    '<h3>Your stack and this marker</h3>'+(fx.length?'<ul>'+fx.map(({c,z})=>'<li><strong>'+esc(c.name)+'</strong> '+(z.d==="up"?"raises":"lowers")+' it <span class="tag" style="--c:'+KTAG[z.k][1]+'">'+KTAG[z.k][0]+'</span><br>'+cites(z.why)+'</li>').join("")+'</ul>':'<p>Nothing in your stack is known to move this marker.</p>')+
    (acts.length?'<h3>What to do</h3><ul>'+acts.map(a=>'<li>'+cites(a)+'</li>').join("")+'</ul>':"")+
    '<p style="font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:16px">Percentile estimated by fitting a '+(m.dist==="log"?"log-normal":"normal")+' curve to the typical range (2.5th–97.5th). It ignores age.</p>'}
+function renderSources(){const used={};COMP.concat([TRAIN]).forEach(c=>{const s=JSON.stringify(c);(s.match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(c.name.split(" (")[0]))});
+  Object.entries(ACT).forEach(([k,v])=>{(JSON.stringify(v).match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(BYID[k].name))});
+  RED.forEach(r=>(r.txt.match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(BYID[r.m].name+" red flag")));
+  document.getElementById("srclist").innerHTML=SRC_ORDER.map(id=>'<li id="src-'+id+'"><span class="n">['+SN(id)+']</span><div><a href="'+SRC[id].u+'" target="_blank" rel="noopener">'+esc(SRC[id].t)+'</a> <span class="num" style="font-size:12px;color:var(--muted)">'+SRC[id].id+'</span><div class="used">Used for: '+esc([...(used[id]||[])].slice(0,8).join(", "))+'</div></div></li>').join("")}
+function renderAll(){renderStack();renderTriage();renderBloodwork()}
+
