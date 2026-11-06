@@ -441,3 +441,45 @@ const RED=[
  {m:"ldl",test:(x)=>x>=5.0,txt:"5.0 mmol/L or higher: Canadian guidelines recommend a statin at this level. [P15]"}
 ];
 
+const EXAMPLE={stack:["creatine","testc","anavar"],train:true,vals:{hematocrit:0.53,hemoglobin:178,plt:330,alt:78,ast:66,ggt:28,bili:14,ck:1450,creatinine:128,ldl:3.9,hdl:0.62,tg:1.1,glucose:6.3,testo:52,lh:0.2,estradiol:210,ferritin:85}};
+const S={sex:"m",units:"si",stack:[],train:false,vals:{},example:true,sel:"hematocrit",q:"",tab:"triage"};
+try{const r=localStorage.getItem("spotter-v1");if(r){const d=JSON.parse(r);Object.assign(S,{sex:d.sex||"m",units:d.units||"si",stack:d.stack||[],train:!!d.train,vals:d.vals||{},example:!!d.example})}else Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}catch(e){Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}
+function save(){try{localStorage.setItem("spotter-v1",JSON.stringify({sex:S.sex,units:S.units,stack:S.stack,train:S.train,vals:S.vals,example:S.example}))}catch(e){}}
+
+// ---------- math
+function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+0.3275911*x);return s*(1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x))}
+const Phi=z=>0.5*(1+erf(z/Math.SQRT2));
+const ri=m=>Array.isArray(m.ri)?m.ri:m.ri[S.sex];
+function params(m){const [lo,hi]=ri(m);if(m.dist==="log"){const a=Math.log(lo),b=Math.log(hi);return{mu:(a+b)/2,sd:(b-a)/3.92}}return{mu:(lo+hi)/2,sd:(hi-lo)/3.92}}
+const zOf=(m,x)=>{const p=params(m);return m.dist==="log"?(Math.log(Math.max(x,1e-6))-p.mu)/p.sd:(x-p.mu)/p.sd};
+const pct=(m,x)=>Phi(zOf(m,x))*100;
+function pdf(m,x){const p=params(m);if(m.dist==="log"){if(x<=0)return 0;const z=(Math.log(x)-p.mu)/p.sd;return Math.exp(-z*z/2)/(x*p.sd)}const z=(x-p.mu)/p.sd;return Math.exp(-z*z/2)/p.sd}
+function optOf(m){if(!m.opt)return null;return m.opt.m||m.opt.f?m.opt[S.sex]:m.opt}
+// direction a value is off in, or null if fine
+function offDir(m,x){if(x==null)return null;const [lo,hi]=ri(m);if(x>hi)return"up";if(x<lo)return"down";const O=optOf(m);if(O){if(O.l[1]!=null&&x>O.l[1])return"up";if(O.l[0]!=null&&x<O.l[0])return"down"}return null}
+function stackComps(){const c=S.stack.map(id=>BYC[id]).filter(Boolean);if(S.train)c.push(TRAIN);return c}
+function causes(m,d){const out=[];stackComps().forEach(c=>c.fx.forEach(f=>{if(f.m===m.id&&f.d===d)out.push({c,f})}));return out}
+function triage(){
+  const res=[];M.forEach(m=>{const x=S.vals[m.id];if(x==null)return;const d=offDir(m,x);const red=RED.filter(r=>r.m===m.id&&r.test(x,m));
+    if(!d&&!red.length)return;const cs=d?causes(m,d):[];
+    let cat=cs.some(z=>z.f.k==="risk")?"risk":cs.length?"explained":"unexplained";
+    res.push({m,x,d:d||"up",cs,cat,red})});
+  return res;
+}
+
+// ---------- formatting
+const f=m=>S.units==="us"?m.us[1]:1,u=m=>S.units==="us"?m.us[0]:m.unit,dp=m=>S.units==="us"?m.dp[1]:m.dp[0];
+const fmt=(m,v)=>v==null?"":(v*f(m)).toLocaleString("en-CA",{minimumFractionDigits:dp(m),maximumFractionDigits:dp(m)});
+const fmtIn=(m,v)=>v==null?"":String(+(v*f(m)).toFixed(Math.max(dp(m),2)));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const cites=s=>esc(s).replace(/\s*\[(P\d+)\]/g,(_,id)=>'<a class="cite" href="#sources" data-src="'+id+'" title="'+esc(SRC[id].t)+'">'+SN(id)+'</a>');
+function ord(p){if(p<1)return"<1st";if(p>99)return">99th";const n=Math.round(p);return n+((n%100>=11&&n%100<=13)?"th":({1:"st",2:"nd",3:"rd"}[n%10]||"th"))}
+const CAT={red:{n:"Red flags",c:"var(--danger)",d:"Act on these whatever the cause"},risk:{n:"Real risks",c:"var(--risk)",d:"Explained by your stack, but actually harmful"},unexplained:{n:"Unexplained",c:"var(--warn)",d:"Nothing in your stack does this"},explained:{n:"Explained",c:"var(--calm)",d:"Lab artifacts or expected effects"}};
+const KTAG={risk:["Real risk","var(--risk)"],expected:["Expected","var(--calm)"],artifact:["Artifact","var(--ok)"]};
+
+// ---------- tabs
+function go(tab,sub){S.tab=tab;document.querySelectorAll("section[data-tab]").forEach(s=>s.classList.toggle("on",s.dataset.tab===tab));
+  document.querySelectorAll("nav a").forEach(a=>{if(a.dataset.go===tab)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  const h=sub||tab;if(location.hash.slice(1)!==h)safeReplace(null,"","#"+h)}
+function fromHash(){const h=location.hash.slice(1);if(BYID[h]){S.sel=h;go("bloodwork",h);renderBloodwork()}else go(["triage","bloodwork","sources"].includes(h)?h:"triage")}
+
