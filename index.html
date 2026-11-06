@@ -483,3 +483,55 @@ function go(tab,sub){S.tab=tab;document.querySelectorAll("section[data-tab]").fo
   const h=sub||tab;if(location.hash.slice(1)!==h)safeReplace(null,"","#"+h)}
 function fromHash(){const h=location.hash.slice(1);if(BYID[h]){S.sel=h;go("bloodwork",h);renderBloodwork()}else go(["triage","bloodwork","sources"].includes(h)?h:"triage")}
 
+// ---------- stack UI
+function renderStack(){
+  const el=document.getElementById("chips");
+  el.innerHTML=S.stack.length?S.stack.map(id=>{const c=BYC[id];return'<span class="schip" style="--c:'+CLS[c.cls].c+'">'+esc(c.name)+' <small>'+CLS[c.cls].n+'</small><button aria-label="Remove '+esc(c.name)+'" data-rm="'+id+'">×</button></span>'}).join(""):'<span class="empty">Nothing added yet. Add creatine, TRT, a cycle, peptides, anything.</span>';
+  document.getElementById("trainSw").checked=S.train;renderOpts();
+}
+function renderOpts(){const q=document.getElementById("pickQ").value.trim().toLowerCase();let h="";
+  Object.keys(CLS).forEach(k=>{const list=COMP.filter(c=>c.cls===k&&(!q||(c.name+" "+c.aka).toLowerCase().includes(q)));if(!list.length)return;
+    h+='<div class="grp">'+CLS[k].n+'</div>'+list.map(c=>{const on=S.stack.includes(c.id);return'<button class="opt" role="menuitemcheckbox" aria-checked="'+on+'" data-pick="'+c.id+'"><span class="box">'+(on?"✓":"")+'</span><span><strong>'+esc(c.name)+'</strong><small>'+esc(c.aka)+'</small></span></button>'}).join("")});
+  document.getElementById("opts").innerHTML=h||'<p class="empty" style="padding:8px">No match. Try another name.</p>'}
+
+// ---------- triage UI
+function renderTriage(){
+  document.getElementById("exNote").style.display=S.example?"":"none";
+  const T=triage(),hasVals=Object.keys(S.vals).length>0;
+  document.getElementById("st1").classList.toggle("done",S.stack.length>0||S.train);
+  document.getElementById("st2").classList.toggle("done",hasVals);
+  document.getElementById("st3").classList.toggle("done",hasVals&&(S.stack.length>0||S.train));
+  const act=T.filter(t=>t.red.length),fix=T.filter(t=>!t.red.length&&t.cat!=="explained"),exp=T.filter(t=>!t.red.length&&t.cat==="explained");
+  const nFine=M.filter(m=>S.vals[m.id]!=null).length-T.length;
+  const vd=document.getElementById("verdict");
+  if(!hasVals)vd.innerHTML='<p class="vline">Add your results to see your triage.</p>';
+  else vd.innerHTML='<div class="vbig"><span style="--c:var(--danger)"><b>'+act.length+'</b>act now</span><span style="--c:var(--risk)"><b>'+fix.length+'</b>fix or ask about</span><span style="--c:var(--calm)"><b>'+exp.length+'</b>expected from your stack</span><span style="--c:var(--ok)"><b>'+nFine+'</b>in range</span></div>';
+  const why=t=>t.cs.length?t.cs.map(z=>'<li><span class="tag" style="--c:'+KTAG[z.f.k][1]+'">'+KTAG[z.f.k][0]+'</span><span><strong>'+esc(z.c.name)+':</strong> '+cites(z.f.why)+'</span></li>').join(""):'<li><span class="tag" style="--c:var(--warn)">Unexplained</span><span>Nothing in your stack pushes this '+(t.d==="up"?"up":"down")+'. Bring it to a doctor.</span></li>';
+  const card=(t,c)=>{const [lo,hi]=ri(t.m);const acts=(ACT[t.m.id]||{})[t.d]||[];
+    return'<article class="card" style="--c:'+c+'"><div class="top"><h3>'+esc(t.m.name)+' <span class="dir">'+(t.d==="up"?"high":"low")+'</span></h3><span class="val">'+fmt(t.m,t.x)+' <small>'+esc(u(t.m))+'</small></span></div><div class="rng">Typical '+fmt(t.m,lo)+'–'+fmt(t.m,hi)+'</div>'+
+      t.red.map(r=>'<p class="flagline">'+cites(r.txt)+'</p>').join("")+'<ul class="why">'+why(t)+'</ul>'+
+      (acts.length?'<details class="todo"><summary>What to do</summary><ul>'+acts.map(a=>'<li>'+cites(a)+'</li>').join("")+'</ul></details>':"")+'</article>'};
+  const line=t=>'<li><a href="#'+t.m.id+'" data-open="'+t.m.id+'"><strong>'+esc(t.m.name)+'</strong> <span class="num">'+fmt(t.m,t.x)+' '+esc(u(t.m))+'</span></a><span>'+t.cs.map(z=>esc(z.c.name.split(" (")[0])).join(" + ")+' · '+t.cs.map(z=>KTAG[z.f.k][0].toLowerCase()).filter((v,i,a)=>a.indexOf(v)===i).join(", ")+'</span></li>';
+  let h="";
+  if(act.length)h+='<div class="group"><h2 style="--c:var(--danger)"><i></i>Act now</h2><p>Past a threshold that matters whatever caused it.</p><div class="cards">'+act.map(t=>card(t,"var(--danger)")).join("")+'</div></div>';
+  if(fix.length)h+='<div class="group"><h2 style="--c:var(--risk)"><i></i>Fix or ask about</h2><p>Real harm from your stack, or something your stack doesn\'t explain.</p><div class="cards">'+fix.sort((a,b)=>(a.cat==="risk"?0:1)-(b.cat==="risk"?0:1)).map(t=>card(t,t.cat==="risk"?"var(--risk)":"var(--warn)")).join("")+'</div></div>';
+  if(exp.length)h+='<div class="group"><h2 style="--c:var(--calm)"><i></i>Expected from your stack</h2><p>Flagged by the lab, but explained by what you take or how you train. Don\'t panic over these.</p><ul class="explist">'+exp.map(line).join("")+'</ul></div>';
+  if(hasVals&&!T.length)h='<div class="panel"><p style="margin:0">Nothing flagged. Every value you entered is in its typical range.</p></div>';
+  document.getElementById("groups").innerHTML=h;
+  // checklist
+  const comps=S.stack.map(id=>BYC[id]);const cls=new Set(comps.map(c=>c.cls));const L=["Morning draw, fasted 8+ hours, well hydrated."];
+  L.push("No heavy lifting for 7 days before if you want clean liver and CK numbers. "+cites("[P12]"));
+  if(S.stack.includes("creatine"))L.push("Keep taking creatine, but tell the doctor, or ask for cystatin C alongside creatinine. "+cites("[P11] [P13]"));
+  if(cls.has("trt")||cls.has("inj"))L.push("Draw at the same point between injections every time, so results compare.");
+  if(cls.has("inj")||cls.has("oral")||cls.has("sarm"))L.push("Ask for hematocrit, lipids with ApoB, a liver panel with GGT, and LH. "+cites("[P2] [P22]"));
+  if(cls.has("gh"))L.push("Add IGF-1, fasting glucose and A1c. "+cites("[P8]"));
+  L.push("Tell the doctor exactly what you take.");
+  document.getElementById("checklist").innerHTML=L.map(x=>"<li><span>"+(x.includes("<a")?x:esc(x))+"</span></li>").join("");
+  const need={};stackComps().forEach(c=>c.fx.forEach(fx=>{if(S.vals[fx.m]==null)(need[fx.m]??=new Set()).add(c.name.split(" (")[0])}));
+  const keys=Object.keys(need);
+  document.getElementById("watchSub").textContent=keys.length?"Your stack affects these, but you haven't entered them.":stackComps().length?"You've covered every marker your stack affects.":"Add your stack to see what to test.";
+  document.getElementById("watch").innerHTML=keys.map(id=>'<span>'+esc(BYID[id].name)+'<small>'+esc([...need[id]].join(", "))+'</small></span>').join("");
+  const rows=stackComps();
+  document.getElementById("fxTable").innerHTML=rows.length?'<tbody>'+rows.map(c=>'<tr><td>'+esc(c.name)+'</td><td>'+(c.fx.length?c.fx.map(x=>'<span class="eff" style="--c:'+KTAG[x.k][1]+'">'+(x.d==="up"?"↑":"↓")+' '+esc(BYID[x.m].name)+'</span>').join(""):'<span class="empty">No known effects on routine markers.</span>')+(c.note?'<div class="note">'+cites(c.note)+'</div>':"")+'</td></tr>').join("")+'</tbody>':'<tbody><tr><td class="empty" style="font-weight:400">Add compounds to see what they do to bloodwork.</td></tr></tbody>';
+}
+
