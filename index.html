@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spotter Lifter Bloodwork</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: dark gym-floor header, chalk-white work surface. Triage first: stack on top, flags sorted by what caused them. */
+:root{
+  --bg:#eef0f2; --paper:#ffffff; --ink:#101318; --muted:#5f6b76; --line:#dde2e6; --accent:#1d4ed8; --accent-soft:#e3eafc;
+  --bar:#101318; --bar-ink:#f2f4f6;
+  --ok:#237a47; --calm:#47657f; --warn:#a16207; --risk:#c2410c; --danger:#b91c1c; --low:#2d66ab;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif; --sans:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c0f13; --paper:#151a20; --ink:#e7ebef; --muted:#97a3ae; --line:#26303a; --accent:#7aa2ff; --accent-soft:#1a2747; --bar:#07090c;
+  --ok:#5cc489; --calm:#8fb0cc; --warn:#e3b04b; --risk:#f28b54; --danger:#f26b6b; --low:#79a9ea; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0c0f13; --paper:#151a20; --ink:#e7ebef; --muted:#97a3ae; --line:#26303a; --accent:#7aa2ff; --accent-soft:#1a2747; --bar:#07090c;
+  --ok:#5cc489; --calm:#8fb0cc; --warn:#e3b04b; --risk:#f28b54; --danger:#f26b6b; --low:#79a9ea; color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans)}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{text-wrap:balance}
+
+header{background:var(--bar);color:var(--bar-ink);position:sticky;top:0;z-index:20}
+.bar{max-width:1200px;margin:0 auto;padding:10px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px}
+.brand{display:flex;align-items:baseline;gap:10px;margin:0}
+.brand b{font:700 26px/1 var(--display);letter-spacing:.06em}
+.brand span{font-size:13px;color:#9aa6b2}
+nav{display:flex;gap:2px;margin-right:auto}
+nav a{padding:7px 12px;border-radius:6px;color:#aeb8c2;text-decoration:none;font-weight:600;font-size:15px}
+nav a:hover{color:#fff}
+nav a[aria-current="page"]{color:#fff;background:#232a33}
+.seg{display:inline-flex;background:#1b2128;border-radius:6px;padding:2px}
+.seg button{border:0;background:transparent;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:13px;font-weight:600;color:#aeb8c2}
+.seg button[aria-pressed="true"]{background:#f2f4f6;color:#101318}
+.toggles{display:flex;gap:8px}
+
+main{max-width:1200px;margin:0 auto;padding:24px 20px 40px}
+section[data-tab]{display:none}
+section[data-tab].on{display:flex;flex-direction:column;gap:20px}
+.panel{background:var(--paper);border-radius:12px;padding:22px;box-shadow:0 0 0 1px var(--line)}
+.eyebrow{font:700 13px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+h2.sec{font:700 24px/1.1 var(--display);letter-spacing:.02em;text-transform:uppercase;margin:6px 0 2px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 12px;max-width:70ch}
+.btn{border:1px solid var(--line);background:var(--paper);padding:7px 13px;border-radius:7px;cursor:pointer;font-size:14px;font-weight:600}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
