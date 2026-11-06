@@ -237,3 +237,40 @@ footer p{max-width:95ch;margin:0}
 </header>
 
 <main>
+<section data-tab="triage">
+  <div class="hero">
+    <h1>Is it your stack, or is it a problem?</h1>
+    <p>Lab reports flag lifters for everything. Tell Spotter what you take and it sorts each flag into what's expected, and what you should actually deal with.</p>
+    <ol class="steps"><li class="done" id="st1"><b>1</b>Add your stack</li><li id="st2"><b>2</b>Enter your results</li><li id="st3"><b>3</b>Read your triage</li></ol>
+  </div>
+
+  <div class="panel stackp">
+    <div class="stackrow">
+      <div class="stackchips" id="chips"></div>
+      <div class="picker" id="picker">
+        <button class="btn primary" id="pickBtn" aria-haspopup="listbox" aria-expanded="false">+ Add to stack</button>
+        <div class="pop" id="pop" role="dialog" aria-label="Choose compounds"><input id="pickQ" type="search" placeholder="Search: tren, MK-677, creatine…" aria-label="Search compounds"><div class="opts" id="opts"></div></div>
+      </div>
+    </div>
+    <div class="stackfoot">
+      <label class="switch"><input type="checkbox" id="trainSw"> Trained hard in the 7 days before the draw</label>
+      <span class="btnrow"><button class="btn" data-act="paste">Paste lab report</button><button class="btn" data-go="bloodwork">Type in results</button></span>
+    </div>
+  </div>
+
+  <div class="notice" id="exNote"><span><b>This is an example.</b> Swap in your own stack and results.</span><button class="btn" data-act="clear">Start blank</button></div>
+
+  <div class="verdict" id="verdict"></div>
+  <div id="groups" class="groups"></div>
+
+  <details class="panel moreinfo">
+    <summary>Prep for your next blood test</summary>
+    <div class="two" style="margin-top:16px">
+      <div><p class="eyebrow">Before the draw</p><ul class="check" id="checklist"></ul></div>
+      <div><p class="eyebrow">Test these next</p><p class="sub" id="watchSub"></p><div class="watch" id="watch"></div></div>
+    </div>
+    <p class="eyebrow" style="margin-top:22px">What your stack does to bloodwork</p><div class="fxwrap"><table class="fx" id="fxTable"></table></div>
+  </details>
+  <p class="policy">Spotter doesn't give doses, cycles or PCT protocols. For anything in "Act now," see a doctor who knows exactly what you're on.</p>
+</section>
+
