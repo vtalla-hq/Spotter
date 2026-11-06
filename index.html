@@ -573,3 +573,45 @@ function renderSources(){const used={};COMP.concat([TRAIN]).forEach(c=>{const s=
   document.getElementById("srclist").innerHTML=SRC_ORDER.map(id=>'<li id="src-'+id+'"><span class="n">['+SN(id)+']</span><div><a href="'+SRC[id].u+'" target="_blank" rel="noopener">'+esc(SRC[id].t)+'</a> <span class="num" style="font-size:12px;color:var(--muted)">'+SRC[id].id+'</span><div class="used">Used for: '+esc([...(used[id]||[])].slice(0,8).join(", "))+'</div></div></li>').join("")}
 function renderAll(){renderStack();renderTriage();renderBloodwork()}
 
+// ---------- events
+function seg(id,key){document.querySelectorAll("#"+id+" button").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.v===S[key]);b.onclick=()=>{S[key]=b.dataset.v;save();seg(id,key);renderAll()}})}
+seg("sexSeg","sex");seg("unitSeg","units");
+const pop=document.getElementById("pop"),pickBtn=document.getElementById("pickBtn");
+function setPop(open){pop.classList.toggle("open",open);pickBtn.setAttribute("aria-expanded",open);if(open){renderOpts();document.getElementById("pickQ").focus()}}
+pickBtn.onclick=e=>{e.stopPropagation();setPop(!pop.classList.contains("open"))};
+document.getElementById("pickQ").addEventListener("input",renderOpts);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&pop.classList.contains("open")){setPop(false);pickBtn.focus()}});
+document.addEventListener("click",e=>{
+  if(pop.classList.contains("open")&&!e.target.closest("#picker"))setPop(false);
+  const pk=e.target.closest("[data-pick]");if(pk){const id=pk.dataset.pick;S.stack=S.stack.includes(id)?S.stack.filter(x=>x!==id):[...S.stack,id];S.example=false;save();renderStack();renderTriage();renderBloodwork();const nb=document.querySelector('[data-pick="'+id+'"]');if(nb)nb.focus();return}
+  const rm=e.target.closest("[data-rm]");if(rm){S.stack=S.stack.filter(x=>x!==rm.dataset.rm);S.example=false;save();renderAll();return}
+  const c=e.target.closest("a.cite[data-src]");if(c){e.preventDefault();go("sources");const li=document.getElementById("src-"+c.dataset.src);if(li){li.scrollIntoView({block:"center"});li.classList.add("flash");setTimeout(()=>li.classList.remove("flash"),1600)}return}
+  const op=e.target.closest("[data-open]");if(op){e.preventDefault();S.sel=op.dataset.open;S.q="";document.getElementById("q").value="";go("bloodwork",S.sel);renderBloodwork();window.scrollTo(0,0);return}
+  const g=e.target.closest("[data-go]");if(g){e.preventDefault();go(g.dataset.go);window.scrollTo(0,0);return}
+  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
+});
+document.getElementById("trainSw").addEventListener("change",e=>{S.train=e.target.checked;S.example=false;save();renderTriage();renderBloodwork()});
+window.addEventListener("hashchange",fromHash);
+document.getElementById("q").addEventListener("input",e=>{S.q=e.target.value;renderBloodwork()});
+const rowsEl=document.getElementById("rows");
+function select(id){S.sel=id;safeReplace(null,"","#"+id);document.querySelectorAll(".row").forEach(r=>r.classList.toggle("sel",r.dataset.id===id));renderSheet()}
+rowsEl.addEventListener("click",e=>{const r=e.target.closest(".row");if(r)select(r.dataset.id)});
+rowsEl.addEventListener("keydown",e=>{const r=e.target.closest(".row");if(r&&e.target===r&&(e.key==="Enter"||e.key===" ")){e.preventDefault();select(r.dataset.id)}});
+rowsEl.addEventListener("focusin",e=>{if(e.target.tagName==="INPUT"){const r=e.target.closest(".row");if(r&&S.sel!==r.dataset.id)select(r.dataset.id)}});
+rowsEl.addEventListener("change",e=>{if(e.target.tagName!=="INPUT")return;const id=e.target.id.slice(3),m=BYID[id],raw=e.target.value.replace(/,/g,"").trim();
+  if(raw==="")delete S.vals[id];else{const v=parseFloat(raw);if(!isFinite(v)||v<0){e.target.value=fmtIn(m,S.vals[id]);return}S.vals[id]=v/f(m)}
+  S.example=false;save();const row=e.target.closest(".row"),tmp=document.createElement("div");tmp.innerHTML=rowHTML(m);row.replaceWith(tmp.firstChild);renderSheet();renderTriage()});
+const dlg=document.getElementById("pasteDlg");
+function openPaste(){document.getElementById("pasteMsg").textContent="Reading in "+(S.units==="si"?"SI":"US")+" units.";dlg.showModal()}
+document.getElementById("pasteCancel").onclick=()=>dlg.close();
+document.getElementById("pasteGo").onclick=()=>{const lines=document.getElementById("pasteTxt").value.split(/\n/),found=[];
+  lines.forEach(line=>{const L=line.toLowerCase();let best=null;
+    M.forEach(m=>m.al.forEach(a=>{const re=new RegExp("(^|[^a-z])"+a.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-z]|$)");if(re.test(L)&&(!best||a.length>best.a.length))best={m,a}}));
+    if(best&&!found.includes(best.m.id)){const after=L.slice(L.indexOf(best.a)+best.a.length).replace(/-1\b|t4|a1c|\bc\b/g,"");const n=after.match(/(\d+(?:\.\d+)?)/);if(n){S.vals[best.m.id]=parseFloat(n[1])/f(best.m);found.push(best.m.id)}}});
+  if(!found.length){document.getElementById("pasteMsg").textContent="No markers recognized. Each line should start with a test name, like 'ALT 78'.";return}
+  S.example=false;S.sel=found[0];save();dlg.close();renderAll();go("triage")};
+
+renderSources();renderAll();fromHash();
+</script>
+</body>
+</html>
