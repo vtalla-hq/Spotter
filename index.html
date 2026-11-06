@@ -274,3 +274,33 @@ footer p{max-width:95ch;margin:0}
   <p class="policy">Spotter doesn't give doses, cycles or PCT protocols. For anything in "Act now," see a doctor who knows exactly what you're on.</p>
 </section>
 
+<section data-tab="bloodwork">
+  <div class="split">
+    <div class="panel list">
+      <div class="listhead"><input class="search" id="q" type="search" placeholder="Search markers" aria-label="Search markers"><button class="btn" data-act="paste">Paste report</button></div>
+      <div id="rows"></div>
+    </div>
+    <aside class="panel sheet" id="sheet" aria-live="polite"></aside>
+  </div>
+</section>
+
+<section data-tab="sources">
+  <div class="panel prose">
+    <p class="eyebrow">Sources</p>
+    <p>Each effect, cutoff and action links to one of these. Where Spotter says something without a citation, it's standard lab physiology or a common-sense step, not a research finding.</p>
+    <ol class="srclist" id="srclist"></ol>
+    <p style="margin-top:16px"><strong>How triage works.</strong> A marker is flagged when it's outside its typical adult range, or far from its guideline target for lipids and glucose. Spotter then checks your stack and your training for anything known to push that marker the same way. If something does and the effect is a lab artifact, it's filed as explained. If the effect is real harm, it's filed as a real risk. If nothing explains it, it's unexplained. A small set of thresholds are red flags whatever the cause.</p>
+    <p><strong>Ranges.</strong> Typical adult ranges used by Canadian labs. IGF-1, LH and estradiol depend heavily on age, sex and cycle phase, so your lab's printed range comes first.</p>
+  </div>
+</section>
+</main>
+
+<footer><p>Spotter is an educational tool, not medical advice, and it is not a guide to using any drug. Many listed compounds are unapproved, illegal to sell for human use, or veterinary products with little human data. If you have chest pain, yellow eyes or skin, dark urine with muscle pain, or sudden swelling or shortness of breath, get urgent care.</p></footer>
+
+<dialog id="pasteDlg">
+  <h2>Paste a lab report</h2>
+  <p style="font-size:14px;color:var(--muted);margin:0 0 10px">Paste the results text from your portal. Spotter reads the first number after each marker name it recognizes, in the units currently selected.</p>
+  <textarea id="pasteTxt" placeholder="Hematocrit 0.53 L/L&#10;ALT 78 U/L&#10;HDL Cholesterol 0.62 mmol/L&#10;CK 1450 U/L"></textarea>
+  <div class="foot"><span id="pasteMsg"></span><button class="btn" id="pasteCancel">Cancel</button><button class="btn primary" id="pasteGo">Read values</button></div>
+</dialog>
+
