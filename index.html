@@ -401,3 +401,43 @@ const COMP=[
 const BYC=Object.fromEntries(COMP.map(c=>[c.id,c]));
 const TRAIN={id:"training",name:"Hard training",cls:"supp",fx:[{m:"ck",d:"up",k:"artifact",why:"One heavy session kept CK, AST and ALT raised for at least 7 days in healthy men. [P12]"},{m:"ast",d:"up",k:"artifact",why:"Raised for 7+ days after lifting. [P12]"},{m:"alt",d:"up",k:"artifact",why:"Raised for 7+ days after lifting, while GGT, ALP and bilirubin stayed normal. [P12]"},{m:"creatinine",d:"up",k:"artifact",why:"More muscle means more creatinine."}]};
 
+// ---------- actions by marker and direction
+const ACT={
+ hematocrit:{up:["Drink plenty of water before the draw; dehydration reads high.","On testosterone, guidelines hold it above 54%, check for sleep apnea, then restart at a lower dose. [P3]","In the HAARLEM study, hematocrit returned to baseline after cycles ended. [P2]","Whether you need phlebotomy is a doctor's call, not a DIY fix."]},
+ hemoglobin:{up:["Hydrate before the draw.","Read it alongside hematocrit. [P3]"]},
+ plt:{up:["Recheck. Platelets rose with hematocrit on cycles and fell back after. [P2]"]},
+ alt:{up:["Retest after 7 days without lifting; one session kept ALT up for a week. [P12]","Add GGT. Lifting didn't raise it, so a high GGT points to the liver. [P12]","Skip alcohol and high-dose acetaminophen until it's sorted.","With an oral or a SARM in your stack, stopping it early is what prevents worse injury. [P6]"]},
+ ast:{up:["Retest after 7 days without lifting. [P12]","Add GGT or CK to tell liver from muscle. [P12]"]},
+ ggt:{up:["Lifting doesn't raise GGT, so take this one seriously. [P12]","Cut alcohol."]},
+ bili:{up:["Yellow eyes or skin, itching or dark urine: go to urgent care. [P6]","Stop any oral steroid or SARM and see a doctor; most cases improve after stopping. [P6]"]},
+ alp:{up:["Ask for GGT to tell liver from bone. [P14]"]},
+ ck:{up:["Expected for days after hard training; retest after 7 days off. [P12]","Very high CK with muscle pain, weakness or dark urine needs urgent care."]},
+ creatinine:{up:["Ask for cystatin C. Muscle and creatine don't affect it, and combined with creatinine it's more accurate. [P13]","Tell your doctor you take creatine. [P11]"]},
+ cystatin:{up:["Unlike creatinine, this isn't a creatine or muscle artifact. Follow up with a doctor. [P13]"]},
+ urea:{up:["Usually high protein intake or dehydration."]},
+ ldl:{up:["Swap saturated fat for unsaturated fats; trials show it lowers LDL. [P18]","Ask for ApoB, which counts the particles directly. [P22]","At 5.0 mmol/L or above, Canadian guidelines recommend treatment. [P15]"]},
+ hdl:{down:["Do 2+ hours of cardio a week; session length mattered more than intensity. [P17]","Orals and SARMs hit HDL hardest. In studies it recovered after stopping. [P2] [P5]","Ask for ApoB to see the full risk picture. [P22]"]},
+ tg:{up:["Avoid a big meal the night before the test.","Cut sugar and alcohol."],down:["Low triglycerides aren't a problem on their own."]},
+ apob:{up:["Swap saturated fat for unsaturated fats. [P18]","Cut the oral or SARM if you're on one. [P2]"]},
+ glucose:{up:["Confirm you fasted 8+ hours.","Walk for a few minutes after meals and through the day. [P19]","On MK-677 or GH, rising glucose is a known effect; get an A1c. [P8]","6.1–6.9 mmol/L is impaired fasting glucose; 7.0+ is the diabetes range. [P16]"],down:["Low fasting glucose on a GLP-1 drug can happen; tell your prescriber if you feel shaky."]},
+ a1c:{up:["Walk after meals. [P19]","On MK-677 or GH, this is a known effect. [P8]","6.0–6.4% is prediabetes; 6.5%+ is the diabetes range. [P16]"]},
+ igf1:{up:["High IGF-1 means high GH exposure. Check fasting glucose and A1c too. [P8]"]},
+ testo:{down:["Sleep 7–9 hours. A week of 5-hour nights cut testosterone 10–15% in young men. [P20]","After steroids or SARMs, low natural testosterone usually means suppression. See a doctor about recovery rather than guessing."],up:["Above-range testosterone means outside hormones. Watch hematocrit and HDL. [P2]"]},
+ lh:{down:["Near-zero LH means your own production is shut off. In HAARLEM it recovered after cycles, slowly. [P2]","See a doctor, ideally an endocrinologist, about recovery and fertility."]},
+ estradiol:{up:["Usually from testosterone converting to estrogen.","Ask a doctor before trying to push it down; very low estradiol has its own harms."]},
+ tsh:{down:["Expected on thyroid hormone. Long-term suppression is a medical issue; see a doctor."]},
+ ft4:{up:["Too much thyroid hormone can cause fast heart rate and bone loss; see a doctor."]},
+ ferritin:{down:["Eat heme iron: red meat, chicken thighs, mussels.","If you need a supplement, ask about every-other-day dosing; it absorbs better. [P23]"]}
+};
+
+// red flags: thresholds that matter whatever the cause
+const RED=[
+ {m:"hematocrit",test:(x)=>x>=0.54,txt:"At or above 54%: the guideline point where testosterone is held until it falls. [P3]"},
+ {m:"bili",test:(x)=>x>42,txt:"More than double the upper limit. With an oral or a SARM, this is the typical liver-injury pattern. Yellow eyes, itching or dark urine means urgent care. [P6]"},
+ {m:"alt",test:(x,m)=>x>5*ri(m)[1],txt:"More than 5× the upper limit, a moderate elevation by ACG categories. [P14] If you haven't lifted in a week, see a doctor soon."},
+ {m:"ck",test:(x,m)=>x>10*ri(m)[1],txt:"More than 10× the upper limit. With muscle pain, weakness or dark urine, go to urgent care."},
+ {m:"glucose",test:(x)=>x>=7.0,txt:"7.0 mmol/L or higher is in the diabetes range; it needs a repeat test and a doctor. [P16]"},
+ {m:"a1c",test:(x)=>x>=6.5,txt:"6.5% or higher is in the diabetes range. [P16]"},
+ {m:"ldl",test:(x)=>x>=5.0,txt:"5.0 mmol/L or higher: Canadian guidelines recommend a statin at this level. [P15]"}
+];
+
