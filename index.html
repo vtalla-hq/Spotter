@@ -535,3 +535,35 @@ function renderTriage(){
   document.getElementById("fxTable").innerHTML=rows.length?'<tbody>'+rows.map(c=>'<tr><td>'+esc(c.name)+'</td><td>'+(c.fx.length?c.fx.map(x=>'<span class="eff" style="--c:'+KTAG[x.k][1]+'">'+(x.d==="up"?"↑":"↓")+' '+esc(BYID[x.m].name)+'</span>').join(""):'<span class="empty">No known effects on routine markers.</span>')+(c.note?'<div class="note">'+cites(c.note)+'</div>':"")+'</td></tr>').join("")+'</tbody>':'<tbody><tr><td class="empty" style="font-weight:400">Add compounds to see what they do to bloodwork.</td></tr></tbody>';
 }
 
+// ---------- bloodwork UI
+function rowHTML(m){const x=S.vals[m.id];const d=offDir(m,x);const fxd=stackComps().filter(c=>c.fx.some(z=>z.m===m.id));
+  let tag='<span class="tag" style="--c:var(--muted)">–</span>';
+  if(x!=null){if(!d)tag='<span class="tag" style="--c:var(--ok)">In range</span>';else{const cs=causes(m,d);const cat=cs.some(z=>z.f.k==="risk")?"risk":cs.length?"explained":"unexplained";tag='<span class="tag" style="--c:'+CAT[cat].c+'">'+(d==="up"?"High":"Low")+' · '+CAT[cat].n.replace(/s$/,"")+'</span>'}}
+  return'<div class="row'+(S.sel===m.id?" sel":"")+'" data-id="'+m.id+'" role="button" tabindex="0" aria-label="'+esc(m.name)+'"><div class="nm"><strong>'+esc(m.name)+'</strong><small>'+esc(u(m))+'</small>'+(fxd.length?' <small class="fxd">· affected by '+esc(fxd.map(c=>c.name.split(" (")[0]).join(", "))+'</small>':"")+'</div><input id="in-'+m.id+'" inputmode="decimal" aria-label="Your '+esc(m.name)+' in '+esc(u(m))+'" placeholder="add" value="'+fmtIn(m,x)+'">'+tag+'</div>'}
+function renderBloodwork(){const q=S.q.trim().toLowerCase();let h="";
+  PANELS.forEach((p,i)=>{const g=M.filter(m=>m.panel===i&&(!q||(m.name+" "+m.abbr+" "+m.al.join(" ")).toLowerCase().includes(q)));if(g.length)h+='<div class="ph">'+p+'</div>'+g.map(rowHTML).join("")});
+  document.getElementById("rows").innerHTML=h||'<p class="empty" style="padding:16px">No markers match.</p>';renderSheet()}
+function niceStep(raw){const p=Math.pow(10,Math.floor(Math.log10(raw)));const n=raw/p;return(n<1.5?1:n<3?2:n<7?5:10)*p}
+function curve(m,x){const W=520,H=170,pl=8,pr=8,pt=10,pb=40;const [lo,hi]=ri(m),p=params(m);
+  let a,b;if(m.dist==="log"){a=Math.exp(p.mu-3.2*p.sd);b=Math.exp(p.mu+3.2*p.sd)}else{a=p.mu-3.8*p.sd;b=p.mu+3.8*p.sd}
+  if(x!=null){const sp=b-a;a=Math.min(a,x-sp*.04);b=Math.max(b,x+sp*.06)}a=Math.max(0,a);
+  const N=220,ys=[];let ym=0;for(let i=0;i<=N;i++){const v=a+(b-a)*i/N,y=pdf(m,v);ys.push([v,y]);if(y>ym)ym=y}
+  const X=v=>pl+(v-a)/(b-a)*(W-pl-pr),Y=v=>pt+(1-v/ym)*(H-pt-pb);
+  const line=ys.map(([v,y],i)=>(i?"L":"M")+X(v).toFixed(1)+","+Y(y).toFixed(1)).join("");const rp=ys.filter(([v])=>v>=lo&&v<=hi);
+  const area=rp.length?"M"+X(rp[0][0]).toFixed(1)+","+Y(0)+rp.map(([v,y])=>"L"+X(v).toFixed(1)+","+Y(y).toFixed(1)).join("")+"L"+X(rp[rp.length-1][0]).toFixed(1)+","+Y(0)+"Z":"";
+  let s='<svg class="curve" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Typical distribution of '+esc(m.name)+'"><path d="'+area+'" fill="var(--accent-soft)"/><path d="'+line+'" fill="none" stroke="var(--accent)" stroke-width="2"/><line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(0)+'" y2="'+Y(0)+'" stroke="var(--line)"/>';
+  const by=Y(0)+18;const st=niceStep((b-a)*f(m)/5)/f(m);for(let t=Math.ceil(a/st)*st;t<=b;t+=st)if(![lo,hi].some(k=>Math.abs(X(k)-X(t))<34))s+='<text x="'+X(t).toFixed(1)+'" y="'+by+'" text-anchor="middle">'+fmt(m,t)+'</text>';
+  [lo,hi].forEach(t=>{s+='<line x1="'+X(t)+'" x2="'+X(t)+'" y1="'+pt+'" y2="'+Y(0)+'" stroke="var(--accent)" stroke-dasharray="3 3" opacity=".55"/><text x="'+X(t).toFixed(1)+'" y="'+by+'" text-anchor="middle" style="fill:var(--accent);font-weight:600">'+fmt(m,t)+'</text>'});
+  if(x!=null){const d=offDir(m,x);const c=d?"var(--risk)":"var(--ok)";const xx=X(x),an=xx>W*.8?"end":xx<W*.2?"start":"middle";s+='<line x1="'+xx+'" x2="'+xx+'" y1="'+pt+'" y2="'+Y(0)+'" stroke="'+c+'" stroke-width="2.5"/><circle cx="'+xx+'" cy="'+Y(pdf(m,x))+'" r="5" fill="'+c+'" stroke="var(--paper)" stroke-width="2"/><text x="'+xx+'" y="'+(by+16)+'" text-anchor="'+an+'" style="fill:'+c+';font-weight:600">You: '+fmt(m,x)+'</text>'}
+  return s+'</svg>'}
+function renderSheet(){const m=BYID[S.sel]||M[0],x=S.vals[m.id],[lo,hi]=ri(m),d=offDir(m,x);
+  const fx=[];stackComps().forEach(c=>c.fx.forEach(z=>{if(z.m===m.id)fx.push({c,z})}));
+  const acts=d?((ACT[m.id]||{})[d]||[]):[];const red=x!=null?RED.filter(r=>r.m===m.id&&r.test(x,m)):[];
+  document.getElementById("sheet").innerHTML='<p class="eyebrow">'+PANELS[m.panel]+'</p><h2>'+esc(m.name)+'</h2><div class="abbr">'+esc(m.abbr)+'</div>'+
+   (x!=null?'<div class="big"><span class="v">'+fmt(m,x)+'</span><span class="u">'+esc(u(m))+'</span><span class="p">'+ord(pct(m,x))+' percentile</span></div>':'<p style="color:var(--muted);font-size:14px;margin:12px 0 0">Enter a value to see where you land.</p>')+
+   red.map(r=>'<p class="flagline" style="color:var(--danger)">'+cites(r.txt)+'</p>').join("")+curve(m,x)+
+   '<dl class="facts"><dt>Typical range</dt><dd class="num">'+fmt(m,lo)+'–'+fmt(m,hi)+' '+esc(u(m))+'</dd></dl>'+
+   '<h3>What it is</h3><p>'+esc(m.what)+'</p>'+
+   '<h3>Your stack and this marker</h3>'+(fx.length?'<ul>'+fx.map(({c,z})=>'<li><strong>'+esc(c.name)+'</strong> '+(z.d==="up"?"raises":"lowers")+' it <span class="tag" style="--c:'+KTAG[z.k][1]+'">'+KTAG[z.k][0]+'</span><br>'+cites(z.why)+'</li>').join("")+'</ul>':'<p>Nothing in your stack is known to move this marker.</p>')+
+   (acts.length?'<h3>What to do</h3><ul>'+acts.map(a=>'<li>'+cites(a)+'</li>').join("")+'</ul>':"")+
+   '<p style="font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:16px">Percentile estimated by fitting a '+(m.dist==="log"?"log-normal":"normal")+' curve to the typical range (2.5th–97.5th). It ignores age.</p>'}
