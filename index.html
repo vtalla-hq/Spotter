@@ -304,3 +304,33 @@ footer p{max-width:95ch;margin:0}
   <div class="foot"><span id="pasteMsg"></span><button class="btn" id="pasteCancel">Cancel</button><button class="btn primary" id="pasteGo">Read values</button></div>
 </dialog>
 
+<script>
+function safeReplace(a,b,h){try{history.replaceState(a,b,h)}catch(e){}}
+// ---------- sources (checked against PubMed / journal / regulator pages)
+const SRC={
+ P1:{t:"Pope HG Jr, et al. Adverse health consequences of performance-enhancing drugs: an Endocrine Society scientific statement. Endocr Rev. 2014;35(3):341–375.",u:"https://pubmed.ncbi.nlm.nih.gov/24423981/",id:"PMID 24423981"},
+ P2:{t:"Smit DL, et al. Positive and negative side effects of androgen abuse. The HAARLEM study: a one-year prospective cohort study in 100 men. Scand J Med Sci Sports. 2021;31(2):427–438.",u:"https://pubmed.ncbi.nlm.nih.gov/33038020/",id:"PMID 33038020"},
+ P3:{t:"Bhasin S, et al. Testosterone therapy in men with hypogonadism: an Endocrine Society clinical practice guideline. J Clin Endocrinol Metab. 2018;103(5):1715–1744.",u:"https://doi.org/10.1210/jc.2018-00229",id:"doi 10.1210/jc.2018-00229"},
+ P4:{t:"Anabolic steroid effect on the liver (review). Curr Sports Med Rep. 2018;17(3):97–102.",u:"https://pubmed.ncbi.nlm.nih.gov/29521706/",id:"PMID 29521706"},
+ P5:{t:"Basaria S, et al. The safety, pharmacokinetics, and effects of LGD-4033, a novel nonsteroidal oral selective androgen receptor modulator, in healthy young men. J Gerontol A Biol Sci Med Sci. 2013;68(1):87–95.",u:"https://pubmed.ncbi.nlm.nih.gov/22459616/",id:"PMID 22459616"},
+ P6:{t:"Mohideen H, et al. Selective androgen receptor modulators: an emerging liver toxin. J Clin Transl Hepatol. 2023;11(1):188–196.",u:"https://doi.org/10.14218/JCTH.2022.00207",id:"doi 10.14218/JCTH.2022.00207"},
+ P7:{t:"Systematic review of safety of selective androgen receptor modulators in healthy adults: implications for recreational users. J Xenobiot. 2023.",u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC10204391/",id:"PMC10204391"},
+ P8:{t:"Nass R, et al. Effects of an oral ghrelin mimetic (MK-677) on body composition and clinical outcomes in healthy older adults: a randomized trial. Ann Intern Med. 2008;149(9):601–611.",u:"https://doi.org/10.7326/0003-4819-149-9-200811040-00003",id:"doi 10.7326/0003-4819-149-9-200811040-00003"},
+ P9:{t:"Jastreboff AM, et al. Triple-hormone-receptor agonist retatrutide for obesity: a phase 2 trial. N Engl J Med. 2023;389(6):514–526.",u:"https://doi.org/10.1056/NEJMoa2301972",id:"doi 10.1056/NEJMoa2301972"},
+ P10:{t:"Drugs.com. Retatrutide FDA approval status (updated July 24, 2026).",u:"https://www.drugs.com/history/retatrutide",id:"drugs.com"},
+ P11:{t:"Kreider RB, et al. International Society of Sports Nutrition position stand: safety and efficacy of creatine supplementation in exercise, sport, and medicine. J Int Soc Sports Nutr. 2017;14:18.",u:"https://pubmed.ncbi.nlm.nih.gov/28615996/",id:"PMID 28615996"},
+ P12:{t:"Pettersson J, et al. Muscular exercise can cause highly pathological liver function tests in healthy men. Br J Clin Pharmacol. 2008;65(2):253–259.",u:"https://pubmed.ncbi.nlm.nih.gov/17764474/",id:"PMID 17764474"},
+ P13:{t:"Inker LA, et al. Estimating glomerular filtration rate from serum creatinine and cystatin C. N Engl J Med. 2012;367(1):20–29.",u:"https://pubmed.ncbi.nlm.nih.gov/22762315/",id:"PMID 22762315"},
+ P14:{t:"Kwo PY, Cohen SM, Lim JK. ACG clinical guideline: evaluation of abnormal liver chemistries. Am J Gastroenterol. 2017;112(1):18–35.",u:"https://pubmed.ncbi.nlm.nih.gov/27995906/",id:"PMID 27995906"},
+ P15:{t:"Pearson GJ, et al. 2021 Canadian Cardiovascular Society guidelines for the management of dyslipidemia. Can J Cardiol. 2021;37(8):1129–1150.",u:"https://pubmed.ncbi.nlm.nih.gov/33781847/",id:"PMID 33781847"},
+ P16:{t:"Punthakee Z, et al. Definition, classification and diagnosis of diabetes, prediabetes and metabolic syndrome (Diabetes Canada 2018). Can J Diabetes. 2018;42:S10–S15.",u:"https://doi.org/10.1016/j.jcjd.2017.10.003",id:"doi 10.1016/j.jcjd.2017.10.003"},
+ P17:{t:"Kodama S, et al. Effect of aerobic exercise training on serum HDL cholesterol: a meta-analysis. Arch Intern Med. 2007;167(10):999–1008.",u:"https://pubmed.ncbi.nlm.nih.gov/17533202/",id:"PMID 17533202"},
+ P18:{t:"Hooper L, et al. Reduction in saturated fat intake for cardiovascular disease. Cochrane Database Syst Rev. 2020;5:CD011737.",u:"https://pubmed.ncbi.nlm.nih.gov/32428300/",id:"PMID 32428300"},
+ P19:{t:"Buffey AJ, et al. Interrupting prolonged sitting with standing and light-intensity walking: effects on cardiometabolic biomarkers. Sports Med. 2022;52(8):1765–1787.",u:"https://pubmed.ncbi.nlm.nih.gov/35147898/",id:"PMID 35147898"},
+ P20:{t:"Leproult R, Van Cauter E. Effect of 1 week of sleep restriction on testosterone levels in young healthy men. JAMA. 2011;305(21):2173–2174.",u:"https://pubmed.ncbi.nlm.nih.gov/21632481/",id:"PMID 21632481"},
+ P21:{t:"McGuire FP, et al. Regeneration or risk? A narrative review of BPC-157 for musculoskeletal healing. Curr Rev Musculoskelet Med. 2025.",u:"https://doi.org/10.1007/s12178-025-09990-7",id:"doi 10.1007/s12178-025-09990-7"},
+ P22:{t:"Sniderman AD, et al. Apolipoprotein B particles and cardiovascular disease: a narrative review. JAMA Cardiol. 2019;4(12):1287–1295.",u:"https://pubmed.ncbi.nlm.nih.gov/31642874/",id:"PMID 31642874"},
+ P23:{t:"Stoffel NU, et al. Iron absorption from oral iron supplements given on consecutive versus alternate days. Lancet Haematol. 2017;4(11):e524–e533.",u:"https://pubmed.ncbi.nlm.nih.gov/29032957/",id:"PMID 29032957"}
+};
+const SRC_ORDER=Object.keys(SRC);const SN=id=>SRC_ORDER.indexOf(id)+1;
+
