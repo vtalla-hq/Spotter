@@ -16,7 +16,14 @@ Standard lab reports flag lifters for everything: high creatinine from creatine,
 - Paste-a-report parser for LifeLabs, Dynacare and hospital portal text
 - Pre-draw checklist and "test these next" suggestions based on your stack
 - **Health check**: a stack gap check (tests and habits your stack calls for), combo warnings for stacks that double up on the same harm, and supplements and habits rated Proven, Weak evidence or Avoid
-- 30 cited sources (PubMed, guidelines, regulators). Every effect and cutoff links to one
+- **Cycle timeline**: tell Spotter whether the draw was before, on or after a cycle. Baseline draws and draws 12+ weeks off aren't blamed on the cycle
+- **Is your gear real?**: checks whether LH and testosterone look like what your stack should do
+- **Heart strain**: blood pressure (ACC/AHA 2017 categories), resting heart rate, hematocrit and heart-scan status in one view
+- **Kidney score**: CKD-EPI 2021 eGFR from creatinine alone and from creatinine plus cystatin C, so muscle and creatine don't fool you
+- **Doctor sheet**: a printable one-page summary of what you take, flagged results, tests to add and questions to ask
+- **ER signs**: emergency symptoms, with the ones tied to your stack marked
+- **Share card**: an image of your triage counts (no values; stack optional)
+- 34 cited sources (PubMed, guidelines, regulators). Every effect and cutoff links to one
 
 ## Privacy
 
