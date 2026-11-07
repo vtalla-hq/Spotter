@@ -414,6 +414,19 @@ dialog{border-radius:16px}
 .det a.mk{color:var(--ink);font-weight:600;text-decoration:none}.det a.mk:hover{text-decoration:underline}
 .untouched{font-size:13px;color:var(--muted);margin:10px 2px 0}
 .snote{font-size:12.5px;color:var(--muted);margin:12px 2px 0}
+.how{margin-top:40px;padding-top:40px;border-top:1px solid var(--line)}
+.how h2{font:700 clamp(30px,4.2vw,52px)/1.02 var(--display);letter-spacing:-.045em;margin:0 0 36px;max-width:20ch}
+.how h2 span{color:#9a968e}
+.how3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;padding-top:24px;border-top:1px solid var(--line)}
+@media (max-width:820px){.how3{grid-template-columns:1fr}}
+.how3 .k{font:500 12px var(--mono);color:var(--muted)}
+.how3 h3{font:600 22px/1.1 var(--display);letter-spacing:-.02em;margin:14px 0 8px}
+.how3 p{margin:0;color:var(--muted);line-height:1.6}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:44px;padding-top:28px;border-top:1px solid var(--line)}
+@media (max-width:820px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stats b{display:block;font:600 clamp(40px,5vw,64px)/1 var(--display);letter-spacing:-.05em}
+.stats span{display:block;font-weight:600;margin-top:10px}
+.stats small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
 </style>
 </head>
 <body>
@@ -473,6 +486,15 @@ dialog{border-radius:16px}
     </div>
     <p class="eyebrow" style="margin-top:22px">What your stack does to bloodwork</p><div class="fxwrap"><table class="fx" id="fxTable"></table></div>
   </details>
+  <div class="how">
+    <h2>Lab ranges are written for people who don't lift. <span>Spotter reads them for people who do.</span></h2>
+    <div class="how3">
+      <div><span class="k">01</span><h3>Map</h3><p>Add your stack and see which organs each compound works on, and whether that's harm, an expected change or just a lab artifact.</p></div>
+      <div><span class="k">02</span><h3>Triage</h3><p>Paste your results. Every flag lands in act now, fix, or expected, with the study behind the call one tap away.</p></div>
+      <div><span class="k">03</span><h3>Hand off</h3><p>Print a doctor sheet with what you take, what's flagged and what to test next. No doses, no judgment, no guessing.</p></div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
   <p class="policy">Spotter doesn't give doses, cycles or PCT protocols. For anything in "Act now," see a doctor who knows exactly what you're on. Chest pain, yellow eyes or sudden weakness? <a href="#er" data-go="er" style="color:var(--danger);font-weight:700">See ER signs</a>.</p>
 </section>
 
@@ -841,6 +863,8 @@ function renderSheet(){const m=BYID[S.sel]||M[0],x=S.vals[m.id],[lo,hi]=ri(m),d=
    '<h3>Your stack and this marker</h3>'+(fx.length?'<ul>'+fx.map(({c,z})=>'<li><strong>'+esc(c.name)+'</strong> '+(z.d==="up"?"raises":"lowers")+' it <span class="tag" style="--c:'+KTAG[z.k][1]+'">'+KTAG[z.k][0]+'</span><br>'+cites(z.why)+'</li>').join("")+'</ul>':'<p>Nothing in your stack is known to move this marker.</p>')+
    (acts.length?'<h3>What to do</h3><ul>'+acts.map(a=>'<li>'+cites(a)+'</li>').join("")+'</ul>':"")+
    '<p style="font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:16px">Percentile estimated by fitting a '+(m.dist==="log"?"log-normal":"normal")+' curve to the typical range (2.5th–97.5th). It ignores age.</p>'}
+function renderStats(){const fx=COMP.reduce((a,c)=>a+c.fx.length,0);
+  document.getElementById("stats").innerHTML=[[SRC_ORDER.length,"cited sources","PubMed papers, guidelines and regulators"],[COMP.length,"compounds","supplements to SARMs, GH and GLP-1s"],[M.length,"markers","with SI and US units"],[fx,"mapped effects","each tagged harm, expected or artifact"]].map(([n,l,d])=>'<div><b>'+n+'</b><span>'+l+'</span><small>'+d+'</small></div>').join("")}
 function renderSources(){const used={};COMP.concat([TRAIN]).forEach(c=>{const s=JSON.stringify(c);(s.match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(c.name.split(" (")[0]))});
   Object.entries(ACT).forEach(([k,v])=>{(JSON.stringify(v).match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(BYID[k].name))});
   RED.forEach(r=>(r.txt.match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(BYID[r.m].name+" red flag")));
@@ -1137,7 +1161,7 @@ document.getElementById("pasteGo").onclick=()=>{const lines=document.getElementB
   if(!found.length){document.getElementById("pasteMsg").textContent="No markers recognized. Each line should start with a test name, like 'ALT 78'.";return}
   S.example=false;S.sel=found[0];save();dlg.close();renderAll();go("triage")};
 
-renderSources();renderAll();fromHash();
+renderSources();renderStats();renderAll();fromHash();
 </script>
 </body>
 </html>
