@@ -368,7 +368,7 @@ dialog{border-radius:16px}
 .btn.big{padding:12px 20px;font-size:16px;border-radius:12px}
 .hcopy .steps{margin-top:22px;font-size:14px}
 .mapcard{border:1px solid var(--line);border-radius:20px;background:var(--paper);background-image:radial-gradient(color-mix(in srgb,var(--muted) 30%,transparent) 1px,transparent 1.2px);background-size:16px 16px;padding:14px 14px 10px}
-.maphead{display:flex;justify-content:space-between;align-items:center;font:500 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:2px 4px 6px}
+.maphead{display:flex;flex-wrap:wrap;gap:4px 10px;justify-content:space-between;align-items:center;font:500 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:2px 4px 6px}
 .leg{display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0}
 .leg i{display:inline-block;width:16px;height:2px;background:var(--c);margin-left:6px}
 .leg i.d{background:none;border-top:2px dashed var(--c);height:0}
@@ -1044,9 +1044,9 @@ function renderMap(){const el=document.getElementById("map"),comps=S.stack.map(i
   const E=[];comps.forEach(c=>{const by={};c.fx.forEach(f=>{const sy=SYS_OF[f.m];if(!sy)return;(by[sy]??=[]).push(f)});if(HEART_FX[c.cls])(by.heart??=[]).push({k:"risk"});
     Object.entries(by).forEach(([sy,fs])=>E.push({c:c.id,s:sy,k:fs.some(f=>f.k==="risk")?"risk":fs.some(f=>f.k==="expected")?"exp":"art",n:fs.length}))});
   const sys=SYS.filter(x=>E.some(e=>e.s===x.id)||LV[x.id].conf>=20);
-  const W=640,pw=t=>Math.max(64,t.length*6.9+30),H=30,cl=(x,w)=>Math.min(W-w/2-4,Math.max(w/2+4,x)),short=c=>c.name.split(" (")[0].replace(" monohydrate","").replace("Methandrostenolone","Dianabol").replace("Thyroid hormone","Thyroid");
+  const nar=el.clientWidth>0&&el.clientWidth<480,W=nar?400:640,pw=t=>Math.max(64,t.length*6.9+30),H=30,cl=(x,w)=>Math.min(W-w/2-4,Math.max(w/2+4,x)),short=c=>c.name.split(" (")[0].replace(" monohydrate","").replace("Methandrostenolone","Dianabol").replace("Thyroid hormone","Thyroid");
   const rowsOf=(arr,max)=>{const r=[];for(let i=0;i<arr.length;i+=max)r.push(arr.slice(i,i+max));return r};
-  const cr=rowsOf(comps,4),sr=rowsOf(sys,sys.length>5?Math.ceil(sys.length/2):5);
+  const cr=rowsOf(comps,nar?3:4),sr=rowsOf(sys,nar?3:sys.length>5?Math.ceil(sys.length/2):5);
   const pos={};let y=34;cr.forEach(r=>{r.forEach((c,i)=>{const w=pw(short(c));pos["c"+c.id]={x:cl(W*(i+.5)/r.length,w),y,w}});y+=44});
   y+=80;sr.forEach((r,ri)=>{r.forEach((s,i)=>{const w=pw(s.sn)+16,n=Math.max(r.length,sr[0].length);pos["s"+s.id]={x:cl(W*(i+.5+(ri%2&&r.length<n?.5:0))/n,w),y,w}});y+=58});
   const Hh=y-10;let h='<svg viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Map of where your stack acts">';
@@ -1117,6 +1117,7 @@ function renderSupport(){const flagged=new Set(triage().map(t=>t.m.id+":"+t.d));
   document.getElementById("support").innerHTML=Object.keys(GRADE).map(k=>{const L=SUP.filter(x=>x.g===k).map(x=>({...x,rel:x.helps.filter(([m,d])=>flagged.has(m+":"+d)).map(([m])=>m)})).sort((a,b)=>b.rel.length-a.rel.length);
     return'<div class="scol"><h3 style="--c:'+GRADE[k].c+'"><i></i>'+GRADE[k].n+'</h3>'+L.map(x=>'<div class="sitem"><strong>'+esc(x.n)+'</strong><span>'+cites(x.d)+'</span>'+(x.rel.length&&k!=="avoid"?'<br><span class="rel">Targets your '+esc(x.rel.map(m=>BYID[m].name).join(", "))+'</span>':"")+'</div>').join("")+'</div>'}).join("")}
 
+let mapW=0;window.addEventListener("resize",()=>{const w=document.getElementById("map").clientWidth<480;if(w!==mapW){mapW=w;renderMap()}});
 function renderAll(){renderStack();renderTriage();renderHealth();renderBloodwork();renderER()}
 
 // ---------- events
