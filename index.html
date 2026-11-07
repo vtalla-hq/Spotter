@@ -278,6 +278,19 @@ details.moreinfo summary{cursor:pointer;font:700 18px var(--display);letter-spac
 .gsig li{display:grid;grid-template-columns:22px 1fr;gap:8px}
 .gsig .ic{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;background:var(--c)}
 .gnote{font-size:13px;color:var(--muted);margin:14px 0 0}
+ .mine{display:flex;flex-wrap:wrap;gap:12px 22px}
+.mine label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+.mine input{width:110px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font:500 16px var(--mono);color:var(--ink)}
+.mine .bpin{display:flex;align-items:center;gap:6px}.mine .bpin input{width:72px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{padding:12px 14px;border-radius:10px;background:var(--bg);border-top:4px solid var(--c)}
+.tile small{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.tile b{display:block;font:600 22px/1.2 var(--mono);margin:4px 0 2px}
+.tile span{font-size:13px;color:var(--c);font-weight:600}
+.tile p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.hsum{display:flex;align-items:baseline;gap:10px;margin:-4px 0 14px}
+.hsum b{font:700 30px/1 var(--display);text-transform:uppercase;color:var(--c)}
+.hsum span{color:var(--muted);font-size:14px}
 footer{max-width:1200px;margin:0 auto;padding:0 20px 32px;font-size:12px;color:var(--muted)}
 footer p{max-width:95ch;margin:0}
 </style>
@@ -338,6 +351,15 @@ footer p{max-width:95ch;margin:0}
   <div class="hhero"><h1>Stay healthy on your stack</h1><p>What you're missing, what clashes, and what's actually worth adding.</p></div>
   <div class="panel" id="cycPanel"><p class="eyebrow">Cycle timeline: what to test, and when</p><div class="tl" id="tl"></div></div>
   <div class="panel" id="gearPanel"><p class="eyebrow">Is your gear real?</p><div id="gear"></div></div>
+  <div class="panel"><p class="eyebrow">Your numbers</p><div class="mine" id="mine">
+    <label>Age<input id="me-age" inputmode="numeric" placeholder="years"></label>
+    <label>Blood pressure<span class="bpin"><input id="me-sys" inputmode="numeric" placeholder="120" aria-label="Systolic"> / <input id="me-dia" inputmode="numeric" placeholder="80" aria-label="Diastolic"></span></label>
+    <label>Resting heart rate<input id="me-hr" inputmode="numeric" placeholder="bpm"></label>
+  </div></div>
+  <div class="two">
+    <div class="panel"><p class="eyebrow">Heart strain</p><div id="heart"></div></div>
+    <div class="panel"><p class="eyebrow">Kidney score (eGFR)</p><div id="kidney"></div></div>
+  </div>
   <div class="panel"><p class="eyebrow">Your habits</p><div class="chips2" id="habits"></div></div>
   <div class="two">
     <div class="panel"><p class="eyebrow">Stack gap check</p><div id="gapwrap"></div></div>
@@ -527,10 +549,10 @@ const RED=[
 
 const EXAMPLE={stack:["creatine","testc","anavar"],train:true,vals:{hematocrit:0.53,hemoglobin:178,plt:330,alt:78,ast:66,ggt:28,bili:14,ck:1450,creatinine:128,ldl:3.9,hdl:0.62,tg:1.1,glucose:6.3,testo:52,lh:0.2,estradiol:210,ferritin:85}};
 // Sample: test cycle + Anavar + MK-677 + creatine, trained hard. Shows every triage group.
-const SAMPLE={stack:["creatine","testc","anavar","mk677"],train:true,cyc:{ph:"on",wk:"9"},vals:{hematocrit:0.55,hemoglobin:182,plt:340,alt:96,ast:71,ggt:24,bili:16,alp:85,ck:2100,creatinine:131,cystatin:0.82,urea:8.4,ldl:4.1,hdl:0.58,tg:1.4,apob:1.22,glucose:6.2,a1c:5.8,igf1:410,testo:58,lh:0.1,estradiol:230,tsh:5.6,ft4:14,ferritin:24}};
-const S={sex:"m",units:"si",stack:[],train:false,hab:{},vals:{},cyc:{ph:"on",wk:""},example:true,sel:"hematocrit",q:"",tab:"triage"};
-try{const r=localStorage.getItem("spotter-v1");if(r){const d=JSON.parse(r);Object.assign(S,{sex:d.sex||"m",units:d.units||"si",stack:d.stack||[],train:!!d.train,hab:d.hab||{},vals:d.vals||{},cyc:d.cyc||{ph:"on",wk:""},example:!!d.example})}else Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}catch(e){Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}
-function save(){try{localStorage.setItem("spotter-v1",JSON.stringify({sex:S.sex,units:S.units,stack:S.stack,train:S.train,hab:S.hab,vals:S.vals,cyc:S.cyc,example:S.example}))}catch(e){}}
+const SAMPLE={stack:["creatine","testc","anavar","mk677"],train:true,cyc:{ph:"on",wk:"9"},me:{age:"29",sys:"138",dia:"86",hr:"74"},vals:{hematocrit:0.55,hemoglobin:182,plt:340,alt:96,ast:71,ggt:24,bili:16,alp:85,ck:2100,creatinine:131,cystatin:0.82,urea:8.4,ldl:4.1,hdl:0.58,tg:1.4,apob:1.22,glucose:6.2,a1c:5.8,igf1:410,testo:58,lh:0.1,estradiol:230,tsh:5.6,ft4:14,ferritin:24}};
+const S={sex:"m",units:"si",stack:[],train:false,hab:{},vals:{},cyc:{ph:"on",wk:""},me:{},example:true,sel:"hematocrit",q:"",tab:"triage"};
+try{const r=localStorage.getItem("spotter-v1");if(r){const d=JSON.parse(r);Object.assign(S,{sex:d.sex||"m",units:d.units||"si",stack:d.stack||[],train:!!d.train,hab:d.hab||{},vals:d.vals||{},cyc:d.cyc||{ph:"on",wk:""},me:d.me||{},example:!!d.example})}else Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}catch(e){Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}
+function save(){try{localStorage.setItem("spotter-v1",JSON.stringify({sex:S.sex,units:S.units,stack:S.stack,train:S.train,hab:S.hab,vals:S.vals,cyc:S.cyc,me:S.me,example:S.example}))}catch(e){}}
 
 // ---------- math
 function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+0.3275911*x);return s*(1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x))}
@@ -702,7 +724,23 @@ function renderGear(){const P=document.getElementById("gearPanel"),G=gearSignals
   const v=!n?{c:"var(--muted)",t:"Can't tell yet",s:"Enter LH and total testosterone from a draw on cycle."}:!bad?{c:"var(--ok)",t:"Looks real",s:"Your labs match what this stack should do."}:bad===n?{c:"var(--danger)",t:"Doesn't look real",s:"Your labs don't match what this stack should do."}:{c:"var(--warn)",t:"Mixed signals",s:"Some of your labs don't match this stack."};
   document.getElementById("gear").innerHTML='<div class="gear"><div class="gverdict" style="--c:'+v.c+'"><b>'+v.t+'</b><span>'+v.s+'</span></div><ul class="gsig">'+(n?G.map(g=>'<li style="--c:'+(g.ok?"var(--ok)":"var(--risk)")+'"><span class="ic">'+(g.ok?"✓":"!")+'</span><span><strong>'+esc(g.t)+'</strong><br><span style="color:var(--muted)">'+cites(g.d)+'</span></span></li>').join(""):'<li style="--c:var(--muted)"><span class="ic">?</span><span>No LH or testosterone result yet.</span></li>')+'</ul></div>'+
    '<p class="gnote">'+cites("Across 19 studies, 36% of black-market steroids were counterfeit and another 37% were under- or over-dosed. [P32]")+' Bloodwork shows whether you\'re getting androgen exposure, not what\'s in the vial. If it looks fake, don\'t raise the dose to make up for it: the next batch could be overdosed or a different drug entirely.</p>'}
-function renderHealth(){renderCycle();renderGear();
+// ---------- your numbers: BP, heart rate, age
+const meN=k=>{const n=parseFloat(S.me[k]);return isFinite(n)&&n>0?n:null};
+function bpCat(sy,di){if(sy>180||di>120)return{n:"Crisis range",c:"var(--danger)",r:4};if(sy>=140||di>=90)return{n:"Stage 2 high",c:"var(--danger)",r:3};if(sy>=130||di>=80)return{n:"Stage 1 high",c:"var(--risk)",r:2};if(sy>=120)return{n:"Elevated",c:"var(--warn)",r:1};return{n:"Normal",c:"var(--ok)",r:0}}
+function heartTiles(){const T=[],sy=meN("sys"),di=meN("dia"),hr=meN("hr"),hct=S.vals.hematocrit;
+  if(sy&&di){const b=bpCat(sy,di);T.push({l:"Blood pressure",v:sy+"/"+di,s:b.n,c:b.c,r:b.r,p:b.r>=4?"Recheck after 5 minutes sitting. With chest pain, shortness of breath, vision changes or weakness, go to the ER.":b.r>=2?"Confirm with readings on 2+ different days. [P33]":"Under 130/80 is the guideline target. [P33]"})}
+  else T.push({l:"Blood pressure",v:"–",s:"Not entered",c:"var(--muted)",r:-1,p:"Androgens raised blood pressure during cycles. [P2]"});
+  if(hr){const r=hr>100?3:hr>=85?1:0;T.push({l:"Resting heart rate",v:hr+" bpm",s:hr>100?"Fast":hr>=85?"Upper normal":"Normal",c:r>=3?"var(--danger)":r?"var(--warn)":"var(--ok)",r,p:hr>100?"Over 100 at rest needs a doctor, especially on thyroid hormone or stimulants.":hr<60?"Low resting rates are common in trained people.":"Measure lying down, first thing in the morning."})}
+  else T.push({l:"Resting heart rate",v:"–",s:"Not entered",c:"var(--muted)",r:-1,p:"Measure lying down, first thing in the morning."});
+  if(hct!=null){const r=hct>=0.54?3:hct>ri(BYID.hematocrit)[1]?2:0;T.push({l:"Hematocrit",v:fmt(BYID.hematocrit,hct)+" "+u(BYID.hematocrit),s:r>=3?"At the hold point":r?"High":"In range",c:r>=3?"var(--danger)":r?"var(--risk)":"var(--ok)",r,p:"Thicker blood makes the heart work harder; guidelines act at 54%. [P3]"})}
+  else T.push({l:"Hematocrit",v:"–",s:"Not tested",c:"var(--muted)",r:-1,p:"Thicker blood makes the heart work harder; guidelines act at 54%. [P3]"});
+  const andro=hasCls("inj")||hasCls("oral");T.push({l:"Heart scan",v:S.hab.echo?"Done":"Never",s:S.hab.echo?"Covered":andro?"Worth getting":"Optional",c:S.hab.echo?"var(--ok)":andro?"var(--risk)":"var(--muted)",r:S.hab.echo?0:andro?2:-1,p:"Long-term users had weaker pumping and more coronary plaque. [P24]"});
+  return T}
+function renderHeart(){const T=heartTiles(),known=T.filter(t=>t.r>=0),top=Math.max(-1,...T.map(t=>t.r));
+  const sum=!known.length?{n:"Not enough data",c:"var(--muted)",d:"Add your blood pressure and heart rate above."}:top>=3?{n:"High strain",c:"var(--danger)",d:"At least one number needs a doctor soon."}:top>=2?{n:"Moderate strain",c:"var(--risk)",d:"Worth fixing before your next cycle."}:top>=1?{n:"Some strain",c:"var(--warn)",d:"Keep an eye on it."}:{n:"Low strain",c:"var(--ok)",d:"Nothing pushing your heart hard right now."};
+  document.getElementById("heart").innerHTML='<div class="hsum" style="--c:'+sum.c+'"><b>'+sum.n+'</b><span>'+sum.d+'</span></div><div class="tiles">'+T.map(t=>'<div class="tile" style="--c:'+t.c+'"><small>'+t.l+'</small><b>'+esc(t.v)+'</b><span>'+t.s+'</span><p>'+cites(t.p)+'</p></div>').join("")+'</div>'}
+function fillMine(){["age","sys","dia","hr"].forEach(k=>{const el=document.getElementById("me-"+k);if(document.activeElement!==el)el.value=S.me[k]||""})}
+function renderHealth(){fillMine();renderCycle();renderGear();renderHeart();
   document.getElementById("habits").innerHTML=HAB.map(h=>'<button class="cchip" data-hab="'+h.id+'" aria-pressed="'+!!S.hab[h.id]+'">'+h.l+'</button>').join("");
   renderGaps();renderCombos();renderSupport();
 }
@@ -712,7 +750,7 @@ const GAPS=[
  {when:()=>hasCls("inj")||hasCls("oral")||hasCls("sarm"),ok:()=>S.vals.apob!=null,t:"ApoB",why:"Counts plaque-causing particles directly. [P22]"},
  {when:()=>hasCls("oral")||hasCls("sarm"),ok:()=>S.vals.alt!=null&&S.vals.ggt!=null,t:"Liver panel with GGT",why:"Orals and SARMs are the compounds tied to liver injury. [P4] [P6]"},
  {when:()=>hasCls("inj")||hasCls("oral")||hasCls("trt")||hasCls("sarm"),ok:()=>S.vals.lh!=null,t:"LH",why:"Shows whether your own production is shut down. [P2]"},
- {when:()=>hasCls("inj")||hasCls("oral")||hasCls("trt"),ok:()=>!!S.hab.bp,t:"Blood pressure checked in the past month",why:"Blood pressure rose during cycles. [P2]"},
+ {when:()=>hasCls("inj")||hasCls("oral")||hasCls("trt"),ok:()=>!!S.hab.bp||meN("sys")!=null,t:"Blood pressure checked in the past month",why:"Blood pressure rose during cycles. [P2]"},
  {when:()=>hasCls("inj")||hasCls("oral"),ok:()=>!!S.hab.echo,t:"Heart scan (echo) at some point",why:"Long-term users had weaker heart pumping and more coronary plaque, and plaque grew with years of use. [P24]"},
  {when:()=>hasCls("inj")||hasCls("oral")||hasCls("sarm"),ok:()=>!!S.hab.cardio,t:"2+ hours of cardio a week",why:"The best-proven way to raise HDL. [P17]"},
  {when:()=>hasCls("gh"),ok:()=>S.vals.glucose!=null&&S.vals.a1c!=null,t:"Fasting glucose and A1c",why:"MK-677 raised glucose and cut insulin sensitivity. [P8]"},
@@ -774,9 +812,10 @@ document.addEventListener("click",e=>{
   const c=e.target.closest("a.cite[data-src]");if(c){e.preventDefault();go("sources");const li=document.getElementById("src-"+c.dataset.src);if(li){li.scrollIntoView({block:"center"});li.classList.add("flash");setTimeout(()=>li.classList.remove("flash"),1600)}return}
   const op=e.target.closest("[data-open]");if(op){e.preventDefault();S.sel=op.dataset.open;S.q="";document.getElementById("q").value="";go("bloodwork",S.sel);renderBloodwork();window.scrollTo(0,0);return}
   const g=e.target.closest("[data-go]");if(g){e.preventDefault();go(g.dataset.go);window.scrollTo(0,0);return}
-  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else if(a.dataset.act==="sample"){Object.assign(S,{stack:[...SAMPLE.stack],train:SAMPLE.train,vals:{...SAMPLE.vals},cyc:{...SAMPLE.cyc},hab:{},sex:"m",units:"si",example:true});seg("sexSeg","sex");seg("unitSeg","units");save();renderAll();go("triage");window.scrollTo(0,0)}else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
+  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else if(a.dataset.act==="sample"){Object.assign(S,{stack:[...SAMPLE.stack],train:SAMPLE.train,vals:{...SAMPLE.vals},cyc:{...SAMPLE.cyc},me:{...SAMPLE.me},hab:{},sex:"m",units:"si",example:true});seg("sexSeg","sex");seg("unitSeg","units");save();renderAll();go("triage");window.scrollTo(0,0)}else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
 });
 document.getElementById("habits").addEventListener("click",e=>{const b=e.target.closest("[data-hab]");if(!b)return;S.hab[b.dataset.hab]=!S.hab[b.dataset.hab];save();renderHealth();renderTriage()});
+document.getElementById("mine").addEventListener("input",e=>{const k=e.target.id.slice(3);if(!k)return;S.me[k]=e.target.value.replace(/[^\d.]/g,"").slice(0,5);S.example=false;save();renderHealth();renderTriage()});
 document.getElementById("cycSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S.cyc.ph=b.dataset.v;S.example=false;save();renderAll()});
 document.getElementById("cycWk").addEventListener("input",e=>{S.cyc.wk=e.target.value.replace(/\D/g,"").slice(0,3);save();renderStack();renderTriage();renderHealth();renderBloodwork()});
 document.getElementById("trainSw").addEventListener("change",e=>{S.train=e.target.checked;S.example=false;save();renderTriage();renderHealth();renderBloodwork()});
