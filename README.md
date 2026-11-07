@@ -15,7 +15,8 @@ Standard lab reports flag lifters for everything: high creatinine from creatine,
 - Per-marker distribution curves and estimated percentiles
 - Paste-a-report parser for LifeLabs, Dynacare and hospital portal text
 - Pre-draw checklist and "test these next" suggestions based on your stack
-- 23 cited sources (PubMed, guidelines, regulators). Every effect and cutoff links to one
+- **Health check**: a stack gap check (tests and habits your stack calls for), combo warnings for stacks that double up on the same harm, and supplements and habits rated Proven, Weak evidence or Avoid
+- 30 cited sources (PubMed, guidelines, regulators). Every effect and cutoff links to one
 
 ## Privacy
 
