@@ -630,7 +630,27 @@ function renderHealth(){
   document.getElementById("habits").innerHTML=HAB.map(h=>'<button class="cchip" data-hab="'+h.id+'" aria-pressed="'+!!S.hab[h.id]+'">'+h.l+'</button>').join("");
   renderGaps();renderCombos();renderSupport();
 }
-function renderGaps(){document.getElementById("gapwrap").innerHTML='<p class="empty">Coming next.</p>'}
+const GAPS=[
+ {when:()=>hasCls("inj")||hasCls("oral")||hasCls("trt")||hasCls("sarm"),ok:()=>S.vals.hematocrit!=null,t:"Hematocrit tested",why:"Androgens raise red cells, and guidelines act at 54%. [P3]"},
+ {when:()=>hasCls("inj")||hasCls("oral")||hasCls("sarm"),ok:()=>S.vals.hdl!=null&&S.vals.ldl!=null,t:"Lipid panel (HDL and LDL)",why:"HDL and LDL moved the wrong way during cycles. [P2] [P5]"},
+ {when:()=>hasCls("inj")||hasCls("oral")||hasCls("sarm"),ok:()=>S.vals.apob!=null,t:"ApoB",why:"Counts plaque-causing particles directly. [P22]"},
+ {when:()=>hasCls("oral")||hasCls("sarm"),ok:()=>S.vals.alt!=null&&S.vals.ggt!=null,t:"Liver panel with GGT",why:"Orals and SARMs are the compounds tied to liver injury. [P4] [P6]"},
+ {when:()=>hasCls("inj")||hasCls("oral")||hasCls("trt")||hasCls("sarm"),ok:()=>S.vals.lh!=null,t:"LH",why:"Shows whether your own production is shut down. [P2]"},
+ {when:()=>hasCls("inj")||hasCls("oral")||hasCls("trt"),ok:()=>!!S.hab.bp,t:"Blood pressure checked in the past month",why:"Blood pressure rose during cycles. [P2]"},
+ {when:()=>hasCls("inj")||hasCls("oral"),ok:()=>!!S.hab.echo,t:"Heart scan (echo) at some point",why:"Long-term users had weaker heart pumping and more coronary plaque, and plaque grew with years of use. [P24]"},
+ {when:()=>hasCls("inj")||hasCls("oral")||hasCls("sarm"),ok:()=>!!S.hab.cardio,t:"2+ hours of cardio a week",why:"The best-proven way to raise HDL. [P17]"},
+ {when:()=>hasCls("gh"),ok:()=>S.vals.glucose!=null&&S.vals.a1c!=null,t:"Fasting glucose and A1c",why:"MK-677 raised glucose and cut insulin sensitivity. [P8]"},
+ {when:()=>hasCls("gh"),ok:()=>S.vals.igf1!=null,t:"IGF-1",why:"Shows how much GH exposure you're actually getting. [P8]"},
+ {when:()=>hasCls("glp"),ok:()=>!!S.hab.protein,t:"Protein at every meal",why:"Lean mass fell about 10% on semaglutide in STEP 1. [P28]"},
+ {when:()=>S.stack.includes("creatine"),ok:()=>S.vals.cystatin!=null,t:"Cystatin C (optional)",why:"Checks your kidneys without the creatine artifact. [P13]"}
+];
+function gapList(){return GAPS.filter(g=>g.when()).map(g=>({...g,done:g.ok()}))}
+function renderGaps(){const G=gapList(),el=document.getElementById("gapwrap");
+  if(!S.stack.length){el.innerHTML='<p class="empty">Add your stack on the Triage tab to see what you should be checking.</p>';return}
+  if(!G.length){el.innerHTML='<p class="empty">Nothing extra to monitor for this stack beyond routine bloodwork.</p>';return}
+  const d=G.filter(g=>g.done).length;
+  el.innerHTML='<div class="gapscore"><b>'+d+'/'+G.length+'</b><span>covered</span></div><div class="gapbar"><i style="width:'+(d/G.length*100)+'%"></i></div><ul class="gaps">'+
+   G.sort((a,b)=>a.done-b.done).map(g=>'<li class="'+(g.done?"ok":"miss")+'"><span class="ic">'+(g.done?"✓":"!")+'</span><span><strong>'+esc(g.t)+'</strong><small>'+cites(g.why)+'</small></span></li>').join("")+'</ul>'}
 function renderCombos(){document.getElementById("combos").innerHTML=''}
 function renderSupport(){document.getElementById("support").innerHTML=''}
 
