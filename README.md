@@ -10,13 +10,13 @@ Standard lab reports flag lifters for everything: high creatinine from creatine,
 
 ## Features
 
-- Stack picker covering supplements, TRT, injectable and oral steroids, SARMs, GH secretagogues, GLP-1 drugs, repair peptides and thyroid hormone
-- 25 lifter-relevant markers with typical adult ranges, SI/US units and sex-specific ranges
+- 58 compounds: supplements, TRT, injectable and oral steroids, prohormones, SARMs and research chems, GH and secretagogues, GLP-1 drugs, peptides, ancillaries (AIs, SERMs, hCG, finasteride), fat burners (clenbuterol, DNP, ECA), and other drugs lifters use (isotretinoin, diuretics, insulin, EPO)
+- 27 lifter-relevant markers, including potassium and PSA, with typical adult ranges, SI/US units and sex-specific ranges
 - Per-marker distribution curves and estimated percentiles
 - Paste-a-report parser for LifeLabs, Dynacare and hospital portal text
 - Pre-draw checklist and "test these next" suggestions based on your stack
 - **Health check**: a stack gap check (tests and habits your stack calls for), combo warnings for stacks that double up on the same harm, and supplements and habits rated Proven, Weak evidence or Avoid
-- **Stack map**: a live graph from each compound to the organ systems it acts on, tagged harm, expected or lab artifact, with one-tap quick stacks
+- **Load map**: a body diagram where each organ system lights up by strain; hover a compound to see what it hits, or load a preset stack in one tap
 - **Organ strain scores**: 0–100 per system, combining what your stack is known to do with what your own bloodwork confirms
 - **Cycle timeline**: tell Spotter whether the draw was before, on or after a cycle. Baseline draws and draws 12+ weeks off aren't blamed on the cycle
 - **Is your gear real?**: checks whether LH and testosterone look like what your stack should do
@@ -25,7 +25,7 @@ Standard lab reports flag lifters for everything: high creatinine from creatine,
 - **Doctor sheet**: a printable one-page summary of what you take, flagged results, tests to add and questions to ask
 - **ER signs**: emergency symptoms, with the ones tied to your stack marked
 - **Share card**: an image of your triage counts (no values; stack optional)
-- 34 cited sources (PubMed, guidelines, regulators). Every effect and cutoff links to one
+- 61 cited sources (PubMed, guidelines, regulators). Every effect and cutoff links to one
 
 ## Privacy
 
