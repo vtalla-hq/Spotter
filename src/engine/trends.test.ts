@@ -60,6 +60,11 @@ describe("projection", () => {
     const pts = series([draw("2025-01-01", { hematocrit: 0.45 }), draw("2026-01-01", { hematocrit: 0.452 })], "hematocrit");
     expect(project(BYID.hematocrit, "m", pts)).toBeNull();
   });
+  it("doesn't project a marker heading back toward the middle of its range", () => {
+    // off-cycle hematocrit easing down from 0.50 is recovery, not a warning
+    const pts = series([draw("2026-08-01", { hematocrit: 0.5 }, "off"), draw("2026-09-01", { hematocrit: 0.48 }, "off")], "hematocrit");
+    expect(project(BYID.hematocrit, "m", pts)).toBeNull();
+  });
   it("doesn't project when already past every threshold", () => {
     const pts = series([draw("2026-09-01", { hematocrit: 0.55 }), draw("2026-10-01", { hematocrit: 0.57 })], "hematocrit");
     expect(project(BYID.hematocrit, "m", pts)).toBeNull();

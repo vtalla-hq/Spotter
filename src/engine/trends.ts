@@ -91,6 +91,9 @@ export function project(m: Marker, sex: Sex, pts: Point[]): Projection | null {
   const red = TARGETS[m.id]?.[dir];
   const edge = dir === "up" ? hi : lo;
   const ahead = (t: number) => (dir === "up" ? t > last.v : t < last.v);
+  // only warn about drift away from the middle of the range; heading back toward it is recovery, not a problem
+  const mid = m.dist === "log" ? Math.sqrt(lo * hi) : (lo + hi) / 2;
+  if ((dir === "up" && last.v < mid) || (dir === "down" && last.v > mid)) return null;
   let target: { v: number; label: string } | null = null;
   if (ahead(edge)) target = { v: edge, label: dir === "up" ? "the top of the typical range" : "the bottom of the typical range" };
   else if (red && ahead(red.v)) target = red;
