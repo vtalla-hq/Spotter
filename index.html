@@ -167,6 +167,7 @@ svg.curve text{fill:var(--muted);font:11px var(--mono)}
 .facts dt{color:var(--muted)} .facts dd{margin:0}
 a.cite{font:600 10px/1 var(--mono);color:var(--accent);text-decoration:none;vertical-align:super;margin-left:1px}
 a.cite:hover{text-decoration:underline}
+.csep{font:600 10px/1 var(--mono);color:var(--accent);vertical-align:super}
 
 /* sources */
 .prose{max-width:80ch}
@@ -524,7 +525,7 @@ const f=m=>S.units==="us"?m.us[1]:1,u=m=>S.units==="us"?m.us[0]:m.unit,dp=m=>S.u
 const fmt=(m,v)=>v==null?"":(v*f(m)).toLocaleString("en-CA",{minimumFractionDigits:dp(m),maximumFractionDigits:dp(m)});
 const fmtIn=(m,v)=>v==null?"":String(+(v*f(m)).toFixed(Math.max(dp(m),2)));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const cites=s=>esc(s).replace(/\s*\[(P\d+)\]/g,(_,id)=>'<a class="cite" href="#sources" data-src="'+id+'" title="'+esc(SRC[id].t)+'">'+SN(id)+'</a>');
+const cites=s=>esc(s).replace(/\s*\[(P\d+)\]/g,(_,id)=>'<a class="cite" href="#sources" data-src="'+id+'" title="'+esc(SRC[id].t)+'">'+SN(id)+'</a>').replace(/<\/a><a class="cite"/g,'</a><span class="csep">,</span><a class="cite"');
 function ord(p){if(p<1)return"<1st";if(p>99)return">99th";const n=Math.round(p);return n+((n%100>=11&&n%100<=13)?"th":({1:"st",2:"nd",3:"rd"}[n%10]||"th"))}
 const CAT={red:{n:"Red flags",c:"var(--danger)",d:"Act on these whatever the cause"},risk:{n:"Real risks",c:"var(--risk)",d:"Explained by your stack, but actually harmful"},unexplained:{n:"Unexplained",c:"var(--warn)",d:"Nothing in your stack does this"},explained:{n:"Explained",c:"var(--calm)",d:"Lab artifacts or expected effects"}};
 const KTAG={risk:["Real risk","var(--risk)"],expected:["Expected","var(--calm)"],artifact:["Artifact","var(--ok)"]};
@@ -666,21 +667,21 @@ function comboList(){const C=[],orals=nCls("oral"),injs=S.stack.filter(id=>BYC[i
 function renderCombos(){const C=comboList(),el=document.getElementById("combos");
   el.innerHTML=!S.stack.length?'<li class="empty" style="background:none;border:0;padding:0">Add your stack to check for risky combos.</li>':C.length?C.map(c=>'<li style="--c:'+c.c+'"><strong>'+esc(c.t)+'</strong><span>'+cites(c.d)+'</span></li>').join(""):'<li style="--c:var(--ok)"><strong>No risky combos found</strong><span>Nothing in your stack doubles up on the same harm.</span></li>'}
 const SUP=[
- {g:"proven",n:"Cardio, 2+ hours a week",helps:["hdl"],d:"Raised HDL across trials; session length mattered most. [P17]"},
- {g:"proven",n:"Psyllium fibre",helps:["ldl","apob"],d:"Across 28 trials, about 10 g a day lowered LDL by 0.33 mmol/L and lowered ApoB. [P25]"},
- {g:"proven",n:"Less saturated fat",helps:["ldl","apob"],d:"Swapping it for unsaturated fats lowers LDL. [P18]"},
- {g:"proven",n:"Prescription omega-3",helps:["tg"],d:"Prescription-strength omega-3 lowered triglycerides 20–30%. Ask a doctor; store-bought fish oil isn't a substitute. [P29]"},
- {g:"proven",n:"Sleep 7–9 hours",helps:["testo"],d:"A week of 5-hour nights cut testosterone 10–15%. [P20]"},
+ {g:"proven",n:"Cardio, 2+ hours a week",helps:[["hdl","down"]],d:"Raised HDL across trials; session length mattered most. [P17]"},
+ {g:"proven",n:"Psyllium fibre",helps:[["ldl","up"],["apob","up"]],d:"Across 28 trials, about 10 g a day lowered LDL by 0.33 mmol/L and lowered ApoB. [P25]"},
+ {g:"proven",n:"Less saturated fat",helps:[["ldl","up"],["apob","up"]],d:"Swapping it for unsaturated fats lowers LDL. [P18]"},
+ {g:"proven",n:"Prescription omega-3",helps:[["tg","up"]],d:"Prescription-strength omega-3 lowered triglycerides 20–30%. Ask a doctor; store-bought fish oil isn't a substitute. [P29]"},
+ {g:"proven",n:"Sleep 7–9 hours",helps:[["testo","down"]],d:"A week of 5-hour nights cut testosterone 10–15%. [P20]"},
  {g:"proven",n:"Creatine",helps:[],d:"Safe for healthy kidneys. It only raises creatinine on tests. [P11]"},
  {g:"proven",n:"Vitamin D in winter, if low",helps:[],d:"Fixing a deficiency is guideline-backed. Test first. [P30]"},
- {g:"proven",n:"Iron every other day, if ferritin is low",helps:["ferritin"],d:"Absorbed better than daily dosing. [P23]"},
- {g:"weak",n:"Citrus bergamot",helps:["ldl"],d:"Lowered lipids in 14 small trials, but reviewers say better studies are needed. [P26]"},
- {g:"weak",n:"TUDCA",helps:["alt","ast"],d:"Studied in liver diseases, but we found no controlled trials in steroid users. It doesn't make an oral safe."},
- {g:"avoid",n:"Red yeast rice",helps:["ldl"],d:"Its active ingredient is identical to the statin lovastatin, doses vary wildly between brands, and some contain a kidney toxin. [P27]"}
+ {g:"proven",n:"Iron every other day, if ferritin is low",helps:[["ferritin","down"]],d:"Absorbed better than daily dosing. [P23]"},
+ {g:"weak",n:"Citrus bergamot",helps:[["ldl","up"]],d:"Lowered lipids in 14 small trials, but reviewers say better studies are needed. [P26]"},
+ {g:"weak",n:"TUDCA",helps:[["alt","up"],["ast","up"]],d:"Studied in liver diseases, but we found no controlled trials in steroid users. It doesn't make an oral safe."},
+ {g:"avoid",n:"Red yeast rice",helps:[["ldl","up"]],d:"Its active ingredient is identical to the statin lovastatin, doses vary wildly between brands, and some contain a kidney toxin. [P27]"}
 ];
 const GRADE={proven:{n:"Proven",c:"var(--ok)"},weak:{n:"Weak evidence",c:"var(--warn)"},avoid:{n:"Avoid",c:"var(--danger)"}};
-function renderSupport(){const flagged=new Set(triage().map(t=>t.m.id));
-  document.getElementById("support").innerHTML=Object.keys(GRADE).map(k=>{const L=SUP.filter(x=>x.g===k).map(x=>({...x,rel:x.helps.filter(m=>flagged.has(m))})).sort((a,b)=>b.rel.length-a.rel.length);
+function renderSupport(){const flagged=new Set(triage().map(t=>t.m.id+":"+t.d));
+  document.getElementById("support").innerHTML=Object.keys(GRADE).map(k=>{const L=SUP.filter(x=>x.g===k).map(x=>({...x,rel:x.helps.filter(([m,d])=>flagged.has(m+":"+d)).map(([m])=>m)})).sort((a,b)=>b.rel.length-a.rel.length);
     return'<div class="scol"><h3 style="--c:'+GRADE[k].c+'"><i></i>'+GRADE[k].n+'</h3>'+L.map(x=>'<div class="sitem"><strong>'+esc(x.n)+'</strong><span>'+cites(x.d)+'</span>'+(x.rel.length&&k!=="avoid"?'<br><span class="rel">Targets your '+esc(x.rel.map(m=>BYID[m].name).join(", "))+'</span>':"")+'</div>').join("")+'</div>'}).join("")}
 
 function renderAll(){renderStack();renderTriage();renderHealth();renderBloodwork()}
