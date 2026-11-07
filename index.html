@@ -552,12 +552,12 @@ dialog h2{text-transform:none;font-stretch:100%;font-weight:800}
     </div>
     <div class="stackfoot">
       <label class="switch"><input type="checkbox" id="trainSw"> Trained hard in the 7 days before the draw</label>
-      <span class="btnrow"><button class="btn" data-act="sample">Try a sample cycle</button><button class="btn" data-act="paste">Paste lab report</button><button class="btn" data-go="bloodwork">Type in results</button><button class="btn" data-act="doc">Doctor sheet</button><button class="btn" data-act="share">Share card</button></span>
+      <span class="btnrow"><button class="btn" data-act="sample">Try a sample cycle</button><button class="btn" data-act="paste">Paste lab report</button><button class="btn" data-go="bloodwork">Type in results</button><button class="btn" data-act="doc">Doctor sheet</button><button class="btn" data-act="share">Share card</button><button class="btn" data-act="clear" id="clearBtn">Clear all</button></span>
     </div>
     <div class="cycrow" id="cycrow"><span>When was this blood drawn?</span><span class="seg" id="cycSeg" aria-label="Cycle phase"><button data-v="pre">Before starting</button><button data-v="on">On cycle</button><button data-v="off">Off cycle</button></span><label id="wkLab"><input class="wkin" id="cycWk" inputmode="numeric" aria-label="Weeks"> <span id="wkTxt">weeks in</span></label></div>
   </div>
 
-  <div class="notice" id="exNote"><span><b>This is an example.</b> Swap in your own stack and results.</span><span class="btnrow"><button class="btn" data-act="sample">Try a sample cycle</button><button class="btn" data-act="clear">Start blank</button></span></div>
+  <div class="notice" id="exNote"><span><b>This is a sample cycle.</b> Swap in your own stack and results, or clear it.</span><span class="btnrow"><button class="btn" data-act="clear">Clear sample</button></span></div>
 
   <div class="verdict" id="verdict"></div>
   <div class="panel strain" id="strainP"><div class="shead"><div><p class="eyebrow">Organ strain</p><h2>Where your stack is hitting you</h2></div><span class="leg2"><i class="c"></i>confirmed by your bloodwork <i class="p"></i>expected from your stack</span></div><div id="strain"></div></div>
@@ -897,8 +897,8 @@ const RED=[
 const EXAMPLE={stack:["creatine","testc","anavar"],train:true,vals:{hematocrit:0.53,hemoglobin:178,plt:330,alt:78,ast:66,ggt:28,bili:14,ck:1450,creatinine:128,ldl:3.9,hdl:0.62,tg:1.1,glucose:6.3,testo:52,lh:0.2,estradiol:210,ferritin:85}};
 // Sample: test cycle + Anavar + MK-677 + creatine, trained hard. Shows every triage group.
 const SAMPLE={stack:["creatine","testc","anavar","mk677"],train:true,cyc:{ph:"on",wk:"9"},me:{age:"29",sys:"138",dia:"86",hr:"74"},vals:{hematocrit:0.55,hemoglobin:182,plt:340,alt:96,ast:71,ggt:24,bili:16,alp:85,ck:2100,creatinine:131,cystatin:0.82,urea:8.4,ldl:4.1,hdl:0.58,tg:1.4,apob:1.22,glucose:6.2,a1c:5.8,igf1:410,testo:58,lh:0.1,estradiol:230,tsh:5.6,ft4:14,ferritin:24}};
-const S={sex:"m",units:"si",stack:[],train:false,hab:{},vals:{},cyc:{ph:"on",wk:""},me:{},example:true,sel:"hematocrit",q:"",tab:"triage"};
-try{const r=localStorage.getItem("spotter-v1");if(r){const d=JSON.parse(r);Object.assign(S,{sex:d.sex||"m",units:d.units||"si",stack:d.stack||[],train:!!d.train,hab:d.hab||{},vals:d.vals||{},cyc:d.cyc||{ph:"on",wk:""},me:d.me||{},example:!!d.example})}else Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}catch(e){Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}
+const S={sex:"m",units:"si",stack:[],train:false,hab:{},vals:{},cyc:{ph:"on",wk:""},me:{},example:false,sel:"hematocrit",q:"",tab:"triage"};
+try{const r=localStorage.getItem("spotter-v1");if(r){const d=JSON.parse(r);Object.assign(S,{sex:d.sex||"m",units:d.units||"si",stack:d.stack||[],train:!!d.train,hab:d.hab||{},vals:d.vals||{},cyc:d.cyc||{ph:"on",wk:""},me:d.me||{},example:!!d.example})}}catch(e){}
 function save(){try{localStorage.setItem("spotter-v1",JSON.stringify({sex:S.sex,units:S.units,stack:S.stack,train:S.train,hab:S.hab,vals:S.vals,cyc:S.cyc,me:S.me,example:S.example}))}catch(e){}}
 
 // ---------- math
@@ -965,6 +965,8 @@ function renderOpts(){const q=document.getElementById("pickQ").value.trim().toLo
 // ---------- triage UI
 function renderTriage(){
   document.getElementById("exNote").style.display=S.example?"":"none";
+  const anyV=Object.keys(S.vals).length>0;document.querySelectorAll('.stackfoot [data-act="doc"],.stackfoot [data-act="share"]').forEach(x=>x.style.display=anyV?"":"none");
+  document.getElementById("clearBtn").style.display=S.stack.length||S.train||Object.keys(S.vals).length||Object.keys(S.me).length?"":"none";
   const T=triage(),hasVals=Object.keys(S.vals).length>0;
   document.getElementById("st1").classList.toggle("done",S.stack.length>0||S.train);
   document.getElementById("st2").classList.toggle("done",hasVals);
@@ -1341,7 +1343,7 @@ document.addEventListener("click",e=>{
   const c=e.target.closest("a.cite[data-src]");if(c){e.preventDefault();go("sources");const li=document.getElementById("src-"+c.dataset.src);if(li){li.scrollIntoView({block:"center"});li.classList.add("flash");setTimeout(()=>li.classList.remove("flash"),1600)}return}
   const op=e.target.closest("[data-open]");if(op){e.preventDefault();S.sel=op.dataset.open;S.q="";document.getElementById("q").value="";go("bloodwork",S.sel);renderBloodwork();window.scrollTo(0,0);return}
   const g=e.target.closest("[data-go]");if(g){e.preventDefault();go(g.dataset.go);window.scrollTo(0,0);return}
-  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else if(a.dataset.act==="doc")openDoc();else if(a.dataset.act==="share")openShare();else if(a.dataset.act==="sample"){Object.assign(S,{stack:[...SAMPLE.stack],train:SAMPLE.train,vals:{...SAMPLE.vals},cyc:{...SAMPLE.cyc},me:{...SAMPLE.me},hab:{},sex:"m",units:"si",example:true});seg("sexSeg","sex");seg("unitSeg","units");save();renderAll();go("triage");window.scrollTo(0,0)}else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
+  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else if(a.dataset.act==="doc")openDoc();else if(a.dataset.act==="share")openShare();else if(a.dataset.act==="sample"){Object.assign(S,{stack:[...SAMPLE.stack],train:SAMPLE.train,vals:{...SAMPLE.vals},cyc:{...SAMPLE.cyc},me:{...SAMPLE.me},hab:{},sex:"m",units:"si",example:true});seg("sexSeg","sex");seg("unitSeg","units");save();renderAll();go("triage");window.scrollTo(0,0)}else if(a.dataset.act==="clear"){Object.assign(S,{vals:{},stack:[],train:false,hab:{},me:{},cyc:{ph:"on",wk:""},example:false});openSys=new Set();save();renderAll();window.scrollTo(0,0)}}
 });
 document.getElementById("habits").addEventListener("click",e=>{const b=e.target.closest("[data-hab]");if(!b)return;S.hab[b.dataset.hab]=!S.hab[b.dataset.hab];save();renderHealth();renderTriage()});
 document.getElementById("mine").addEventListener("input",e=>{const k=e.target.id.slice(3);if(!k)return;S.me[k]=e.target.value.replace(/[^\d.]/g,"").slice(0,5);S.example=false;save();renderHealth();renderTriage()});
