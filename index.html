@@ -651,7 +651,18 @@ function renderGaps(){const G=gapList(),el=document.getElementById("gapwrap");
   const d=G.filter(g=>g.done).length;
   el.innerHTML='<div class="gapscore"><b>'+d+'/'+G.length+'</b><span>covered</span></div><div class="gapbar"><i style="width:'+(d/G.length*100)+'%"></i></div><ul class="gaps">'+
    G.sort((a,b)=>a.done-b.done).map(g=>'<li class="'+(g.done?"ok":"miss")+'"><span class="ic">'+(g.done?"✓":"!")+'</span><span><strong>'+esc(g.t)+'</strong><small>'+cites(g.why)+'</small></span></li>').join("")+'</ul>'}
-function renderCombos(){document.getElementById("combos").innerHTML=''}
+function comboList(){const C=[],orals=nCls("oral"),injs=S.stack.filter(id=>BYC[id].cls==="inj").length;
+  if(orals>=2)C.push({c:"var(--danger)",t:"Two orals at once",d:"Both stress the liver the same way, so the risk stacks. [P4]"});
+  if(orals&&hasCls("sarm"))C.push({c:"var(--danger)",t:"Oral steroid + SARM",d:"Two separate liver stressors. Both are linked to cholestatic liver injury. [P4] [P6]"});
+  if((orals||hasCls("sarm"))&&S.hab.alcohol)C.push({c:"var(--risk)",t:"Liver stressor + regular drinking",d:"Alcohol adds more load on a liver already working against an oral or SARM. [P14]"});
+  if(orals&&(injs||hasCls("trt")))C.push({c:"var(--risk)",t:"Injectable + oral",d:"Orals hit lipids harder than injectables alone, so HDL takes a double hit. [P2]"});
+  if(injs>=2)C.push({c:"var(--risk)",t:"Multiple injectables",d:"More androgen exposure means more hematocrit and lipid strain, and heart plaque grew with years of use. [P2] [P24]"});
+  if(nCls("gh")>=2)C.push({c:"var(--risk)",t:"Two GH-pathway compounds",d:"Their glucose effects can add up. [P8] [P1]"});
+  if(hasCls("glp"))C.push({c:"var(--warn)",t:"GLP-1 drug",d:"About 10% of lean mass was lost on semaglutide in STEP 1. Keep lifting and eating protein. [P28]"});
+  if(hasCls("thy"))C.push({c:"var(--warn)",t:"Thyroid hormone",d:"Too much strains the heart. Watch resting heart rate and get TSH and free T4 checked."});
+  return C}
+function renderCombos(){const C=comboList(),el=document.getElementById("combos");
+  el.innerHTML=!S.stack.length?'<li class="empty" style="background:none;border:0;padding:0">Add your stack to check for risky combos.</li>':C.length?C.map(c=>'<li style="--c:'+c.c+'"><strong>'+esc(c.t)+'</strong><span>'+cites(c.d)+'</span></li>').join(""):'<li style="--c:var(--ok)"><strong>No risky combos found</strong><span>Nothing in your stack doubles up on the same harm.</span></li>'}
 function renderSupport(){document.getElementById("support").innerHTML=''}
 
 function renderAll(){renderStack();renderTriage();renderHealth();renderBloodwork()}
