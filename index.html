@@ -486,6 +486,19 @@ nav a{font:600 14px/1 var(--sans);font-stretch:100%;letter-spacing:0;text-transf
 #map .sc{font-size:13px}
 .hchips button{font-size:12.5px;font-weight:600}
 .card h3{font-size:17px}
+/* monochrome: ink accent, colour only where it means something */
+html:root:not([data-theme="dark"]){--accent:#1b1c19;--volt:#1b1c19;--accent-soft:#efefeb}
+html:root[data-theme="dark"]{--accent:#f1efe7;--volt:#f1efe7;--accent-soft:#232520}
+.btn.primary,.presets button[aria-pressed="true"]{color:var(--bg)}
+.hcopy h1 .b,html:root:not([data-theme="dark"]) .hcopy h1 .b{color:#8d8a82}
+.eyebrow::before{display:none}
+.how3>div::before{display:none}
+.schip,.hchips button{box-shadow:none}
+.card{border-left-width:3px}
+.vbig b{color:var(--ink)}
+.vbig span::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c);align-self:center;margin-right:2px}
+a.cite,.csep{color:var(--muted)}
+a.cite:hover{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -550,11 +563,10 @@ nav a{font:600 14px/1 var(--sans);font-stretch:100%;letter-spacing:0;text-transf
   <div class="how">
     <h2>Lab ranges are written for people who don't lift. <span>Spotter reads them for people who do.</span></h2>
     <div class="how3">
-      <div style="--c:#facc15"><span class="k">Warm-up</span><h3>Load your stack</h3><p>Pick from 58 compounds, from creatine to clenbuterol. The load map shows which organs each one works on, and whether that's harm, an expected change or just a lab artifact.</p></div>
+      <div style="--c:#facc15"><span class="k">Warm-up</span><h3>Load your stack</h3><p>Pick anything from creatine to clenbuterol. The load map shows which organs each one works on, and whether that's harm, an expected change or just a lab artifact.</p></div>
       <div style="--c:#3b82f6"><span class="k">Working set</span><h3>Run your bloods</h3><p>Paste your results. Every flag lands in act now, fix, or expected, with the paper behind the call one tap away.</p></div>
       <div style="--c:#22c55e"><span class="k">Cool-down</span><h3>Hand it off</h3><p>Print a doctor sheet with what you take, what's flagged and what to test next. No doses, no judgment, no guessing.</p></div>
     </div>
-    <div class="stats" id="stats"></div>
   </div>
   <p class="policy">Spotter doesn't give doses, cycles or PCT protocols. For anything in "Act now," see a doctor who knows exactly what you're on. Chest pain, yellow eyes or sudden weakness? <a href="#er" data-go="er" style="color:var(--danger);font-weight:700">See ER signs</a>.</p>
 </section>
@@ -695,7 +707,13 @@ const SRC={
  P58:{t:"Nelson ME, et al. Melanotan II injection resulting in systemic toxicity and rhabdomyolysis. Clin Toxicol. 2012;50(10):1169–1173.",u:"https://pubmed.ncbi.nlm.nih.gov/23121206/",id:"PMID 23121206"},
  P59:{t:"Peters B, et al. Melanotan II: a possible cause of renal infarction: review of the literature and case report. CEN Case Rep. 2020;9(2):159–161.",u:"https://pubmed.ncbi.nlm.nih.gov/31953620/",id:"PMID 31953620"},
  P60:{t:"Abeles RD, et al. Androgenic anabolic steroid-induced liver injury: two case reports assessed for causality by the updated RUCAM score and a comprehensive review of the literature. BMJ Open Gastroenterol. 2020;7(1):e000549.",u:"https://pubmed.ncbi.nlm.nih.gov/33214235/",id:"PMID 33214235"},
- P61:{t:"van Bokhorst QNE, et al. A 29-year-old bodybuilder with liothyronine-induced thyrotoxic hypokalaemic periodic paralysis. Eur J Case Rep Intern Med. 2021;8(3):002362.",u:"https://pubmed.ncbi.nlm.nih.gov/33869098/",id:"PMID 33869098"}
+ P61:{t:"van Bokhorst QNE, et al. A 29-year-old bodybuilder with liothyronine-induced thyrotoxic hypokalaemic periodic paralysis. Eur J Case Rep Intern Med. 2021;8(3):002362.",u:"https://pubmed.ncbi.nlm.nih.gov/33869098/",id:"PMID 33869098"},
+ P62:{t:"Rasmussen JJ, et al. Former abusers of anabolic androgenic steroids exhibit decreased testosterone levels and hypogonadal symptoms years after cessation: a case-control study. PLoS One. 2016;11(8):e0161208.",u:"https://pubmed.ncbi.nlm.nih.gov/27532478/",id:"PMID 27532478"},
+ P63:{t:"Herlitz LC, et al. Development of focal segmental glomerulosclerosis after anabolic steroid abuse. J Am Soc Nephrol. 2010;21(1):163–172.",u:"https://doi.org/10.1681/ASN.2009040450",id:"doi 10.1681/ASN.2009040450"},
+ P64:{t:"Hartgens F, et al. Effects of androgenic-anabolic steroids on apolipoproteins and lipoprotein (a). Br J Sports Med. 2004;38(3):253–259.",u:"https://pubmed.ncbi.nlm.nih.gov/15155420/",id:"PMID 15155420"},
+ P65:{t:"Dickerman RD, et al. Anabolic steroid-induced hepatotoxicity: is it overstated? Clin J Sport Med. 1999;9(1):34–39.",u:"https://pubmed.ncbi.nlm.nih.gov/10336050/",id:"PMID 10336050"},
+ P66:{t:"Ohlander SJ, et al. Erythrocytosis following testosterone therapy. Sex Med Rev. 2018;6(1):77–85.",u:"https://pubmed.ncbi.nlm.nih.gov/28526632/",id:"PMID 28526632"},
+ P67:{t:"Windfeld-Mathiasen J, et al. Mortality among users of anabolic steroids. JAMA. 2024;331(14):1229–1230.",u:"https://doi.org/10.1001/jama.2024.3180",id:"doi 10.1001/jama.2024.3180"}
 };
 const SRC_ORDER=Object.keys(SRC);const SN=id=>SRC_ORDER.indexOf(id)+1;
 
@@ -734,7 +752,7 @@ const BYID=Object.fromEntries(M.map(m=>[m.id,m]));
 
 // ---------- compounds. k: artifact = lab effect, not harm; expected = intended or predictable effect worth knowing; risk = real harm signal.
 const CLS={supp:{n:"Supplements & diet",c:"var(--ok)"},trt:{n:"Testosterone",c:"var(--accent)"},inj:{n:"Injectable steroids",c:"var(--risk)"},oral:{n:"Oral steroids",c:"var(--danger)"},sarm:{n:"SARMs & research chems",c:"var(--warn)"},gh:{n:"GH & secretagogues",c:"#8b5cf6"},glp:{n:"GLP-1 class",c:"#0e9f9a"},pep:{n:"Peptides",c:"var(--calm)"},thy:{n:"Thyroid",c:"#b45309"},anc:{n:"Ancillaries & fertility",c:"#0ea5e9"},burn:{n:"Fat burners & stimulants",c:"#ef4444"},rx:{n:"Other drugs lifters use",c:"#a3a3a3"}};
-const INJ=[{m:"hematocrit",d:"up",k:"risk",why:"Hematocrit and platelets rose during cycles in a prospective study of 100 users, then returned to baseline after stopping. [P2]"},{m:"hemoglobin",d:"up",k:"risk",why:"Moves with hematocrit. [P2]"},{m:"plt",d:"up",k:"risk",why:"Platelet count rose during cycles. [P2]"},{m:"hdl",d:"down",k:"risk",why:"Lipids worsened during cycles and recovered after stopping. [P2]"},{m:"ldl",d:"up",k:"risk",why:"Lipid profile shifted the wrong way during cycles. [P2]"},{m:"apob",d:"up",k:"risk",why:"Tracks the LDL rise. [P2]"},{m:"lh",d:"down",k:"expected",why:"Outside androgens shut down your own production during a cycle. [P2]"}];
+const INJ=[{m:"hematocrit",d:"up",k:"risk",why:"Hematocrit and platelets rose during cycles in a prospective study of 100 users, then returned to baseline after stopping. [P2]"},{m:"hemoglobin",d:"up",k:"risk",why:"Moves with hematocrit. [P2]"},{m:"plt",d:"up",k:"risk",why:"Platelet count rose during cycles. [P2]"},{m:"hdl",d:"down",k:"risk",why:"In athletes self-dosing several steroids, HDL fell from 1.08 to 0.43 mmol/L and hadn't recovered 6 weeks after stopping. [P64]"},{m:"ldl",d:"up",k:"risk",why:"Lipid profile shifted the wrong way during cycles. [P2]"},{m:"apob",d:"up",k:"risk",why:"ApoB rose from 0.96 to 1.32 g/L on a cycle. [P64]"},{m:"lh",d:"down",k:"expected",why:"Outside androgens shut down your own production during a cycle. [P2]"}];
 const ORALFX=[{m:"alt",d:"up",k:"risk",why:"17α-alkylated orals are the steroids linked to liver injury: raised transaminases and cholestasis. [P4]"},{m:"ast",d:"up",k:"risk",why:"Rises with liver stress from orals. [P4]"},{m:"ggt",d:"up",k:"risk",why:"Part of the cholestatic pattern. [P4]"},{m:"bili",d:"up",k:"risk",why:"Cholestasis from orals raises bilirubin. [P4]"},{m:"hdl",d:"down",k:"risk",why:"Orals hit the lipid profile harder than injectables alone. [P2]"},{m:"ldl",d:"up",k:"risk",why:"Oral steroids cause significant lipoprotein changes. [P4]"},{m:"lh",d:"down",k:"expected",why:"Suppresses your own production. [P2]"}];
 const SARMFX=[{m:"hdl",d:"down",k:"risk",why:"In a 21-day trial, LGD-4033 lowered HDL in a dose-dependent way; it recovered after stopping. [P5]"},{m:"testo",d:"down",k:"expected",why:"Total testosterone and SHBG fell with dose in the same trial. [P5]"},{m:"lh",d:"down",k:"expected",why:"Suppression of your own axis. [P5]"},{m:"tg",d:"down",k:"artifact",why:"Triglycerides fell in the LGD-4033 trial. Not harmful on its own. [P5]"},{m:"bili",d:"up",k:"risk",why:"Reported SARM liver injury typically shows jaundice with marked bilirubin rises and milder enzyme rises. [P6]"},{m:"alt",d:"up",k:"risk",why:"Liver injury cases have been reported with ostarine, RAD-140 and LGD-4033. [P7]"}];
 const COMP=[
@@ -808,14 +826,14 @@ const COMP=[
  {id:"epo",cls:"rx",name:"EPO",aka:"erythropoietin epoetin",note:"Pushes hematocrit toward 50% in healthy people; stacking it with androgens adds up. [P57]",fx:[{m:"hematocrit",d:"up",k:"risk",why:"Injections raised hematocrit to just under 50% in healthy people. [P57]"},{m:"hemoglobin",d:"up",k:"risk",why:"Rises with red-cell mass. [P57]"}]}
 ];
 const BYC=Object.fromEntries(COMP.map(c=>[c.id,c]));
-const TRAIN={id:"training",name:"Hard training",cls:"supp",fx:[{m:"ck",d:"up",k:"artifact",why:"One heavy session kept CK, AST and ALT raised for at least 7 days in healthy men. [P12]"},{m:"ast",d:"up",k:"artifact",why:"Raised for 7+ days after lifting. [P12]"},{m:"alt",d:"up",k:"artifact",why:"Raised for 7+ days after lifting, while GGT, ALP and bilirubin stayed normal. [P12]"},{m:"creatinine",d:"up",k:"artifact",why:"More muscle means more creatinine."}]};
+const TRAIN={id:"training",name:"Hard training",cls:"supp",fx:[{m:"ck",d:"up",k:"artifact",why:"One heavy session kept CK, AST and ALT raised for at least 7 days in healthy men. [P12]"},{m:"ast",d:"up",k:"artifact",why:"Raised for 7+ days after lifting. [P12]"},{m:"alt",d:"up",k:"artifact",why:"Raised for 7+ days after lifting, while GGT, ALP and bilirubin stayed normal. Bodybuilders on and off steroids both had high ALT and CK with normal GGT. [P12] [P65]"},{m:"creatinine",d:"up",k:"artifact",why:"More muscle means more creatinine."}]};
 
 // ---------- actions by marker and direction
 const ACT={
- hematocrit:{up:["Drink plenty of water before the draw; dehydration reads high.","On testosterone, guidelines hold it above 54%, check for sleep apnea, then restart at a lower dose. [P3]","In the HAARLEM study, hematocrit returned to baseline after cycles ended. [P2]","Whether you need phlebotomy is a doctor's call, not a DIY fix."]},
+ hematocrit:{up:["Drink plenty of water before the draw; dehydration reads high.","Short-acting testosterone injections carry the highest risk of high hematocrit. [P66]","On testosterone, guidelines hold it above 54%, check for sleep apnea, then restart at a lower dose. [P3]","In the HAARLEM study, hematocrit returned to baseline after cycles ended. [P2]","Whether you need phlebotomy is a doctor's call, not a DIY fix."]},
  hemoglobin:{up:["Hydrate before the draw.","Read it alongside hematocrit. [P3]"]},
  plt:{up:["Recheck. Platelets rose with hematocrit on cycles and fell back after. [P2]"]},
- alt:{up:["Retest after 7 days without lifting; one session kept ALT up for a week. [P12]","Add GGT. Lifting didn't raise it, so a high GGT points to the liver. [P12]","Skip alcohol and high-dose acetaminophen until it's sorted.","With an oral or a SARM in your stack, stopping it early is what prevents worse injury. [P6]"]},
+ alt:{up:["Retest after 7 days without lifting; one session kept ALT up for a week. [P12]","If CK is high and GGT is normal, it's more likely muscle than liver. [P65]","Add GGT. Lifting didn't raise it, so a high GGT points to the liver. [P12]","Skip alcohol and high-dose acetaminophen until it's sorted.","With an oral or a SARM in your stack, stopping it early is what prevents worse injury. [P6]"]},
  ast:{up:["Retest after 7 days without lifting. [P12]","Add GGT or CK to tell liver from muscle. [P12]"]},
  ggt:{up:["Lifting doesn't raise GGT, so take this one seriously. [P12]","Cut alcohol."]},
  bili:{up:["Yellow eyes or skin, itching or dark urine: go to urgent care. [P6]","Stop any oral steroid or SARM and see a doctor; most cases improve after stopping. [P6]"]},
@@ -1014,7 +1032,7 @@ const TL=[
  {n:"Baseline",w:"before you start",t:["Full panel: blood count, lipids with ApoB, liver, kidney, hormones","Blood pressure","This is what every later test is compared to"]},
  {n:"On cycle",w:"mid-cycle and at the end",t:["Hematocrit, lipids, liver panel with GGT","Blood pressure, every few weeks","LH near zero is expected now [P34]"]},
  {n:"Off, 0–3 months",w:"right after stopping",t:["Flags from the cycle can linger here","Most blood changes were back to baseline by 3 months [P2]","Retest around week 12"]},
- {n:"Off, 3–12 months",w:"recovery check",t:["Testosterone and LH should be back in range for most [P34]","11% still had low testosterone at one year [P34]","Still low or still flagged? See a doctor"]}
+ {n:"Off, 3–12 months",w:"recovery check",t:["Testosterone and LH should be back in range for most [P34]","11% still had low testosterone at one year [P34]","Years later, 27% of former users were still below range [P62]","Still low or still flagged? See a doctor"]}
 ];
 function tlIdx(){if(S.cyc.ph==="pre")return 0;if(S.cyc.ph==="on")return 1;return lapsed()?3:2}
 function renderCycle(){const P=document.getElementById("cycPanel");if(!onCycleStack()){P.style.display="none";return}P.style.display="";const i=tlIdx();
@@ -1066,7 +1084,7 @@ function heartTiles(){const T=[],sy=meN("sys"),di=meN("dia"),hr=meN("hr"),hct=S.
   return T}
 function renderHeart(){const T=heartTiles(),known=T.filter(t=>t.r>=0),top=Math.max(-1,...T.map(t=>t.r));
   const sum=!known.length?{n:"Not enough data",c:"var(--muted)",d:"Add your blood pressure and heart rate above."}:top>=3?{n:"High strain",c:"var(--danger)",d:"At least one number needs a doctor soon."}:top>=2?{n:"Moderate strain",c:"var(--risk)",d:"Worth fixing before your next cycle."}:top>=1?{n:"Some strain",c:"var(--warn)",d:"Keep an eye on it."}:{n:"Low strain",c:"var(--ok)",d:"Nothing pushing your heart hard right now."};
-  document.getElementById("heart").innerHTML='<div class="hsum" style="--c:'+sum.c+'"><b>'+sum.n+'</b><span>'+sum.d+'</span></div><div class="tiles">'+T.map(t=>'<div class="tile" style="--c:'+t.c+'"><small>'+t.l+'</small><b>'+esc(t.v)+'</b><span>'+t.s+'</span><p>'+cites(t.p)+'</p></div>').join("")+'</div>'}
+  document.getElementById("heart").innerHTML='<div class="hsum" style="--c:'+sum.c+'"><b>'+sum.n+'</b><span>'+sum.d+'</span></div><div class="tiles">'+T.map(t=>'<div class="tile" style="--c:'+t.c+'"><small>'+t.l+'</small><b>'+esc(t.v)+'</b><span>'+t.s+'</span><p>'+cites(t.p)+'</p></div>').join("")+'</div>'+((hasCls("inj")||hasCls("oral"))?'<p class="gnote">'+cites("In a Danish cohort of 1,189 steroid users, the death rate over 11 years was 2.8 times that of non-users. [P67]")+'</p>':"")}
 // CKD-EPI 2021, race-free (Inker 2021). Creatinine stored in µmol/L.
 function egfr(){const age=meN("age"),cr=S.vals.creatinine,cy=S.vals.cystatin;if(!age||cr==null)return null;
   const F=S.sex==="f",sc=cr/88.4,k=F?0.7:0.9;
@@ -1162,7 +1180,7 @@ function strain(){const T=triage(),TB=Object.fromEntries(T.map(t=>[t.m.id,t])),c
     if(sy.id==="heart"){const sb=meN("sys"),db=meN("dia"),hr=meN("hr");if(sb&&db){labs++;const b=bpCat(sb,db),w=[0,10,25,45,70][b.r];if(w){conf=comb(conf,w);C.push({v:"Blood pressure "+sb+"/"+db,s:b.n,w,c:b.c})}}
       if(hr){labs++;if(hr>100){conf=comb(conf,30);C.push({v:"Resting heart rate "+hr+" bpm",s:"Fast",w:30,c:"var(--danger)"})}}}
     const ps=labs?pred*.4:pred,cf=Math.round(conf),tot=Math.round(comb(conf,ps));
-    const lv=tot===0?{n:"Not flagged",c:"var(--muted)"}:tot<20?{n:"Low",c:"var(--ok)"}:tot<45?{n:"Moderate",c:"var(--warn)"}:tot<70?{n:"High",c:"var(--risk)"}:{n:"Severe",c:"var(--danger)"};
+    const lv=tot===0?{n:"Not flagged",c:"var(--muted)"}:tot<20?{n:"Low",c:"#9a978f"}:tot<45?{n:"Moderate",c:"#c08a1e"}:tot<70?{n:"High",c:"#d0602a"}:{n:"Severe",c:"#c42b2b"};
     return{...sy,pred:ps,conf:Math.min(cf,tot),tot,lv,P,C,labs,touched:P.length>0||C.length>0}}).sort((a,b)=>b.tot-a.tot||b.touched-a.touched)}
 let openSys=new Set();
 function renderStrain(){const L=strain(),el=document.getElementById("strain"),P=document.getElementById("strainP");
@@ -1171,7 +1189,7 @@ function renderStrain(){const L=strain(),el=document.getElementById("strain"),P=
   const row=x=>{const sub=[x.C.length?x.C.length+" flagged result"+(x.C.length>1?"s":""):x.labs?"results in range":"no results entered",x.P.length?x.P.length+" stack effect"+(x.P.length>1?"s":""):"no stack effects"].join(" · ");
     const det=x.C.map(c=>c.t?'<li><span class="tag" style="--c:'+(c.t.red.length?"var(--danger)":CAT[c.t.cat].c)+'">'+(c.t.red.length?"Act now":c.t.cat==="risk"?"Real risk":c.t.cat==="unexplained"?"Unexplained":"Expected")+'</span><span><a class="mk" href="#'+c.t.m.id+'" data-open="'+c.t.m.id+'">'+esc(c.t.m.name)+'</a> <span class="num">'+fmt(c.t.m,c.t.x)+' '+esc(u(c.t.m))+'</span>'+(c.t.cs.length?' · from '+esc([...new Set(c.t.cs.map(z=>z.c.name.split(" (")[0]))].join(", ")):"")+'</span></li>':'<li><span class="tag" style="--c:'+c.c+'">'+c.s+'</span><span>'+esc(c.v)+'</span></li>').join("")+
       x.P.map(p=>'<li><span class="tag" style="--c:'+(p.f.k==="risk"?"var(--risk)":"var(--calm)")+'">'+(p.f.k==="risk"?"Harm":"Expected")+'</span><span><strong>'+esc(p.c.name.split(" (")[0])+'</strong>'+(p.f.m?' '+(p.f.d==="up"?"raises":"lowers")+' '+esc(BYID[p.f.m].name)+'. ':': ')+cites(p.f.why)+'</span></li>').join("");
-    return'<div class="srow'+(openSys.has(x.id)?" open":"")+'" id="sys-'+x.id+'" style="--c:'+x.lv.c+';--sc:'+SYSC[x.id]+'"><button aria-expanded="'+openSys.has(x.id)+'" data-sys="'+x.id+'"><span class="nm"><i></i>'+x.n+'</span><span class="lv">'+x.lv.n+'</span><span class="sc">'+x.tot+'</span><span class="chev">⌄</span><span class="trk"><i class="c" style="width:'+x.conf+'%"></i><i class="p" style="width:'+(x.tot-x.conf)+'%"></i></span><span class="sub2">'+sub+'</span></button><div class="det"><ul>'+det+'</ul></div></div>'};
+    return'<div class="srow'+(openSys.has(x.id)?" open":"")+'" id="sys-'+x.id+'" style="--c:'+x.lv.c+';--sc:'+x.lv.c+'"><button aria-expanded="'+openSys.has(x.id)+'" data-sys="'+x.id+'"><span class="nm"><i></i>'+x.n+'</span><span class="lv">'+x.lv.n+'</span><span class="sc">'+x.tot+'</span><span class="chev">⌄</span><span class="trk"><i class="c" style="width:'+x.conf+'%"></i><i class="p" style="width:'+(x.tot-x.conf)+'%"></i></span><span class="sub2">'+sub+'</span></button><div class="det"><ul>'+det+'</ul></div></div>'};
   el.innerHTML='<div class="srows">'+on.map(row).join("")+'</div>'+(off.length?'<p class="untouched">Not touched by your stack or results: '+off.map(x=>x.n).join(", ")+'.</p>':"")+'<p class="snote">0–100. Flagged results count most; what your stack is known to do counts less once you have results for that system. A low score means nothing is flagged, not that it\'s safe.</p>'}
 document.getElementById("strain").addEventListener("click",e=>{const b=e.target.closest("[data-sys]");if(!b)return;const id=b.dataset.sys;openSys.has(id)?openSys.delete(id):openSys.add(id);const r=b.parentElement;r.classList.toggle("open");b.setAttribute("aria-expanded",r.classList.contains("open"))});
 
@@ -1189,7 +1207,7 @@ function renderMap(){const el=document.getElementById("map"),L=strain(),LV=Objec
   // labels: resolve overlaps per side
   const lab={L:[],R:[]};SYS.forEach(sy=>{const [x,y,side]=SPOT[sy.id];lab[side].push({sy,x,y,ly:y})});
   ["L","R"].forEach(k=>{const a=lab[k].sort((p,q)=>p.y-q.y);for(let i=1;i<a.length;i++)if(a[i].ly-a[i-1].ly<40)a[i].ly=a[i-1].ly+40;const over=a.length?a[a.length-1].ly-(H-24):0;if(over>0)a.forEach(o=>o.ly-=over)});
-  [...lab.L,...lab.R].forEach(o=>{const x=LV[o.sy.id],c=SYSC[o.sy.id],on=x.tot>0,r=6+Math.min(x.tot,100)*.15,left=SPOT[o.sy.id][2]==="L",lx=left?112:448,ta=left?"end":"start";
+  [...lab.L,...lab.R].forEach(o=>{const x=LV[o.sy.id],on=x.tot>0,c=x.lv.c,r=6+Math.min(x.tot,100)*.15,left=SPOT[o.sy.id][2]==="L",lx=left?112:448,ta=left?"end":"start";
     h+='<g class="spot'+(x.tot>=45?" hot":"")+'" data-s="'+o.sy.id+'" tabindex="0" role="button" aria-label="'+esc(o.sy.n)+', strain '+x.tot+'">'+
       '<path class="lead" d="M'+o.x+','+o.y+' L'+(left?lx+18:lx-18)+','+o.ly+' L'+(left?lx+4:lx-4)+','+o.ly+'" stroke="'+(on?c:"var(--muted)")+'"/>'+
       '<circle class="pulse" cx="'+o.x+'" cy="'+o.y+'" r="'+r+'" stroke="'+c+'"/>'+
@@ -1221,6 +1239,7 @@ const GAPS=[
  {when:()=>hasCls("oral")||hasCls("sarm"),ok:()=>S.vals.alt!=null&&S.vals.ggt!=null,t:"Liver panel with GGT",why:"Orals and SARMs are the compounds tied to liver injury. [P4] [P6]"},
  {when:()=>hasCls("inj")||hasCls("oral")||hasCls("trt")||hasCls("sarm"),ok:()=>S.vals.lh!=null,t:"LH",why:"Shows whether your own production is shut down. [P2]"},
  {when:()=>hasCls("inj")||hasCls("oral")||hasCls("trt"),ok:()=>!!S.hab.bp||meN("sys")!=null,t:"Blood pressure checked in the past month",why:"Blood pressure rose during cycles. [P2]"},
+ {when:()=>hasCls("inj")||hasCls("oral"),ok:()=>S.vals.creatinine!=null&&S.vals.cystatin!=null,t:"Kidney check (creatinine + cystatin C)",why:"Long-term steroid use was linked to kidney scarring in bodybuilders. [P63]"},
  {when:()=>hasCls("inj")||hasCls("oral"),ok:()=>!!S.hab.echo,t:"Heart scan (echo) at some point",why:"Long-term users had weaker heart pumping and more coronary plaque, and plaque grew with years of use. [P24]"},
  {when:()=>hasCls("inj")||hasCls("oral")||hasCls("sarm"),ok:()=>!!S.hab.cardio,t:"2+ hours of cardio a week",why:"The best-proven way to raise HDL. [P17]"},
  {when:()=>hasCls("gh"),ok:()=>S.vals.glucose!=null&&S.vals.a1c!=null,t:"Fasting glucose and A1c",why:"MK-677 raised glucose and cut insulin sensitivity. [P8]"},
@@ -1312,7 +1331,7 @@ document.getElementById("pasteGo").onclick=()=>{const lines=document.getElementB
   if(!found.length){document.getElementById("pasteMsg").textContent="No markers recognized. Each line should start with a test name, like 'ALT 78'.";return}
   S.example=false;S.sel=found[0];save();dlg.close();renderAll();go("triage")};
 
-renderSources();renderStats();renderAll();fromHash();
+renderSources();renderAll();fromHash();
 </script>
 </body>
 </html>

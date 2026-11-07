@@ -25,7 +25,7 @@ Standard lab reports flag lifters for everything: high creatinine from creatine,
 - **Doctor sheet**: a printable one-page summary of what you take, flagged results, tests to add and questions to ask
 - **ER signs**: emergency symptoms, with the ones tied to your stack marked
 - **Share card**: an image of your triage counts (no values; stack optional)
-- 61 cited sources (PubMed, guidelines, regulators). Every effect and cutoff links to one
+- 67 cited sources (PubMed, guidelines, regulators). Every effect and cutoff links to one
 
 ## Privacy
 
