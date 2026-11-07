@@ -269,6 +269,15 @@ details.moreinfo summary{cursor:pointer;font:700 18px var(--display);letter-spac
 .tl .when{font:500 12px/1 var(--mono);color:var(--muted)}
 .tl ul{margin:8px 0 0;padding-left:16px;font-size:13px;color:var(--muted)}
 .tl li{margin-bottom:3px}
+ .gear{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+@media (max-width:700px){.gear{grid-template-columns:1fr}}
+.gverdict{padding:16px 18px;border-radius:12px;background:var(--bg);border-left:5px solid var(--c);min-width:220px}
+.gverdict b{display:block;font:700 26px/1.05 var(--display);text-transform:uppercase;color:var(--c)}
+.gverdict span{font-size:13px;color:var(--muted)}
+.gsig{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:14px}
+.gsig li{display:grid;grid-template-columns:22px 1fr;gap:8px}
+.gsig .ic{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;background:var(--c)}
+.gnote{font-size:13px;color:var(--muted);margin:14px 0 0}
 footer{max-width:1200px;margin:0 auto;padding:0 20px 32px;font-size:12px;color:var(--muted)}
 footer p{max-width:95ch;margin:0}
 </style>
@@ -328,6 +337,7 @@ footer p{max-width:95ch;margin:0}
 <section data-tab="health">
   <div class="hhero"><h1>Stay healthy on your stack</h1><p>What you're missing, what clashes, and what's actually worth adding.</p></div>
   <div class="panel" id="cycPanel"><p class="eyebrow">Cycle timeline: what to test, and when</p><div class="tl" id="tl"></div></div>
+  <div class="panel" id="gearPanel"><p class="eyebrow">Is your gear real?</p><div id="gear"></div></div>
   <div class="panel"><p class="eyebrow">Your habits</p><div class="chips2" id="habits"></div></div>
   <div class="two">
     <div class="panel"><p class="eyebrow">Stack gap check</p><div id="gapwrap"></div></div>
@@ -676,7 +686,23 @@ const TL=[
 function tlIdx(){if(S.cyc.ph==="pre")return 0;if(S.cyc.ph==="on")return 1;return lapsed()?3:2}
 function renderCycle(){const P=document.getElementById("cycPanel");if(!onCycleStack()){P.style.display="none";return}P.style.display="";const i=tlIdx();
   document.getElementById("tl").innerHTML=TL.map((s,k)=>'<div class="st'+(k<i?" past":k===i?" now":"")+'"><h4>'+s.n+'</h4><span class="when">'+s.w+'</span><ul>'+s.t.map(x=>'<li>'+cites(x)+'</li>').join("")+'</ul></div>').join("")}
-function renderHealth(){renderCycle();
+// gear check: bloodwork can show androgen exposure, not what's in the vial
+function gearSignals(){const st=S.stack,V=S.vals,sig=[];const hasTest=st.includes("testc")||st.includes("trt");
+  const andro=st.some(id=>["inj","oral","trt"].includes((BYC[id]||{}).cls));const nonTestInj=st.some(id=>(BYC[id]||{}).cls==="inj"&&id!=="testc");
+  if(!andro)return null;
+  if(V.lh!=null){const lo=ri(BYID.lh)[0];sig.push(V.lh<lo?{ok:1,t:"LH is suppressed ("+fmt(BYID.lh,V.lh)+" IU/L)",d:"That's what real androgens do; LH was near zero during cycles in nearly everyone. [P34]"}:{ok:0,t:"LH isn't suppressed ("+fmt(BYID.lh,V.lh)+" IU/L)",d:"On real androgens LH is usually near zero. A normal LH means your body isn't seeing much androgen. [P34]"})}
+  if(V.testo!=null){const [lo,hi]=ri(BYID.testo),x=V.testo,tv=fmt(BYID.testo,x)+" "+u(BYID.testo);
+    if(st.includes("testc"))sig.push(x>hi?{ok:1,t:"Testosterone is above range ("+tv+")",d:"Fits a cycle dose of testosterone."}:{ok:0,t:"Testosterone isn't above range ("+tv+")",d:"A cycle dose of testosterone usually pushes it above range, so this can point to a weak or fake product, or a draw late in the injection interval."});
+    else if(st.includes("trt"))sig.push(x>=lo?{ok:1,t:"Testosterone is in or above range ("+tv+")",d:"Fits a replacement dose."}:{ok:0,t:"Testosterone is below range on TRT ("+tv+")",d:"Check the timing of the draw against your injection, and tell your prescriber."});
+    else if(nonTestInj)sig.push(x<lo?{ok:1,t:"Testosterone is low ("+tv+")",d:"Expected when you're on a non-testosterone steroid: your own production is shut down."}:{ok:0,t:"Testosterone is still in range ("+tv+")",d:"A real non-testosterone steroid usually shuts your own testosterone down. If it's normal, the vial may not contain what it says, or may contain testosterone instead."})}
+  return sig}
+function renderGear(){const P=document.getElementById("gearPanel"),G=gearSignals();
+  if(!G||S.cyc.ph!=="on"&&onCycleStack()){P.style.display="none";return}P.style.display="";
+  const n=G.length,bad=G.filter(g=>!g.ok).length;
+  const v=!n?{c:"var(--muted)",t:"Can't tell yet",s:"Enter LH and total testosterone from a draw on cycle."}:!bad?{c:"var(--ok)",t:"Looks real",s:"Your labs match what this stack should do."}:bad===n?{c:"var(--danger)",t:"Doesn't look real",s:"Your labs don't match what this stack should do."}:{c:"var(--warn)",t:"Mixed signals",s:"Some of your labs don't match this stack."};
+  document.getElementById("gear").innerHTML='<div class="gear"><div class="gverdict" style="--c:'+v.c+'"><b>'+v.t+'</b><span>'+v.s+'</span></div><ul class="gsig">'+(n?G.map(g=>'<li style="--c:'+(g.ok?"var(--ok)":"var(--risk)")+'"><span class="ic">'+(g.ok?"✓":"!")+'</span><span><strong>'+esc(g.t)+'</strong><br><span style="color:var(--muted)">'+cites(g.d)+'</span></span></li>').join(""):'<li style="--c:var(--muted)"><span class="ic">?</span><span>No LH or testosterone result yet.</span></li>')+'</ul></div>'+
+   '<p class="gnote">'+cites("Across 19 studies, 36% of black-market steroids were counterfeit and another 37% were under- or over-dosed. [P32]")+' Bloodwork shows whether you\'re getting androgen exposure, not what\'s in the vial. If it looks fake, don\'t raise the dose to make up for it: the next batch could be overdosed or a different drug entirely.</p>'}
+function renderHealth(){renderCycle();renderGear();
   document.getElementById("habits").innerHTML=HAB.map(h=>'<button class="cchip" data-hab="'+h.id+'" aria-pressed="'+!!S.hab[h.id]+'">'+h.l+'</button>').join("");
   renderGaps();renderCombos();renderSupport();
 }
