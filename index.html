@@ -291,6 +291,17 @@ details.moreinfo summary{cursor:pointer;font:700 18px var(--display);letter-spac
 .hsum{display:flex;align-items:baseline;gap:10px;margin:-4px 0 14px}
 .hsum b{font:700 30px/1 var(--display);text-transform:uppercase;color:var(--c)}
 .hsum span{color:var(--muted);font-size:14px}
+ nav a.er{color:#ff8a8a}
+.erhero{background:var(--danger);color:#fff;border-radius:12px;padding:24px 26px}
+.erhero h1{font:700 clamp(30px,4.5vw,44px)/1 var(--display);text-transform:uppercase;margin:0 0 8px}
+.erhero p{margin:0;font-size:17px;max-width:62ch;opacity:.95}
+.erlist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.erlist{grid-template-columns:1fr}}
+.erlist li{background:var(--paper);box-shadow:0 0 0 1px var(--line);border-left:5px solid var(--danger);border-radius:10px;padding:14px 16px}
+.erlist li.dim{border-left-color:var(--line)}
+.erlist strong{display:block;font-size:16px}
+.erlist span{font-size:14px;color:var(--muted)}
+.erlist .yours{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;color:var(--danger);background:color-mix(in srgb,var(--danger) 12%,transparent);padding:2px 8px;border-radius:999px}
 footer{max-width:1200px;margin:0 auto;padding:0 20px 32px;font-size:12px;color:var(--muted)}
 footer p{max-width:95ch;margin:0}
 </style>
@@ -299,7 +310,7 @@ footer p{max-width:95ch;margin:0}
 <header>
   <div class="bar">
     <p class="brand"><b>SPOTTER</b><span>bloodwork for lifters</span></p>
-    <nav aria-label="Sections"><a href="#triage" data-go="triage">Triage</a><a href="#health" data-go="health">Health check</a><a href="#bloodwork" data-go="bloodwork">Bloodwork</a><a href="#sources" data-go="sources">Sources</a></nav>
+    <nav aria-label="Sections"><a href="#triage" data-go="triage">Triage</a><a href="#health" data-go="health">Health check</a><a href="#bloodwork" data-go="bloodwork">Bloodwork</a><a href="#er" data-go="er" class="er">ER signs</a><a href="#sources" data-go="sources">Sources</a></nav>
     <div class="toggles">
       <span class="seg" id="sexSeg" aria-label="Sex"><button data-v="m">Male</button><button data-v="f">Female</button></span>
       <span class="seg" id="unitSeg" aria-label="Units"><button data-v="si">SI</button><button data-v="us">US</button></span>
@@ -344,7 +355,7 @@ footer p{max-width:95ch;margin:0}
     </div>
     <p class="eyebrow" style="margin-top:22px">What your stack does to bloodwork</p><div class="fxwrap"><table class="fx" id="fxTable"></table></div>
   </details>
-  <p class="policy">Spotter doesn't give doses, cycles or PCT protocols. For anything in "Act now," see a doctor who knows exactly what you're on.</p>
+  <p class="policy">Spotter doesn't give doses, cycles or PCT protocols. For anything in "Act now," see a doctor who knows exactly what you're on. Chest pain, yellow eyes or sudden weakness? <a href="#er" data-go="er" style="color:var(--danger);font-weight:700">See ER signs</a>.</p>
 </section>
 
 <section data-tab="health">
@@ -377,6 +388,12 @@ footer p{max-width:95ch;margin:0}
     </div>
     <aside class="panel sheet" id="sheet" aria-live="polite"></aside>
   </div>
+</section>
+
+<section data-tab="er">
+  <div class="erhero"><h1>Go to the ER</h1><p>If you have any of these, call emergency services or go to the emergency room now. Don't wait for bloodwork, and tell them exactly what you take.</p></div>
+  <ul class="erlist" id="erlist"></ul>
+  <p class="policy">Signs marked "Your stack" are more likely with what you've added. Any of them is an emergency for anyone. In the US and Canada, call or text 988 for a mental health crisis.</p>
 </section>
 
 <section data-tab="sources">
@@ -598,7 +615,7 @@ const KTAG={risk:["Real risk","var(--risk)"],expected:["Expected","var(--calm)"]
 function go(tab,sub){S.tab=tab;document.querySelectorAll("section[data-tab]").forEach(s=>s.classList.toggle("on",s.dataset.tab===tab));
   document.querySelectorAll("nav a").forEach(a=>{if(a.dataset.go===tab)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   const h=sub||tab;if(location.hash.slice(1)!==h)safeReplace(null,"","#"+h)}
-function fromHash(){const h=location.hash.slice(1);if(BYID[h]){S.sel=h;go("bloodwork",h);renderBloodwork()}else go(["triage","health","bloodwork","sources"].includes(h)?h:"triage")}
+function fromHash(){const h=location.hash.slice(1);if(BYID[h]){S.sel=h;go("bloodwork",h);renderBloodwork()}else go(["triage","health","bloodwork","er","sources"].includes(h)?h:"triage")}
 
 // ---------- stack UI
 function renderStack(){
@@ -694,6 +711,7 @@ function renderSheet(){const m=BYID[S.sel]||M[0],x=S.vals[m.id],[lo,hi]=ri(m),d=
 function renderSources(){const used={};COMP.concat([TRAIN]).forEach(c=>{const s=JSON.stringify(c);(s.match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(c.name.split(" (")[0]))});
   Object.entries(ACT).forEach(([k,v])=>{(JSON.stringify(v).match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(BYID[k].name))});
   RED.forEach(r=>(r.txt.match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(BYID[r.m].name+" red flag")));
+  [["P31","Kidney score"],["P13","Kidney score"],["P32","Gear check"],["P34","Gear check"],["P34","Cycle timeline"],["P2","Cycle timeline"],["P33","Heart strain"],["P33","ER signs"],["P3","Heart strain"],["P24","Heart strain"],["P6","ER signs"]].forEach(([k,v])=>(used[k]??=new Set()).add(v));
   document.getElementById("srclist").innerHTML=SRC_ORDER.map(id=>'<li id="src-'+id+'"><span class="n">['+SN(id)+']</span><div><a href="'+SRC[id].u+'" target="_blank" rel="noopener">'+esc(SRC[id].t)+'</a> <span class="num" style="font-size:12px;color:var(--muted)">'+SRC[id].id+'</span><div class="used">Used for: '+esc([...(used[id]||[])].slice(0,8).join(", "))+'</div></div></li>').join("")}
 // ---------- health check
 const HAB=[{id:"bp",l:"Blood pressure checked (past month)"},{id:"echo",l:"Had a heart scan (echo)"},{id:"cardio",l:"2+ hrs cardio a week"},{id:"sleep",l:"Sleep 7+ hrs"},{id:"protein",l:"Protein at every meal"},{id:"alcohol",l:"Drink alcohol most weeks"}];
@@ -725,6 +743,20 @@ function renderGear(){const P=document.getElementById("gearPanel"),G=gearSignals
   document.getElementById("gear").innerHTML='<div class="gear"><div class="gverdict" style="--c:'+v.c+'"><b>'+v.t+'</b><span>'+v.s+'</span></div><ul class="gsig">'+(n?G.map(g=>'<li style="--c:'+(g.ok?"var(--ok)":"var(--risk)")+'"><span class="ic">'+(g.ok?"✓":"!")+'</span><span><strong>'+esc(g.t)+'</strong><br><span style="color:var(--muted)">'+cites(g.d)+'</span></span></li>').join(""):'<li style="--c:var(--muted)"><span class="ic">?</span><span>No LH or testosterone result yet.</span></li>')+'</ul></div>'+
    '<p class="gnote">'+cites("Across 19 studies, 36% of black-market steroids were counterfeit and another 37% were under- or over-dosed. [P32]")+' Bloodwork shows whether you\'re getting androgen exposure, not what\'s in the vial. If it looks fake, don\'t raise the dose to make up for it: the next batch could be overdosed or a different drug entirely.</p>'}
 // ---------- your numbers: BP, heart rate, age
+// ---------- ER signs
+const ER=[
+ {t:"Chest pain, pressure or tightness",d:"Especially if it spreads to the arm, jaw or back, or comes with sweating or nausea. Possible heart attack.",rel:()=>hasCls("inj")||hasCls("oral")||hasCls("trt")||hasCls("thy")},
+ {t:"Face drooping, arm weakness or slurred speech",d:"Sudden onset on one side. Possible stroke: note the time it started.",rel:()=>hasCls("inj")||hasCls("oral")||(S.vals.hematocrit||0)>=0.54},
+ {t:"Sudden shortness of breath, or one swollen, painful calf",d:"Possible blood clot in the lung or leg.",rel:()=>hasCls("inj")||hasCls("oral")||hasCls("trt")||(S.vals.hematocrit||0)>=0.54},
+ {t:"Blood pressure over 180/120 with symptoms",d:"Headache, vision changes, chest pain, confusion or weakness. [P33]",rel:()=>(meN("sys")||0)>180||(meN("dia")||0)>120||hasCls("inj")||hasCls("oral")},
+ {t:"Racing or irregular heartbeat with dizziness or fainting",d:"Especially at rest.",rel:()=>hasCls("thy")||hasCls("inj")||hasCls("oral")||(meN("hr")||0)>100},
+ {t:"Dark, cola-coloured urine with severe muscle pain or weakness",d:"Possible rhabdomyolysis, which can damage the kidneys.",rel:()=>S.train||(S.vals.ck||0)>2000},
+ {t:"Yellow eyes or skin",d:"With itching, dark urine or pale stools. The liver-injury pattern seen with orals and SARMs. [P6]",rel:()=>hasCls("oral")||hasCls("sarm")},
+ {t:"Severe stomach pain that spreads to the back",d:"With vomiting. Possible pancreatitis, a known warning on GLP-1 drug labels.",rel:()=>hasCls("glp")},
+ {t:"Thoughts of suicide or harming yourself",d:"Mood can drop hard after a cycle ends. Call or text 988 in the US or Canada, or your local emergency number.",rel:()=>hasCls("inj")||hasCls("oral")||hasCls("trt")}
+];
+function renderER(){const L=ER.map(e=>({...e,y:S.stack.length||S.train?e.rel():false})).sort((a,b)=>b.y-a.y);
+  document.getElementById("erlist").innerHTML=L.map(e=>'<li'+(e.y||!S.stack.length?"":' class="dim"')+'><strong>'+esc(e.t)+'</strong><span>'+cites(e.d)+'</span>'+(e.y?'<br><span class="yours">Your stack</span>':"")+'</li>').join("")}
 const meN=k=>{const n=parseFloat(S.me[k]);return isFinite(n)&&n>0?n:null};
 function bpCat(sy,di){if(sy>180||di>120)return{n:"Crisis range",c:"var(--danger)",r:4};if(sy>=140||di>=90)return{n:"Stage 2 high",c:"var(--danger)",r:3};if(sy>=130||di>=80)return{n:"Stage 1 high",c:"var(--risk)",r:2};if(sy>=120)return{n:"Elevated",c:"var(--warn)",r:1};return{n:"Normal",c:"var(--ok)",r:0}}
 function heartTiles(){const T=[],sy=meN("sys"),di=meN("dia"),hr=meN("hr"),hct=S.vals.hematocrit;
@@ -811,7 +843,7 @@ function renderSupport(){const flagged=new Set(triage().map(t=>t.m.id+":"+t.d));
   document.getElementById("support").innerHTML=Object.keys(GRADE).map(k=>{const L=SUP.filter(x=>x.g===k).map(x=>({...x,rel:x.helps.filter(([m,d])=>flagged.has(m+":"+d)).map(([m])=>m)})).sort((a,b)=>b.rel.length-a.rel.length);
     return'<div class="scol"><h3 style="--c:'+GRADE[k].c+'"><i></i>'+GRADE[k].n+'</h3>'+L.map(x=>'<div class="sitem"><strong>'+esc(x.n)+'</strong><span>'+cites(x.d)+'</span>'+(x.rel.length&&k!=="avoid"?'<br><span class="rel">Targets your '+esc(x.rel.map(m=>BYID[m].name).join(", "))+'</span>':"")+'</div>').join("")+'</div>'}).join("")}
 
-function renderAll(){renderStack();renderTriage();renderHealth();renderBloodwork()}
+function renderAll(){renderStack();renderTriage();renderHealth();renderBloodwork();renderER()}
 
 // ---------- events
 function seg(id,key){document.querySelectorAll("#"+id+" button").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.v===S[key]);b.onclick=()=>{S[key]=b.dataset.v;save();seg(id,key);renderAll()}})}
