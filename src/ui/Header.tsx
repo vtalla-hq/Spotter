@@ -1,17 +1,21 @@
 import { useStore, type Tab } from "./store";
 import { Seg } from "./bits";
+import { useAccount } from "./account";
+import { useOpenDialog } from "../App";
 
 const NAV: [Tab, string][] = [
   ["triage", "Triage"],
   ["health", "Health check"],
   ["bloodwork", "Bloodwork"],
-  ["trends", "Trends"],
+  ["progress", "Progress"],
   ["er", "ER signs"],
   ["sources", "Sources"],
 ];
 
 export function Header() {
   const { s, set, route, go } = useStore();
+  const A = useAccount();
+  const open = useOpenDialog();
   const toggleTheme = () => {
     const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", cur);
@@ -69,6 +73,16 @@ export function Header() {
           />
           <button className="themebtn" aria-label="Switch light or dark" title="Light / dark" onClick={toggleTheme}>
             ☾
+          </button>
+          <button className={"acct" + (A.account ? " in" : "")} onClick={() => open("account")} title={A.account?.email}>
+            {A.account ? (
+              <>
+                <i aria-hidden="true">{A.account.email.slice(0, 1).toUpperCase()}</i>
+                <span>{A.status === "syncing" ? "Saving…" : A.status === "error" ? "Not saved" : "Account"}</span>
+              </>
+            ) : (
+              "Sign in"
+            )}
           </button>
         </div>
       </div>

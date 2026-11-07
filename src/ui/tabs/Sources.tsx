@@ -67,8 +67,8 @@ export function SourcesTab() {
           not a forecast.
         </p>
         <p>
-          <strong>Privacy.</strong> Everything runs in your browser. Reports you upload are read on your device, never sent anywhere. If you turn on
-          sync, your data is encrypted with your passphrase before it leaves the browser, so the server only ever stores scrambled bytes.
+          <strong>Privacy.</strong> Everything runs in your browser. Reports you upload are read on your device, never sent anywhere. If you sign
+          in, your data is encrypted with your password before it leaves the browser, so the server only ever stores scrambled bytes.
         </p>
       </div>
     </section>

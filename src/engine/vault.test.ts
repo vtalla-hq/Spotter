@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fromB64, mergeStates, open, seal, toB64, WrongPassphrase } from "./vault";
+import { deriveKey, exportKey, fromB64, importKey, mergeStates, newSalt, open, openWithKey, seal, sealWithKey, toB64, WrongPassphrase } from "./vault";
 import { EMPTY_STATE, type State } from "./types";
 
 // fewer iterations so the suite stays fast; production uses 600k
@@ -32,6 +32,22 @@ describe("vault encryption", () => {
     expect(a.salt).not.toBe(b.salt);
     expect(a.iv).not.toBe(b.iv);
     expect(a.data).not.toBe(b.data);
+  });
+});
+
+describe("key-based sealing for signed-in devices", () => {
+  it("re-seals under the same salt so the password still opens it", async () => {
+    const salt = toB64(newSalt());
+    const key = await deriveKey("hunter2hunter2", fromB64(salt), ITER, true);
+    const v = await sealWithKey({ a: 1 }, key, salt, ITER);
+    expect(v.salt).toBe(salt);
+    expect(await open(v, "hunter2hunter2")).toEqual({ a: 1 });
+  });
+  it("round-trips a remembered key", async () => {
+    const salt = toB64(newSalt());
+    const key = await deriveKey("pw", fromB64(salt), ITER, true);
+    const again = await importKey(await exportKey(key));
+    expect(await openWithKey(await sealWithKey({ b: 2 }, key, salt, ITER), again)).toEqual({ b: 2 });
   });
 });
 

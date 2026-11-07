@@ -1,8 +1,8 @@
 import type { Draw, State } from "./types";
 
 /**
- * End-to-end encryption for synced data. The passphrase never leaves the
- * browser: a key is derived from it with PBKDF2 (SHA-256, 600k iterations, per
+ * End-to-end encryption for account data. The password never leaves the
+ * browser in usable form for the data: a key is derived from it with PBKDF2 (SHA-256, 600k iterations, per
  * OWASP 2023) and the state is sealed with AES-256-GCM. The server only ever
  * stores the ciphertext, salt and IV, so it can't read anyone's bloodwork.
  */
@@ -33,41 +33,59 @@ export function fromB64(b64: string): Uint8Array<ArrayBuffer> {
   return out;
 }
 
-async function deriveKey(pass: string, salt: Uint8Array<ArrayBuffer>, iter: number): Promise<CryptoKey> {
+/** extractable so a signed-in device can remember it instead of the password */
+export async function deriveKey(pass: string, salt: Uint8Array<ArrayBuffer>, iter = PBKDF2_ITERATIONS, extractable = false): Promise<CryptoKey> {
   const base = await crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]);
   return crypto.subtle.deriveKey(
     { name: "PBKDF2", salt, iterations: iter, hash: "SHA-256" },
     base,
     { name: "AES-GCM", length: 256 },
-    false,
+    extractable,
     ["encrypt", "decrypt"],
   );
 }
 
-export async function seal(value: unknown, pass: string, iter = PBKDF2_ITERATIONS): Promise<Vault> {
-  const salt = crypto.getRandomValues(new Uint8Array(16));
+export const newSalt = () => crypto.getRandomValues(new Uint8Array(16));
+
+/** Encrypt with an already-derived key. A fresh IV every time; the salt is kept so the key can be derived again. */
+export async function sealWithKey(value: unknown, key: CryptoKey, salt: string, iter = PBKDF2_ITERATIONS): Promise<Vault> {
   const iv = crypto.getRandomValues(new Uint8Array(12));
-  const key = await deriveKey(pass, salt, iter);
   const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(JSON.stringify(value)));
-  return { v: 1, iter, salt: toB64(salt), iv: toB64(iv), data: toB64(new Uint8Array(ct)) };
+  return { v: 1, iter, salt, iv: toB64(iv), data: toB64(new Uint8Array(ct)) };
 }
 
-export class WrongPassphrase extends Error {
-  constructor() {
-    super("That passphrase doesn't unlock this data.");
-  }
-}
-
-export async function open<T = unknown>(vault: Vault, pass: string): Promise<T> {
-  const key = await deriveKey(pass, fromB64(vault.salt), vault.iter);
+export async function openWithKey<T = unknown>(vault: Vault, key: CryptoKey): Promise<T> {
   let pt: ArrayBuffer;
   try {
     pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: fromB64(vault.iv) }, key, fromB64(vault.data));
   } catch {
-    // GCM's auth tag fails on a wrong key or any tampering
     throw new WrongPassphrase();
   }
   return JSON.parse(dec.decode(pt)) as T;
+}
+
+export async function exportKey(key: CryptoKey): Promise<string> {
+  return toB64(new Uint8Array(await crypto.subtle.exportKey("raw", key)));
+}
+
+export async function importKey(raw: string): Promise<CryptoKey> {
+  return crypto.subtle.importKey("raw", fromB64(raw), { name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]);
+}
+
+export async function seal(value: unknown, pass: string, iter = PBKDF2_ITERATIONS): Promise<Vault> {
+  const salt = newSalt();
+  return sealWithKey(value, await deriveKey(pass, salt, iter), toB64(salt), iter);
+}
+
+export class WrongPassphrase extends Error {
+  constructor() {
+    super("That password doesn't unlock your saved data.");
+  }
+}
+
+export async function open<T = unknown>(vault: Vault, pass: string): Promise<T> {
+  // GCM's auth tag fails on a wrong key or any tampering
+  return openWithKey<T>(vault, await deriveKey(pass, fromB64(vault.salt), vault.iter));
 }
 
 /**
