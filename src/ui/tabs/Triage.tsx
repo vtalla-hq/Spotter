@@ -501,7 +501,7 @@ function TrendsLink() {
         {n} saved draw{n === 1 ? "" : "s"}
         {s.drawDate ? ` · showing ${s.drawDate}` : ""}
       </span>
-      <Go tab="trends">See your trends →</Go>
+      <Go tab="progress">See your progress →</Go>
     </div>
   );
 }

@@ -23,7 +23,7 @@ function Body({ onClose }: { onClose: () => void }) {
     set((x) => saveDraw({ ...x, cyc: { ...x.cyc, ph } }, date));
     milestone("draw_saved", { draws: s.draws.length + (exists ? 0 : 1) });
     onClose();
-    go("trends");
+    go("progress");
     scrollTo(0, 0);
   };
   return (
@@ -31,7 +31,7 @@ function Body({ onClose }: { onClose: () => void }) {
       <h2>Save this draw</h2>
       <p className="dsub">
         Saves your {n} result{n === 1 ? "" : "s"}, stack and cycle phase under the date the blood was taken, so you can see trends and recovery
-        over time. It stays in this browser unless you turn on sync.
+        over time. It's kept in this browser, and in your account if you're signed in.
       </p>
       <div className="iopts">
         <label>

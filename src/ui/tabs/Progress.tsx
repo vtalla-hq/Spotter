@@ -1,44 +1,91 @@
 import { useMemo, useState } from "react";
 import { useOpenDialog } from "../../App";
-import { BYID, M } from "../../engine/data/markers";
-import { BYC } from "../../engine/data/compounds";
 import { CYCLE_CLASSES } from "../../engine/ctx";
+import { BYC } from "../../engine/data/compounds";
+import { BYID, M } from "../../engine/data/markers";
 import { deleteDraw, loadDraw, sampleState } from "../../engine/state";
-import { niceStep } from "../../engine/stats";
-import { changes, fromDayNum, linearFit, project, projections, recovery, series, TARGETS, type Projection } from "../../engine/trends";
+import { changes, project, projections, recovery, series, TARGETS, type Projection } from "../../engine/trends";
 import { factor, fmt, unitLabel } from "../../engine/units";
-import type { Draw, Marker } from "../../engine/types";
+import type { Draw, Marker, Units } from "../../engine/types";
+import { useAccount } from "../account";
+import { Spark, TrendChart } from "../charts";
 import { vars } from "../bits";
-import { syncConfigured } from "../../features/sync";
 import { useStore } from "../store";
 
 const PH: Record<Draw["ph"], string> = { pre: "Baseline", on: "On cycle", off: "Off cycle" };
-const niceDate = (iso: string) =>
-  new Date(iso + "T12:00:00").toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" });
+const niceDate = (iso: string) => new Date(iso + "T12:00:00").toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" });
 const weeks = (d: number) => (d < 14 ? `${d} day${d === 1 ? "" : "s"}` : `${Math.round(d / 7)} weeks`);
 
+/** monthly change with enough digits to not round to zero */
+function perMonth(m: Marker, u: Units, v: number) {
+  const x = Math.abs(v) * factor(m, u);
+  return x >= 10 ? Math.round(x).toLocaleString("en-CA") : String(+x.toPrecision(2));
+}
+
+function AccountBar() {
+  const A = useAccount();
+  const open = useOpenDialog();
+  if (A.account)
+    return (
+      <div className="acctbar in">
+        <span>
+          <b>Saved to your account</b> · {A.account.email} ·{" "}
+          {A.status === "syncing" ? "saving…" : A.status === "error" ? <span style={{ color: "var(--danger)" }}>{A.error}</span> : "up to date"}
+        </span>
+        <button className="btn" onClick={() => open("account")}>
+          Account
+        </button>
+      </div>
+    );
+  return (
+    <div className="acctbar">
+      <span>
+        <b>Sign in to keep your progress.</b> Your draws are saved in this browser for now. With an account you can see them on any device,
+        encrypted so only you can read them.
+      </span>
+      <button className="btn primary" onClick={() => open("account")}>
+        Sign in
+      </button>
+    </div>
+  );
+}
+
 export function TrendsTab() {
-  const { s, set, go } = useStore();
+  const { s, ctx, set, go } = useStore();
   const open = useOpenDialog();
   const draws = s.draws;
   const P = useMemo(() => projections(draws, s.sex), [draws, s.sex]);
   const R = useMemo(() => recovery(draws, s.sex), [draws, s.sex]);
   const C = useMemo(() => changes(draws), [draws]);
-  const tracked = M.filter((m) => series(draws, m.id).length >= 2);
+  const projBy = Object.fromEntries(P.map((p) => [p.id, p]));
+  // projected first, then out of range, then the rest in panel order
+  const tracked = M.map((m) => ({ m, pts: series(draws, m.id) }))
+    .filter((x) => x.pts.length >= 2)
+    .map((x) => {
+      const [lo, hi] = ctx.ri(x.m);
+      const v = x.pts[x.pts.length - 1].v;
+      return { ...x, out: v > hi || v < lo, proj: projBy[x.m.id] ?? null };
+    })
+    .sort((a, b) => Number(!!b.proj) - Number(!!a.proj) || Number(b.out) - Number(a.out));
   const [sel, setSel] = useState<string | null>(null);
-  const cur = sel && tracked.some((m) => m.id === sel) ? sel : (P[0]?.id ?? tracked[0]?.id ?? null);
+  const cur = sel && tracked.some((x) => x.m.id === sel) ? sel : (tracked[0]?.m.id ?? null);
+  const pick = (id: string) => {
+    setSel(id);
+    setTimeout(() => document.getElementById("detail")?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 20);
+  };
 
   if (!draws.length)
     return (
-      <section data-tab="trends" className="on">
+      <section data-tab="progress" className="on">
         <div className="hhero">
-          <h1>Track your bloodwork over time</h1>
+          <h1>Your progress</h1>
           <p>Save each draw and Spotter charts every marker, projects when one will cross a line, and shows how far you've recovered after a cycle.</p>
         </div>
+        <AccountBar />
         <div className="panel">
           <p className="eyebrow">No saved draws yet</p>
           <p className="sub">
-            Enter or upload your results, then hit "Save this draw" with the date it was taken. Two draws a week or more apart are enough for a trend.
+            Upload or enter your results, then hit "Save this draw" with the date it was taken. Two draws a week or more apart are enough for a trend.
             Mark one as "Before starting" to measure recovery against your own baseline.
           </p>
           <div className="btnrow">
@@ -66,21 +113,23 @@ export function TrendsTab() {
     );
 
   return (
-    <section data-tab="trends" className="on">
+    <section data-tab="progress" className="on">
       <div className="hhero">
-        <h1>Your trends</h1>
+        <h1>Your progress</h1>
         <p>
           {draws.length} saved draw{draws.length === 1 ? "" : "s"}, {niceDate(draws[0].date)}
           {draws.length > 1 ? " to " + niceDate(draws[draws.length - 1].date) : ""}.
         </p>
       </div>
 
-      {s.example && (
+      {s.example ? (
         <div className="notice">
           <span>
             <b>This is a sample history.</b> Clear it from the Triage tab to start your own.
           </span>
         </div>
+      ) : (
+        <AccountBar />
       )}
 
       {P.length > 0 && (
@@ -88,14 +137,42 @@ export function TrendsTab() {
           <p className="eyebrow">At this rate</p>
           <ul className="proj">
             {P.slice(0, 6).map((p) => (
-              <ProjLine key={p.id} p={p} onPick={() => setSel(p.id)} />
+              <ProjLine key={p.id} p={p} onPick={() => pick(p.id)} />
             ))}
           </ul>
           <p className="gnote">
-            Straight-line projection from your recent draws in the same cycle phase. Retest before the date, not after: a projection is a nudge,
-            not a forecast.
+            Straight-line projection from your recent draws in the same cycle phase. Retest before the date, not after: a projection is a nudge, not
+            a forecast.
           </p>
         </div>
+      )}
+
+      {tracked.length > 0 && cur && (
+        <>
+          <div className="sgrid">
+            {tracked.map(({ m, pts, out, proj }) => {
+              const last = pts[pts.length - 1].v;
+              const prev = pts[pts.length - 2].v;
+              const pct = prev ? Math.round(((last - prev) / Math.abs(prev)) * 100) : 0;
+              return (
+                <button key={m.id} className={"scard" + (m.id === cur ? " on" : "")} aria-pressed={m.id === cur} onClick={() => pick(m.id)}>
+                  <span className="sh">
+                    <span className="snm">{m.name}</span>
+                    <span className={"sv" + (out ? " out" : "")}>
+                      {fmt(m, s.units, last)} <small>{unitLabel(m, s.units)}</small>
+                    </span>
+                  </span>
+                  <Spark pts={pts} r={ctx.ri(m)} proj={proj} />
+                  <span className="sf">
+                    <span title="Change since your previous draw">{pct === 0 ? "no change" : `${pct > 0 ? "↑" : "↓"} ${Math.abs(pct)}%`}</span>
+                    {proj && <span className="sp">line ~{new Date(proj.date + "T12:00:00").toLocaleDateString("en-CA", { month: "short", day: "numeric" })}</span>}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <Detail id={cur} />
+        </>
       )}
 
       {R.length > 0 && (
@@ -121,23 +198,9 @@ export function TrendsTab() {
             })}
           </ul>
           <p className="gnote">
-            How far each marker has come back from its worst draw toward your own "before starting" draw. "Past" means it went beyond your
-            baseline the other way: after a cycle, low testosterone or LH there usually means your own production hasn't recovered yet.
+            How far each marker has come back from its worst draw toward your own "before starting" draw. "Past" means it went beyond your baseline
+            the other way: after a cycle, low testosterone or LH there usually means your own production hasn't recovered yet.
           </p>
-        </div>
-      )}
-
-      {tracked.length > 0 && cur && (
-        <div className="panel">
-          <p className="eyebrow">Chart</p>
-          <div className="chips2" style={{ marginBottom: 12 }}>
-            {tracked.map((m) => (
-              <button key={m.id} className="cchip" aria-pressed={m.id === cur} onClick={() => setSel(m.id)}>
-                {m.name}
-              </button>
-            ))}
-          </div>
-          <TrendChart m={BYID[cur]} />
         </div>
       )}
 
@@ -222,18 +285,13 @@ export function TrendsTab() {
             </tbody>
           </table>
         </div>
-        <div className="btnrow" style={{ marginTop: 12 }}>
-          {Object.keys(s.vals).length > 0 && (
+        {Object.keys(s.vals).length > 0 && (
+          <div className="btnrow" style={{ marginTop: 12 }}>
             <button className="btn" onClick={() => open("save")}>
               Save current results
             </button>
-          )}
-          {syncConfigured && (
-            <button className="btn" onClick={() => open("sync")}>
-              Sync across devices
-            </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -248,12 +306,6 @@ function confirmDelete(date: string) {
   }
 }
 
-/** monthly change with enough digits to not round to zero */
-function perMonth(m: Marker, u: "si" | "us", v: number) {
-  const x = Math.abs(v) * factor(m, u);
-  return x >= 10 ? Math.round(x).toLocaleString("en-CA") : String(+x.toPrecision(2));
-}
-
 function ProjLine({ p, onPick }: { p: Projection; onPick: () => void }) {
   const { s } = useStore();
   const m = BYID[p.id];
@@ -264,99 +316,38 @@ function ProjLine({ p, onPick }: { p: Projection; onPick: () => void }) {
       <button className="linkish" onClick={onPick}>
         <strong>{m.name}</strong>
       </button>{" "}
-      {p.dir === "up" ? "is rising" : "is falling"} about {perMonth(m, s.units, p.per30)} {unitLabel(m, s.units)} a month and hits {p.label} (
-      {tv}) around <b>{niceDate(p.date)}</b>, in about {weeks(p.days)}.
+      {p.dir === "up" ? "is rising" : "is falling"} about {perMonth(m, s.units, p.per30)} {unitLabel(m, s.units)} a month and hits {p.label} ({tv})
+      around <b>{niceDate(p.date)}</b>, in about {weeks(p.days)}.
     </li>
   );
 }
 
-function TrendChart({ m }: { m: Marker }) {
+function Detail({ id }: { id: string }) {
   const { s, ctx } = useStore();
-  const pts = series(s.draws, m.id);
+  const m = BYID[id];
+  const pts = series(s.draws, id);
   const proj = project(m, s.sex, pts);
-  const fit = linearFit(pts.slice(-4));
-  const [lo, hi] = ctx.ri(m);
-  const W = 640,
-    H = 260,
-    pl = 52,
-    pr = 16,
-    pt = 14,
-    pb = 34;
-  const d0 = pts[0].day;
-  const d1 = Math.max(pts[pts.length - 1].day, proj ? pts[pts.length - 1].day + proj.days : 0, d0 + 7);
-  const red = Object.values(TARGETS[m.id] ?? {}).map((t) => t!.v);
-  const vals = [...pts.map((p) => p.v), lo, hi, ...(proj ? [proj.target] : [])];
-  let y0 = Math.min(...vals);
-  let y1 = Math.max(...vals);
-  red.forEach((r) => {
-    if (r > y1 && r - y1 < (y1 - y0) * 0.5) y1 = r;
-    if (r < y0 && y0 - r < (y1 - y0) * 0.5) y0 = r;
-  });
-  const pad = (y1 - y0) * 0.12 || 1;
-  y0 = Math.max(0, y0 - pad);
-  y1 = y1 + pad;
-  const X = (d: number) => pl + ((d - d0) / (d1 - d0 || 1)) * (W - pl - pr);
-  const Y = (v: number) => pt + (1 - (v - y0) / (y1 - y0)) * (H - pt - pb);
-  const f = factor(m, s.units);
-  const step = niceStep(((y1 - y0) * f) / 5) / f;
-  const yt: number[] = [];
-  for (let t = Math.ceil(y0 / step) * step; t <= y1; t += step) yt.push(t);
-  const last = pts[pts.length - 1];
-  const line = pts.map((p, i) => (i ? "L" : "M") + X(p.day).toFixed(1) + "," + Y(p.v).toFixed(1)).join("");
+  const r = ctx.ri(m);
+  const lines = Object.values(TARGETS[id] ?? {}).map((t) => ({ v: t!.v, label: t!.label.replace(/^the /, "") }));
   return (
-    <svg className="trend" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${m.name} over time`}>
-      <rect x={pl} width={W - pl - pr} y={Y(Math.min(hi, y1))} height={Math.max(0, Y(Math.max(lo, y0)) - Y(Math.min(hi, y1)))} fill="var(--accent-soft)" />
-      {yt.map((t) => (
-        <g key={t}>
-          <line x1={pl} x2={W - pr} y1={Y(t)} y2={Y(t)} stroke="var(--line)" />
-          <text x={pl - 8} y={Y(t) + 4} textAnchor="end">
-            {fmt(m, s.units, t)}
-          </text>
-        </g>
-      ))}
-      {red
-        .filter((r) => r >= y0 && r <= y1)
-        .map((r) => (
-          <g key={r}>
-            <line x1={pl} x2={W - pr} y1={Y(r)} y2={Y(r)} stroke="var(--danger)" strokeDasharray="5 4" />
-            <text x={W - pr} y={Y(r) - 5} textAnchor="end" style={{ fill: "var(--danger)" }}>
-              {fmt(m, s.units, r)}
-            </text>
-          </g>
-        ))}
-      {proj && fit && (
-        <>
-          <line
-            x1={X(last.day)}
-            y1={Y(last.v)}
-            x2={X(last.day + proj.days)}
-            y2={Y(proj.target)}
-            stroke="var(--risk)"
-            strokeWidth={2}
-            strokeDasharray="4 4"
-          />
-          <circle cx={X(last.day + proj.days)} cy={Y(proj.target)} r={5} fill="var(--paper)" stroke="var(--risk)" strokeWidth={2} />
-          <text x={X(last.day + proj.days)} y={Y(proj.target) - 10} textAnchor="end" style={{ fill: "var(--risk)", fontWeight: 600 }}>
-            {niceDate(fromDayNum(last.day + proj.days))}
-          </text>
-        </>
-      )}
-      <path d={line} fill="none" stroke="var(--ink)" strokeWidth={2} />
-      {pts.map((p) => {
-        const out = p.v > hi || p.v < lo;
-        return (
-          <g key={p.day}>
-            <circle cx={X(p.day)} cy={Y(p.v)} r={5} fill={out ? "var(--risk)" : "var(--ok)"} stroke="var(--paper)" strokeWidth={2} />
-            <text x={X(p.day)} y={H - 10} textAnchor="middle">
-              {new Date(p.date + "T12:00:00").toLocaleDateString("en-CA", { month: "short", day: "numeric" })}
-            </text>
-          </g>
-        );
-      })}
-      <text x={pl} y={pt - 2} style={{ fontWeight: 600 }}>
-        {unitLabel(m, s.units)}
-      </text>
-      <title>{`${m.name}: typical ${fmt(m, s.units, lo)}–${fmt(m, s.units, hi)}`}</title>
-    </svg>
+    <div className="panel" id="detail">
+      <div className="dhead">
+        <div>
+          <p className="eyebrow">Over time</p>
+          <h2>{m.name}</h2>
+        </div>
+        <span className="leg3">
+          <i className="b" />
+          typical range <i className="h" />
+          on cycle <i className="o" />
+          out of range <i className="p" />
+          projected
+        </span>
+      </div>
+      <TrendChart m={m} u={s.units} r={r} pts={pts} proj={proj} lines={lines} />
+      <p className="gnote">
+        Typical {fmt(m, s.units, r[0])}–{fmt(m, s.units, r[1])} {unitLabel(m, s.units)}. Hover or tap the chart for exact values.
+      </p>
+    </div>
   );
 }

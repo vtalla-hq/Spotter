@@ -18,8 +18,8 @@ function load(): State {
   return normalize({});
 }
 
-// ---------- routing: /triage, /health, /bloodwork/:marker, /trends, /er, /sources
-export const TABS = ["triage", "health", "bloodwork", "trends", "er", "sources"] as const;
+// ---------- routing: /, /health, /bloodwork/:marker, /progress, /er, /sources
+export const TABS = ["triage", "health", "bloodwork", "progress", "er", "sources"] as const;
 export type Tab = (typeof TABS)[number];
 
 interface Route {
@@ -29,6 +29,7 @@ interface Route {
 
 function parseLocation(): Route {
   const parts = location.pathname.split("/").filter(Boolean);
+  if (parts[0] === "trends") parts[0] = "progress"; // old name
   // old hash links: /#bloodwork, /#hematocrit
   const h = location.hash.slice(1);
   if (!parts.length && h) {
@@ -48,6 +49,8 @@ interface Store {
   T: Flag[];
   /** apply a change; marks the state as edited for sync */
   set: (fn: (s: State) => State) => void;
+  /** load a whole state without marking it as a new edit (used after syncing) */
+  replace: (s: State) => void;
   route: Route;
   go: (tab: Tab, sel?: string) => void;
   /** jump to a source on the Sources tab and flash it */
@@ -89,6 +92,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const set = useCallback((fn: (s: State) => State) => setS((prev) => ({ ...fn(prev), updatedAt: Date.now() })), []);
 
+  const replace = useCallback((next: State) => setS(next), []);
+
   const go = useCallback((tab: Tab, sel?: string) => {
     setRoute((r) => {
       const next = { tab, sel: sel ?? r.sel };
@@ -113,7 +118,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const ctx = useMemo(() => makeCtx(s), [s]);
   const T = useMemo(() => triage(ctx), [ctx]);
 
-  const value = useMemo(() => ({ s, ctx, T, set, route, go, cite, flash }), [s, ctx, T, set, route, go, cite, flash]);
+  const value = useMemo(() => ({ s, ctx, T, set, replace, route, go, cite, flash }), [s, ctx, T, set, replace, route, go, cite, flash]);
   return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>;
 }
 

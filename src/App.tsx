@@ -4,21 +4,20 @@ import { useStore } from "./ui/store";
 import { TriageTab } from "./ui/tabs/Triage";
 import { HealthTab } from "./ui/tabs/Health";
 import { BloodworkTab } from "./ui/tabs/Bloodwork";
-import { TrendsTab } from "./ui/tabs/Trends";
+import { TrendsTab } from "./ui/tabs/Progress";
 import { ErTab } from "./ui/tabs/Er";
 import { SourcesTab } from "./ui/tabs/Sources";
 import { DoctorDialog } from "./ui/dialogs/DoctorDialog";
 import { FeedbackDialog } from "./ui/dialogs/FeedbackDialog";
 import { ImportDialog } from "./ui/dialogs/ImportDialog";
 import { SaveDrawDialog } from "./ui/dialogs/SaveDrawDialog";
+import { AccountDialog } from "./ui/dialogs/AccountDialog";
 import { milestone, trackPage } from "./features/analytics";
-import { getPass, syncConfigured, syncNow } from "./features/sync";
 
-// Share and sync pull in canvas and Supabase code most visitors never need
+// Share pulls in canvas code most visitors never need
 const ShareDialog = lazy(() => import("./ui/dialogs/ShareDialog"));
-const SyncDialog = lazy(() => import("./ui/dialogs/SyncDialog"));
 
-export type DialogName = "import" | "doc" | "share" | "feedback" | "sync" | "save";
+export type DialogName = "import" | "doc" | "share" | "feedback" | "account" | "save";
 const DialogCtx = createContext<(d: DialogName) => void>(() => {});
 export const useOpenDialog = () => useContext(DialogCtx);
 
@@ -41,17 +40,13 @@ export default function App() {
     if (realDraws >= 2) milestone("returned_with_second_draw", { draws: realDraws });
   }, [realDraws]);
 
-  // back from the sign-in email: reopen sync so it can finish
+  // back from the confirmation email: open sign-in
   useEffect(() => {
-    if (new URLSearchParams(location.search).has("sync") && syncConfigured) setDlg("sync");
+    if (new URLSearchParams(location.search).has("signin")) {
+      setDlg("account");
+      history.replaceState(null, "", location.pathname);
+    }
   }, []);
-
-  // once unlocked this session, push changes a few seconds after they settle
-  useEffect(() => {
-    if (!syncConfigured || !getPass() || s.example || !s.updatedAt) return;
-    const t = setTimeout(() => syncNow(s).catch(() => {}), 4000);
-    return () => clearTimeout(t);
-  }, [s]);
 
 
   return (
@@ -61,7 +56,7 @@ export default function App() {
         {route.tab === "triage" && <TriageTab />}
         {route.tab === "health" && <HealthTab />}
         {route.tab === "bloodwork" && <BloodworkTab />}
-        {route.tab === "trends" && <TrendsTab />}
+        {route.tab === "progress" && <TrendsTab />}
         {route.tab === "er" && <ErTab />}
         {route.tab === "sources" && <SourcesTab />}
       </main>
@@ -79,9 +74,9 @@ export default function App() {
       <DoctorDialog open={dlg === "doc"} onClose={close} />
       <FeedbackDialog open={dlg === "feedback"} onClose={close} />
       <SaveDrawDialog open={dlg === "save"} onClose={close} />
+      <AccountDialog open={dlg === "account"} onClose={close} />
       <Suspense fallback={null}>
         {dlg === "share" && <ShareDialog open onClose={close} />}
-        {dlg === "sync" && <SyncDialog open onClose={close} />}
       </Suspense>
     </DialogCtx.Provider>
   );
