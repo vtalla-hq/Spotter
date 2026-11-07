@@ -317,9 +317,9 @@ details.moreinfo summary{cursor:pointer;font:700 18px var(--display);letter-spac
 footer{max-width:1200px;margin:0 auto;padding:0 20px 32px;font-size:12px;color:var(--muted)}
 footer p{max-width:95ch;margin:0}
 /* ---------- theme: chalk on rubber flooring. Volt accent, plate-coloured organs. */
-html:root:not([data-theme="light"]){--bg:#0d0e0c;--paper:#161714;--paper2:#1e201c;--ink:#f1efe7;--muted:#a3a094;--line:#2c2e29;--accent:#c6f432;--volt:#c6f432;--accent-soft:rgba(198,244,50,.12);
+html:root[data-theme="dark"]{--bg:#0d0e0c;--paper:#161714;--paper2:#1e201c;--ink:#f1efe7;--muted:#a3a094;--line:#2c2e29;--accent:#c6f432;--volt:#c6f432;--accent-soft:rgba(198,244,50,.12);
   --ok:#4ade80;--calm:#9fb4c8;--warn:#facc15;--risk:#fb923c;--danger:#f87171;color-scheme:dark}
-html:root[data-theme="light"]{--bg:#ecebe4;--paper:#fbfaf6;--paper2:#f1f0e9;--ink:#121310;--muted:#5d5a52;--line:#d9d6cb;--accent:#4a7300;--volt:#c6f432;--accent-soft:#eef7d2;
+html:root:not([data-theme="dark"]){--bg:#f6f6f3;--paper:#ffffff;--paper2:#f4f4f0;--ink:#1b1c19;--muted:#66645d;--line:#e4e2db;--accent:#4a7300;--volt:#c6f432;--accent-soft:#eef7d2;
   --ok:#15803d;--calm:#46627c;--warn:#a16207;--risk:#c2410c;--danger:#b91c1c;color-scheme:light}
 :root{--display:"Archivo","Arial Narrow",system-ui,sans-serif;--sans:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
 body{font-size:15.5px;-webkit-font-smoothing:antialiased;background-color:var(--bg);background-image:radial-gradient(color-mix(in srgb,var(--ink) 5%,transparent) 1px,transparent 1.3px),radial-gradient(color-mix(in srgb,var(--ink) 3%,transparent) 1px,transparent 1.3px);background-size:9px 11px,13px 7px;background-position:0 0,4px 5px}
@@ -372,7 +372,7 @@ input,textarea,select{border-radius:4px!important}
 .hcopy .kick i{width:22px;height:3px;background:var(--volt)}
 .hcopy h1{font:900 clamp(56px,8.6vw,118px)/.84 var(--display);font-stretch:112%;letter-spacing:-.03em;text-transform:uppercase;margin:0 0 22px}
 .hcopy h1 span{display:block}.hcopy h1 .b{color:var(--volt);-webkit-text-stroke:0}
-html:root[data-theme="light"] .hcopy h1 .b{color:var(--ink);background:linear-gradient(transparent 58%,var(--volt) 58%,var(--volt) 92%,transparent 92%);display:inline;box-decoration-break:clone}
+html:root:not([data-theme="dark"]) .hcopy h1 .b{color:var(--ink);background:linear-gradient(transparent 58%,var(--volt) 58%,var(--volt) 92%,transparent 92%);display:inline;box-decoration-break:clone}
 .hcopy p{font-size:17.5px;line-height:1.55;color:var(--muted);margin:0 0 22px;max-width:46ch}
 .btn.big{padding:13px 20px;font-size:14px}
 .hcopy .steps{margin-top:22px;font-size:14px}
@@ -435,7 +435,7 @@ html:root[data-theme="light"] .hcopy h1 .b{color:var(--ink);background:linear-gr
 .how{margin-top:36px;padding-top:36px;border-top:1px solid var(--line)}
 .how h2{font:900 clamp(30px,4.4vw,56px)/.95 var(--display);font-stretch:115%;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 30px;max-width:22ch}
 .how h2 span{color:var(--volt)}
-html:root[data-theme="light"] .how h2 span{color:var(--muted)}
+html:root:not([data-theme="dark"]) .how h2 span{color:var(--muted)}
 .how3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 @media (max-width:820px){.how3{grid-template-columns:1fr}}
 .how3>div{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:18px 18px 20px;position:relative;overflow:hidden}
@@ -449,13 +449,43 @@ html:root[data-theme="light"] .how h2 span{color:var(--muted)}
 .stats>div:first-child{border-left:0}
 .stats .lab{font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .stats b{display:block;font:700 clamp(40px,5vw,62px)/1 var(--mono);letter-spacing:-.05em;color:var(--volt);margin:8px 0 6px}
-html:root[data-theme="light"] .stats b{color:var(--ink)}
+html:root:not([data-theme="dark"]) .stats b{color:var(--ink)}
 .stats small{display:block;color:var(--muted);font-size:13px}
 .srow .nm{font-family:var(--display);font-stretch:110%;font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:14px}
 .srow .nm i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--sc);margin-right:9px}
 .srow .trk .c{background:var(--sc)}
 .srow .trk .p{background:repeating-linear-gradient(135deg,var(--sc) 0 2px,transparent 2px 5px)}
 .srows,.srow>button{border-radius:6px}
+/* calmer, even type scale */
+body{font-size:16px;line-height:1.55}
+html:root:not([data-theme="dark"]) body{background-image:none}
+.bodycard::before{display:none}
+.hcopy h1{font-size:clamp(36px,4.4vw,58px);line-height:.98;font-weight:800;font-stretch:105%;letter-spacing:-.025em;text-transform:none;margin-bottom:18px}
+html:root:not([data-theme="dark"]) .hcopy h1 .b{color:var(--accent);background:none;display:block}
+.hcopy p{font-size:17px}
+.hcopy .kick{font-size:12px}
+nav a{font:600 14px/1 var(--sans);font-stretch:100%;letter-spacing:0;text-transform:none;padding:9px 11px}
+.brand b{font-size:22px;font-stretch:115%}
+.btn{text-transform:none;letter-spacing:0;font:600 14px/1.2 var(--sans)}
+.btn.big{font-size:15px;padding:12px 20px}
+.presets button{text-transform:none;letter-spacing:0;font:600 13.5px var(--sans)}
+.presets .t,.bhead .t,.eyebrow,.ph,.pop .grp,table.fx th,.card h4,.sheet h3,.scol h3,.doc h3,.how3 .k,.stats .lab{font-size:12px;letter-spacing:.08em}
+.group h2,.hhero h1,details.moreinfo summary,.sheet h2,.tl h4,.gverdict b,.hsum b,.shead h2,.how h2,.how3 h3,.srow .nm,.erhero h1{text-transform:none;font-stretch:100%;letter-spacing:-.015em}
+.hhero h1,.erhero h1{font-size:clamp(30px,4vw,46px);font-weight:800;line-height:1.02}
+.group h2{font-size:22px;font-weight:800}
+.shead h2{font-size:24px;font-weight:800}
+.how h2{font-size:clamp(26px,3.2vw,38px);font-weight:800;line-height:1.08}
+.how3 h3{font-size:20px;font-weight:800}
+.srow .nm{font-size:15px;font-weight:700}
+.vbig b{font-size:36px}
+.stats b{font-size:clamp(34px,4vw,48px)}
+.gverdict b,.hsum b{font-size:24px;font-weight:800}
+.tl h4{font-size:15px}
+#map .lbl{font:700 13px var(--sans);text-transform:none;letter-spacing:0}
+#map .lsub{font-size:11.5px}
+#map .sc{font-size:13px}
+.hchips button{font-size:12.5px;font-weight:600}
+.card h3{font-size:17px}
 </style>
 </head>
 <body>
@@ -466,7 +496,7 @@ html:root[data-theme="light"] .stats b{color:var(--ink)}
     <div class="toggles">
       <span class="seg" id="sexSeg" aria-label="Sex"><button data-v="m">Male</button><button data-v="f">Female</button></span>
       <span class="seg" id="unitSeg" aria-label="Units"><button data-v="si">SI</button><button data-v="us">US</button></span>
-      <button class="themebtn" id="themeBtn" aria-label="Switch light or dark" title="Light / dark">☀</button>
+      <button class="themebtn" id="themeBtn" aria-label="Switch light or dark" title="Light / dark">☾</button>
     </div>
   </div>
 </header>
@@ -476,7 +506,7 @@ html:root[data-theme="light"] .stats b{color:var(--ink)}
   <div class="hero2">
     <div class="hcopy">
       <p class="kick"><i></i>Bloodwork triage for lifters</p>
-      <h1><span>Lift heavy.</span> <span class="b">Bleed smart.</span></h1>
+      <h1><span>Know your stack.</span> <span class="b">Know your blood.</span></h1>
       <p>Lab reports flag lifters for everything. Spotter shows which organs your stack is loading, sorts every flag into ignore, fix or act now, and links the study behind each call.</p>
       <div class="btnrow"><button class="btn primary big" data-act="sample">Try a sample cycle</button><button class="btn big" data-go="bloodwork">Enter my results</button></div>
       <ol class="steps"><li class="done" id="st1"><b>1</b>Add your stack</li><li id="st2"><b>2</b>Enter your results</li><li id="st3"><b>3</b>Read your triage</li></ol>
@@ -1150,8 +1180,8 @@ const PRESETS=[["Natty","creatine,ashwa"],["TRT","trt,hcg"],["First cycle","test
 function renderPresets(){const cur=[...S.stack].sort().join(",");document.getElementById("presets").innerHTML='<span class="t">Load a stack</span>'+PRESETS.map(([n,ids])=>'<button data-preset="'+ids+'" aria-pressed="'+(ids.split(",").sort().join(",")===cur)+'">'+n+'</button>').join("")}
 // ---------- load map: organs on a body, sized and coloured by strain
 const SYSC={blood:"#ef4444",heart:"#fb7185",lipids:"#facc15",liver:"#f97316",hpta:"#3b82f6",sugar:"#22c55e",kidney:"#a78bfa",muscle:"#2dd4bf",thyroid:"#e879f9",iron:"#94a3b8"};
-const SPOT={hpta:[280,54,"R"],thyroid:[280,98,"L"],heart:[298,150,"R"],lipids:[262,178,"L"],liver:[252,220,"L"],sugar:[306,232,"R"],kidney:[280,274,"R"],blood:[158,214,"L"],iron:[402,214,"R"],muscle:[252,412,"L"]};
-const SIL='<g transform="translate(80,0)"><circle cx="200" cy="52" r="30"/><rect x="186" y="78" width="28" height="24" rx="6"/><path d="M120,108 Q200,92 280,108 L300,128 Q306,170 292,214 L268,300 Q262,320 250,330 L150,330 Q138,320 132,300 L108,214 Q94,170 100,128 Z"/><path d="M104,120 Q78,128 70,170 L56,260 Q52,282 62,286 Q73,288 77,266 L97,190 Q105,160 113,150 Z"/><path d="M296,120 Q322,128 330,170 L344,260 Q348,282 338,286 Q327,288 323,266 L303,190 Q295,160 287,150 Z"/><path d="M152,326 L198,326 L194,470 Q192,502 177,502 Q162,502 160,470 L148,390 Z"/><path d="M248,326 L202,326 L206,470 Q208,502 223,502 Q238,502 240,470 L252,390 Z"/></g>';
+const SPOT={hpta:[280,46,"R"],thyroid:[280,86,"L"],heart:[294,140,"R"],lipids:[264,168,"L"],liver:[256,206,"L"],sugar:[302,222,"R"],kidney:[280,258,"R"],blood:[194,220,"L"],iron:[366,220,"R"],muscle:[252,382,"L"]};
+const SIL='<g transform="translate(80,0)"><ellipse cx="200" cy="44" rx="23" ry="28"/><path d="M190,68 C190,82 188,90 176,94 C158,99 140,100 132,110 C124,120 124,136 126,150 L134,196 C136,214 140,232 142,250 C142,262 140,272 142,284 L258,284 C260,272 258,262 258,250 C260,232 264,214 266,196 L274,150 C276,136 276,120 268,110 C260,100 242,99 224,94 C212,90 210,82 210,68 Z"/><path d="M130,112 C116,118 112,134 110,152 L104,206 C102,222 100,240 98,258 L94,290 C93,301 99,307 105,305 C110,303 111,297 112,289 L120,238 C122,222 126,206 128,190 L134,150 Z"/><path d="M270,112 C284,118 288,134 290,152 L296,206 C298,222 300,240 302,258 L306,290 C307,301 301,307 295,305 C290,303 289,297 288,289 L280,238 C278,222 274,206 272,190 L266,150 Z"/><path d="M142,280 L258,280 C262,300 260,330 254,360 L248,420 C246,446 246,466 246,484 C247,494 252,500 244,504 L222,504 C216,500 220,492 220,484 L214,420 C210,380 206,350 202,322 L198,322 C194,350 190,380 186,420 L180,484 C180,492 184,500 178,504 L156,504 C148,500 153,494 154,484 C154,466 154,446 152,420 L146,360 C140,330 138,300 142,280 Z"/></g>';
 function compSys(c){const set=new Set();c.fx.forEach(f=>{if(SYS_OF[f.m])set.add(SYS_OF[f.m])});if(c.heart||HEART_FX[c.cls])set.add("heart");return set}
 function renderMap(){const el=document.getElementById("map"),L=strain(),LV=Object.fromEntries(L.map(x=>[x.id,x])),comps=S.stack.map(id=>BYC[id]).filter(Boolean);
   document.getElementById("hchips").innerHTML=comps.length?comps.map(c=>'<button data-hc="'+c.id+'" style="--c:'+CLS[c.cls].c+'">'+esc(c.name.split(" (")[0])+'</button>').join("")+'<span class="hint">hover to see where it hits</span>':'<span class="hint">Nothing loaded yet. Pick a stack below.</span>';
@@ -1240,7 +1270,7 @@ function renderAll(){renderStack();renderTriage();renderHealth();renderBloodwork
 
 // ---------- events
 (function(){let t=null;try{t=localStorage.getItem("spotter-theme")}catch(e){}if(t)document.documentElement.setAttribute("data-theme",t)})();
-document.getElementById("themeBtn").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme")==="light"?"dark":"light";document.documentElement.setAttribute("data-theme",cur);try{localStorage.setItem("spotter-theme",cur)}catch(e){}};
+document.getElementById("themeBtn").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",cur);try{localStorage.setItem("spotter-theme",cur)}catch(e){}};
 function seg(id,key){document.querySelectorAll("#"+id+" button").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.v===S[key]);b.onclick=()=>{S[key]=b.dataset.v;save();seg(id,key);renderAll()}})}
 seg("sexSeg","sex");seg("unitSeg","units");
 const pop=document.getElementById("pop"),pickBtn=document.getElementById("pickBtn");
