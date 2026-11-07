@@ -294,6 +294,7 @@ footer p{max-width:95ch;margin:0}
   <div class="notice" id="exNote"><span><b>This is an example.</b> Swap in your own stack and results.</span><button class="btn" data-act="clear">Start blank</button></div>
 
   <div class="verdict" id="verdict"></div>
+  <div class="hlink" id="hlink"></div>
   <div id="groups" class="groups"></div>
 
   <details class="panel moreinfo">
@@ -554,6 +555,7 @@ function renderTriage(){
   document.getElementById("st3").classList.toggle("done",hasVals&&(S.stack.length>0||S.train));
   const act=T.filter(t=>t.red.length),fix=T.filter(t=>!t.red.length&&t.cat!=="explained"),exp=T.filter(t=>!t.red.length&&t.cat==="explained");
   const nFine=M.filter(m=>S.vals[m.id]!=null).length-T.length;
+  {const G=gapList(),C=comboList(),hl=document.getElementById("hlink");if(S.stack.length){const d=G.filter(g=>g.done).length;hl.style.display="";hl.innerHTML='<span>Health check: '+(G.length?d+'/'+G.length+' monitoring gaps covered':'no extra monitoring needed')+(C.length?' · '+C.length+' combo warning'+(C.length>1?'s':''):'')+'</span><a href="#health" data-go="health">Open health check →</a>'}else hl.style.display="none"}
   const vd=document.getElementById("verdict");
   if(!hasVals)vd.innerHTML='<p class="vline">Add your results to see your triage.</p>';
   else vd.innerHTML='<div class="vbig"><span style="--c:var(--danger)"><b>'+act.length+'</b>act now</span><span style="--c:var(--risk)"><b>'+fix.length+'</b>fix or ask about</span><span style="--c:var(--calm)"><b>'+exp.length+'</b>expected from your stack</span><span style="--c:var(--ok)"><b>'+nFine+'</b>in range</span></div>';
@@ -693,15 +695,15 @@ document.getElementById("pickQ").addEventListener("input",renderOpts);
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&pop.classList.contains("open")){setPop(false);pickBtn.focus()}});
 document.addEventListener("click",e=>{
   if(pop.classList.contains("open")&&!e.target.closest("#picker"))setPop(false);
-  const pk=e.target.closest("[data-pick]");if(pk){const id=pk.dataset.pick;S.stack=S.stack.includes(id)?S.stack.filter(x=>x!==id):[...S.stack,id];S.example=false;save();renderStack();renderTriage();renderBloodwork();const nb=document.querySelector('[data-pick="'+id+'"]');if(nb)nb.focus();return}
+  const pk=e.target.closest("[data-pick]");if(pk){const id=pk.dataset.pick;S.stack=S.stack.includes(id)?S.stack.filter(x=>x!==id):[...S.stack,id];S.example=false;save();renderStack();renderTriage();renderHealth();renderBloodwork();const nb=document.querySelector('[data-pick="'+id+'"]');if(nb)nb.focus();return}
   const rm=e.target.closest("[data-rm]");if(rm){S.stack=S.stack.filter(x=>x!==rm.dataset.rm);S.example=false;save();renderAll();return}
   const c=e.target.closest("a.cite[data-src]");if(c){e.preventDefault();go("sources");const li=document.getElementById("src-"+c.dataset.src);if(li){li.scrollIntoView({block:"center"});li.classList.add("flash");setTimeout(()=>li.classList.remove("flash"),1600)}return}
   const op=e.target.closest("[data-open]");if(op){e.preventDefault();S.sel=op.dataset.open;S.q="";document.getElementById("q").value="";go("bloodwork",S.sel);renderBloodwork();window.scrollTo(0,0);return}
   const g=e.target.closest("[data-go]");if(g){e.preventDefault();go(g.dataset.go);window.scrollTo(0,0);return}
   const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
 });
-document.getElementById("habits").addEventListener("click",e=>{const b=e.target.closest("[data-hab]");if(!b)return;S.hab[b.dataset.hab]=!S.hab[b.dataset.hab];save();renderHealth()});
-document.getElementById("trainSw").addEventListener("change",e=>{S.train=e.target.checked;S.example=false;save();renderTriage();renderBloodwork()});
+document.getElementById("habits").addEventListener("click",e=>{const b=e.target.closest("[data-hab]");if(!b)return;S.hab[b.dataset.hab]=!S.hab[b.dataset.hab];save();renderHealth();renderTriage()});
+document.getElementById("trainSw").addEventListener("change",e=>{S.train=e.target.checked;S.example=false;save();renderTriage();renderHealth();renderBloodwork()});
 window.addEventListener("hashchange",fromHash);
 document.getElementById("q").addEventListener("input",e=>{S.q=e.target.value;renderBloodwork()});
 const rowsEl=document.getElementById("rows");
@@ -711,7 +713,7 @@ rowsEl.addEventListener("keydown",e=>{const r=e.target.closest(".row");if(r&&e.t
 rowsEl.addEventListener("focusin",e=>{if(e.target.tagName==="INPUT"){const r=e.target.closest(".row");if(r&&S.sel!==r.dataset.id)select(r.dataset.id)}});
 rowsEl.addEventListener("change",e=>{if(e.target.tagName!=="INPUT")return;const id=e.target.id.slice(3),m=BYID[id],raw=e.target.value.replace(/,/g,"").trim();
   if(raw==="")delete S.vals[id];else{const v=parseFloat(raw);if(!isFinite(v)||v<0){e.target.value=fmtIn(m,S.vals[id]);return}S.vals[id]=v/f(m)}
-  S.example=false;save();const row=e.target.closest(".row"),tmp=document.createElement("div");tmp.innerHTML=rowHTML(m);row.replaceWith(tmp.firstChild);renderSheet();renderTriage()});
+  S.example=false;save();const row=e.target.closest(".row"),tmp=document.createElement("div");tmp.innerHTML=rowHTML(m);row.replaceWith(tmp.firstChild);renderSheet();renderTriage();renderHealth()});
 const dlg=document.getElementById("pasteDlg");
 function openPaste(){document.getElementById("pasteMsg").textContent="Reading in "+(S.units==="si"?"SI":"US")+" units.";dlg.showModal()}
 document.getElementById("pasteCancel").onclick=()=>dlg.close();
