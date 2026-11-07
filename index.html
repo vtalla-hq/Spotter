@@ -1146,7 +1146,7 @@ document.getElementById("docCopy").onclick=async()=>{const m=document.getElement
 // ---------- shareable result card (canvas, counts only)
 function shareCounts(){const T=triage(),n=M.filter(m=>S.vals[m.id]!=null).length;
   return{act:T.filter(t=>t.red.length).length,fix:T.filter(t=>!t.red.length&&t.cat!=="explained").length,exp:T.filter(t=>!t.red.length&&t.cat==="explained").length,ok:n-T.length,n}}
-function siteHost(){return /^https?:/.test(location.protocol)&&location.host&&!/claude|localhost|usercontent/.test(location.host)?location.host:"spotter-ten-murex.vercel.app"}
+function siteHost(){return /^https?:/.test(location.protocol)&&location.host&&!/claude|localhost|usercontent/.test(location.host)?location.host:"spotterlabs.vercel.app"}
 function drawShare(){const cv=document.getElementById("shareCv"),x=cv.getContext("2d"),W=1200,H=630,C=shareCounts(),G=gapList(),inc=document.getElementById("shareStack").checked;
   const col={bg:"#101318",ink:"#f2f4f6",mut:"#97a3ae",line:"#26303a",danger:"#f26b6b",risk:"#f28b54",calm:"#8fb0cc",ok:"#5cc489",acc:"#7aa2ff"};
   x.fillStyle=col.bg;x.fillRect(0,0,W,H);x.fillStyle=col.acc;x.fillRect(0,0,W,8);
