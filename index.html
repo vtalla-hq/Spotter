@@ -6,7 +6,7 @@
 <title>Spotter Lifter Bloodwork</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* Layout: dark gym-floor header, chalk-white work surface. Triage first: stack on top, flags sorted by what caused them. */
 :root{
@@ -316,12 +316,55 @@ details.moreinfo summary{cursor:pointer;font:700 18px var(--display);letter-spac
 #shareDlg canvas{width:100%;height:auto;border-radius:10px;display:block;box-shadow:0 0 0 1px var(--line)}
 footer{max-width:1200px;margin:0 auto;padding:0 20px 32px;font-size:12px;color:var(--muted)}
 footer p{max-width:95ch;margin:0}
+/* ---------- theme: warm paper, editorial type */
+:root{--bg:#f5f4f1;--paper:#fbfaf8;--ink:#151513;--muted:#6d6a63;--line:#e3e0d9;--accent:#2d5be3;--accent-soft:#e7ecfc;
+  --ok:#2f7d4f;--calm:#56708a;--warn:#a46b07;--risk:#d0601c;--danger:#c42b2b;
+  --display:"Inter Tight","Inter",system-ui,sans-serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11110f;--paper:#191917;--ink:#ecebe6;--muted:#9b978e;--line:#2b2a26;--accent:#7f9cff;--accent-soft:#1d2440;
+  --ok:#62c48b;--calm:#93acc4;--warn:#e0ac4a;--risk:#f08a50;--danger:#f06a6a;color-scheme:dark}}
+body{font-size:15.5px;-webkit-font-smoothing:antialiased}
+header{background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--ink);border-bottom:1px solid var(--line)}
+.bar{padding:14px 20px}
+.brand{align-items:center;text-decoration:none;color:var(--ink)}
+.brand i{width:26px;height:26px;border-radius:7px;background:var(--ink);position:relative;flex:none}
+.brand i::before{content:"";position:absolute;left:5px;right:5px;top:11.5px;height:3px;border-radius:2px;background:var(--bg)}
+.brand i::after{content:"";position:absolute;left:4px;top:7px;width:4px;height:12px;border-radius:1.5px;background:var(--bg);box-shadow:14px 0 0 var(--bg)}
+.brand b{font:700 21px/1 var(--display);letter-spacing:-.03em}
+.brand span{color:var(--muted)}
+nav a{color:var(--muted);font-weight:500;padding:7px 11px}
+nav a:hover{color:var(--ink)}
+nav a[aria-current="page"]{color:var(--ink);background:var(--line)}
+nav a.er{color:var(--danger)}
+.seg{background:var(--line);border-radius:9px}
+.seg button{color:var(--muted);border-radius:7px}
+.seg button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.panel,.card,.explist,.ctr{border-radius:16px;box-shadow:none;border:1px solid var(--line)}
+.card{border-left:4px solid var(--c)}
+.explist{border-left:4px solid var(--calm)}
+.btn{border-radius:10px;padding:8px 14px;font-weight:500}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.eyebrow,.ph,.pop .grp,table.fx th,.card h4,.sheet h3,.scol h3,.doc h3{font:500 11.5px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.group h2,.hhero h1,.hero h1,details.moreinfo summary,.sheet h2,dialog h2,.tl h4,.gverdict b,.hsum b,.erhero h1{font-family:var(--display);text-transform:none;letter-spacing:-.03em}
+.hhero h1,.erhero h1{font-size:clamp(34px,5vw,56px);font-weight:700;line-height:.98}
+.group h2{font-size:24px;font-weight:700}
+details.moreinfo summary{font-size:20px;font-weight:600}
+.sheet h2{font-size:30px}
+.tl h4{font-size:16px;font-weight:700}
+.gverdict b{font-size:28px}
+.hsum b{font-size:30px}
+.vbig b{font-family:var(--display);font-weight:700;letter-spacing:-.04em;font-size:44px}
+.card h3{font-family:var(--display);letter-spacing:-.01em}
+.schip{background:var(--bg);border:1px solid var(--line);box-shadow:inset 3px 0 0 var(--c,var(--accent))}
+.erhero{border-radius:16px}
+dialog{border-radius:16px}
+.notice{border-radius:12px}
 </style>
 </head>
 <body>
 <header>
   <div class="bar">
-    <p class="brand"><b>SPOTTER</b><span>bloodwork for lifters</span></p>
+    <a class="brand" href="#triage" data-go="triage"><i aria-hidden="true"></i><b>Spotter</b><span>bloodwork for lifters</span></a>
     <nav aria-label="Sections"><a href="#triage" data-go="triage">Triage</a><a href="#health" data-go="health">Health check</a><a href="#bloodwork" data-go="bloodwork">Bloodwork</a><a href="#er" data-go="er" class="er">ER signs</a><a href="#sources" data-go="sources">Sources</a></nav>
     <div class="toggles">
       <span class="seg" id="sexSeg" aria-label="Sex"><button data-v="m">Male</button><button data-v="f">Female</button></span>
