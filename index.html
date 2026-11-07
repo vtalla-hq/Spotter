@@ -288,11 +288,11 @@ footer p{max-width:95ch;margin:0}
     </div>
     <div class="stackfoot">
       <label class="switch"><input type="checkbox" id="trainSw"> Trained hard in the 7 days before the draw</label>
-      <span class="btnrow"><button class="btn" data-act="paste">Paste lab report</button><button class="btn" data-go="bloodwork">Type in results</button></span>
+      <span class="btnrow"><button class="btn" data-act="sample">Try a sample cycle</button><button class="btn" data-act="paste">Paste lab report</button><button class="btn" data-go="bloodwork">Type in results</button></span>
     </div>
   </div>
 
-  <div class="notice" id="exNote"><span><b>This is an example.</b> Swap in your own stack and results.</span><button class="btn" data-act="clear">Start blank</button></div>
+  <div class="notice" id="exNote"><span><b>This is an example.</b> Swap in your own stack and results.</span><span class="btnrow"><button class="btn" data-act="sample">Try a sample cycle</button><button class="btn" data-act="clear">Start blank</button></span></div>
 
   <div class="verdict" id="verdict"></div>
   <div class="hlink" id="hlink"></div>
@@ -495,6 +495,8 @@ const RED=[
 ];
 
 const EXAMPLE={stack:["creatine","testc","anavar"],train:true,vals:{hematocrit:0.53,hemoglobin:178,plt:330,alt:78,ast:66,ggt:28,bili:14,ck:1450,creatinine:128,ldl:3.9,hdl:0.62,tg:1.1,glucose:6.3,testo:52,lh:0.2,estradiol:210,ferritin:85}};
+// Sample: test cycle + Anavar + MK-677 + creatine, trained hard. Shows every triage group.
+const SAMPLE={stack:["creatine","testc","anavar","mk677"],train:true,vals:{hematocrit:0.55,hemoglobin:182,plt:340,alt:96,ast:71,ggt:24,bili:16,alp:85,ck:2100,creatinine:131,cystatin:0.82,urea:8.4,ldl:4.1,hdl:0.58,tg:1.4,apob:1.22,glucose:6.2,a1c:5.8,igf1:410,testo:58,lh:0.1,estradiol:230,tsh:5.6,ft4:14,ferritin:24}};
 const S={sex:"m",units:"si",stack:[],train:false,hab:{},vals:{},example:true,sel:"hematocrit",q:"",tab:"triage"};
 try{const r=localStorage.getItem("spotter-v1");if(r){const d=JSON.parse(r);Object.assign(S,{sex:d.sex||"m",units:d.units||"si",stack:d.stack||[],train:!!d.train,hab:d.hab||{},vals:d.vals||{},example:!!d.example})}else Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}catch(e){Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}
 function save(){try{localStorage.setItem("spotter-v1",JSON.stringify({sex:S.sex,units:S.units,stack:S.stack,train:S.train,hab:S.hab,vals:S.vals,example:S.example}))}catch(e){}}
@@ -701,7 +703,7 @@ document.addEventListener("click",e=>{
   const c=e.target.closest("a.cite[data-src]");if(c){e.preventDefault();go("sources");const li=document.getElementById("src-"+c.dataset.src);if(li){li.scrollIntoView({block:"center"});li.classList.add("flash");setTimeout(()=>li.classList.remove("flash"),1600)}return}
   const op=e.target.closest("[data-open]");if(op){e.preventDefault();S.sel=op.dataset.open;S.q="";document.getElementById("q").value="";go("bloodwork",S.sel);renderBloodwork();window.scrollTo(0,0);return}
   const g=e.target.closest("[data-go]");if(g){e.preventDefault();go(g.dataset.go);window.scrollTo(0,0);return}
-  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
+  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else if(a.dataset.act==="sample"){Object.assign(S,{stack:[...SAMPLE.stack],train:SAMPLE.train,vals:{...SAMPLE.vals},hab:{},sex:"m",units:"si",example:true});seg("sexSeg","sex");seg("unitSeg","units");save();renderAll();go("triage");window.scrollTo(0,0)}else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
 });
 document.getElementById("habits").addEventListener("click",e=>{const b=e.target.closest("[data-hab]");if(!b)return;S.hab[b.dataset.hab]=!S.hab[b.dataset.hab];save();renderHealth();renderTriage()});
 document.getElementById("trainSw").addEventListener("change",e=>{S.train=e.target.checked;S.example=false;save();renderTriage();renderHealth();renderBloodwork()});
