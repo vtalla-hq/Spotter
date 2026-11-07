@@ -499,6 +499,13 @@ html:root[data-theme="dark"]{--accent:#f1efe7;--volt:#f1efe7;--accent-soft:#2325
 .vbig span::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c);align-self:center;margin-right:2px}
 a.cite,.csep{color:var(--muted)}
 a.cite:hover{color:var(--ink)}
+dialog h2{text-transform:none;font-stretch:100%;font-weight:800}
+.fbtn{position:fixed;right:16px;bottom:16px;z-index:25;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:600 13.5px var(--sans);padding:9px 14px;border-radius:999px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.fbtn:hover{border-color:var(--ink)}
+.fbtypes{display:flex;flex-wrap:wrap;gap:6px}
+.fbtypes button{border:1px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 13px var(--sans);cursor:pointer}
+.fbtypes button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+@media print{.fbtn{display:none}}
 </style>
 </head>
 <body>
@@ -634,6 +641,16 @@ a.cite:hover{color:var(--ink)}
   <p style="font-size:14px;color:var(--muted);margin:0 0 6px">A one-page summary to print or show at your appointment. It lists what you take, not how much.</p>
   <div class="doc" id="docBody"></div>
   <div class="foot"><span id="docMsg"></span><button class="btn" id="docCopy">Copy text</button><button class="btn" id="docClose">Close</button><button class="btn primary" id="docPrint">Print</button></div>
+</dialog>
+
+<button class="fbtn" id="fbOpen" aria-haspopup="dialog">Feedback</button>
+<dialog id="fbDlg" aria-labelledby="fbH">
+  <h2 id="fbH">Send feedback</h2>
+  <p style="font-size:14px;color:var(--muted);margin:0 0 12px">Bug, missing compound, wrong range, idea? Don't include anything that identifies you or your lab results unless you want to.</p>
+  <div class="fbtypes" id="fbType" role="radiogroup" aria-label="Feedback type"><button data-v="Bug" aria-pressed="false">Bug</button><button data-v="Missing compound or marker" aria-pressed="false">Missing compound</button><button data-v="Something looks wrong" aria-pressed="false">Looks wrong</button><button data-v="Idea" aria-pressed="true">Idea</button></div>
+  <textarea id="fbMsg" placeholder="What happened, or what would make Spotter better?" style="min-height:120px;margin-top:10px"></textarea>
+  <input id="fbEmail" type="email" placeholder="Email, if you want a reply (optional)" style="width:100%;margin-top:8px;padding:9px 10px;border:1px solid var(--line);background:var(--bg)">
+  <div class="foot"><span id="fbMsgOut"></span><button class="btn" id="fbClose">Cancel</button><button class="btn primary" id="fbSend">Send</button></div>
 </dialog>
 
 <dialog id="shareDlg" aria-labelledby="shareH">
@@ -1290,6 +1307,21 @@ function renderAll(){renderStack();renderTriage();renderHealth();renderBloodwork
 // ---------- events
 (function(){let t=null;try{t=localStorage.getItem("spotter-theme")}catch(e){}if(t)document.documentElement.setAttribute("data-theme",t)})();
 document.getElementById("themeBtn").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",cur);try{localStorage.setItem("spotter-theme",cur)}catch(e){}};
+// ---------- analytics: Vercel Web Analytics, cookieless; only on the deployed site
+(function(){const h=location.hostname;if(!/^https?:/.test(location.protocol)||h==="localhost"||/claude|usercontent/.test(h))return;
+  const sc=document.createElement("script");sc.defer=true;sc.src="/_vercel/insights/script.js";document.head.appendChild(sc)})();
+// ---------- feedback. Set FEEDBACK_URL to a Formspree/Tally endpoint to collect privately; otherwise it opens a prefilled GitHub issue.
+const FEEDBACK_URL="";
+const fbDlg=document.getElementById("fbDlg");let fbKind="Idea";
+document.getElementById("fbOpen").onclick=()=>{document.getElementById("fbMsgOut").textContent="";fbDlg.showModal();document.getElementById("fbMsg").focus()};
+document.getElementById("fbClose").onclick=()=>fbDlg.close();
+document.getElementById("fbType").addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(!b)return;fbKind=b.dataset.v;document.querySelectorAll("#fbType button").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+document.getElementById("fbSend").onclick=async()=>{const msg=document.getElementById("fbMsg").value.trim(),email=document.getElementById("fbEmail").value.trim(),out=document.getElementById("fbMsgOut");
+  if(!msg){out.textContent="Write something first.";return}
+  const meta="Tab: "+S.tab+" · Stack: "+(S.stack.join(", ")||"none")+" · "+(window.innerWidth<700?"mobile":"desktop");
+  if(FEEDBACK_URL){try{const r=await fetch(FEEDBACK_URL,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({type:fbKind,message:msg,email,context:meta})});if(!r.ok)throw 0;out.textContent="Thanks, got it.";document.getElementById("fbMsg").value="";setTimeout(()=>fbDlg.close(),1200)}catch(e){out.textContent="Couldn't send. Try again later."}return}
+  const url="https://github.com/vtalla-hq/spotter/issues/new?title="+encodeURIComponent("["+fbKind+"] "+msg.slice(0,60))+"&body="+encodeURIComponent(msg+"\n\n---\n"+meta);
+  try{window.open(url,"_blank","noopener")}catch(e){}out.textContent="Opened GitHub to send it.";};
 function seg(id,key){document.querySelectorAll("#"+id+" button").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.v===S[key]);b.onclick=()=>{S[key]=b.dataset.v;save();seg(id,key);renderAll()}})}
 seg("sexSeg","sex");seg("unitSeg","units");
 const pop=document.getElementById("pop"),pickBtn=document.getElementById("pickBtn");
