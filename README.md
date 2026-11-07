@@ -16,6 +16,8 @@ Standard lab reports flag lifters for everything: high creatinine from creatine,
 - Paste-a-report parser for LifeLabs, Dynacare and hospital portal text
 - Pre-draw checklist and "test these next" suggestions based on your stack
 - **Health check**: a stack gap check (tests and habits your stack calls for), combo warnings for stacks that double up on the same harm, and supplements and habits rated Proven, Weak evidence or Avoid
+- **Stack map**: a live graph from each compound to the organ systems it acts on, tagged harm, expected or lab artifact, with one-tap quick stacks
+- **Organ strain scores**: 0–100 per system, combining what your stack is known to do with what your own bloodwork confirms
 - **Cycle timeline**: tell Spotter whether the draw was before, on or after a cycle. Baseline draws and draws 12+ weeks off aren't blamed on the cycle
 - **Is your gear real?**: checks whether LH and testosterone look like what your stack should do
 - **Heart strain**: blood pressure (ACC/AHA 2017 categories), resting heart rate, hematocrit and heart-scan status in one view
