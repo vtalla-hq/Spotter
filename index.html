@@ -254,6 +254,21 @@ details.moreinfo summary{cursor:pointer;font:700 18px var(--display);letter-spac
 .sitem .rel{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:999px}
 .hlink{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:12px;background:var(--paper);box-shadow:0 0 0 1px var(--line);font-weight:600}
 .hlink a{color:var(--accent);text-decoration:none}
+ .cycrow{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:14px;font-weight:600}
+.cycrow .seg button{font-size:13px}
+.wkin{width:64px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font-family:var(--mono);text-align:right}
+.tl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:34px}
+@media (max-width:820px){.tl{grid-template-columns:1fr 1fr;row-gap:14px}}
+.tl .st{position:relative;padding:16px 12px 0 0}
+.tl .st::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:var(--line)}
+.tl .st:first-child::before{border-radius:3px 0 0 3px}.tl .st:last-child::before{border-radius:0 3px 3px 0}
+.tl .st.past::before{background:var(--calm)}
+.tl .st.now::before{background:var(--accent)}
+.tl .st.now::after{content:"You are here";position:absolute;top:-24px;left:0;font:600 11px/1 var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.tl h4{margin:0 0 2px;font:700 15px/1.2 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.tl .when{font:500 12px/1 var(--mono);color:var(--muted)}
+.tl ul{margin:8px 0 0;padding-left:16px;font-size:13px;color:var(--muted)}
+.tl li{margin-bottom:3px}
 footer{max-width:1200px;margin:0 auto;padding:0 20px 32px;font-size:12px;color:var(--muted)}
 footer p{max-width:95ch;margin:0}
 </style>
@@ -290,6 +305,7 @@ footer p{max-width:95ch;margin:0}
       <label class="switch"><input type="checkbox" id="trainSw"> Trained hard in the 7 days before the draw</label>
       <span class="btnrow"><button class="btn" data-act="sample">Try a sample cycle</button><button class="btn" data-act="paste">Paste lab report</button><button class="btn" data-go="bloodwork">Type in results</button></span>
     </div>
+    <div class="cycrow" id="cycrow"><span>When was this blood drawn?</span><span class="seg" id="cycSeg" aria-label="Cycle phase"><button data-v="pre">Before starting</button><button data-v="on">On cycle</button><button data-v="off">Off cycle</button></span><label id="wkLab"><input class="wkin" id="cycWk" inputmode="numeric" aria-label="Weeks"> <span id="wkTxt">weeks in</span></label></div>
   </div>
 
   <div class="notice" id="exNote"><span><b>This is an example.</b> Swap in your own stack and results.</span><span class="btnrow"><button class="btn" data-act="sample">Try a sample cycle</button><button class="btn" data-act="clear">Start blank</button></span></div>
@@ -311,6 +327,7 @@ footer p{max-width:95ch;margin:0}
 
 <section data-tab="health">
   <div class="hhero"><h1>Stay healthy on your stack</h1><p>What you're missing, what clashes, and what's actually worth adding.</p></div>
+  <div class="panel" id="cycPanel"><p class="eyebrow">Cycle timeline: what to test, and when</p><div class="tl" id="tl"></div></div>
   <div class="panel"><p class="eyebrow">Your habits</p><div class="chips2" id="habits"></div></div>
   <div class="two">
     <div class="panel"><p class="eyebrow">Stack gap check</p><div id="gapwrap"></div></div>
@@ -500,10 +517,10 @@ const RED=[
 
 const EXAMPLE={stack:["creatine","testc","anavar"],train:true,vals:{hematocrit:0.53,hemoglobin:178,plt:330,alt:78,ast:66,ggt:28,bili:14,ck:1450,creatinine:128,ldl:3.9,hdl:0.62,tg:1.1,glucose:6.3,testo:52,lh:0.2,estradiol:210,ferritin:85}};
 // Sample: test cycle + Anavar + MK-677 + creatine, trained hard. Shows every triage group.
-const SAMPLE={stack:["creatine","testc","anavar","mk677"],train:true,vals:{hematocrit:0.55,hemoglobin:182,plt:340,alt:96,ast:71,ggt:24,bili:16,alp:85,ck:2100,creatinine:131,cystatin:0.82,urea:8.4,ldl:4.1,hdl:0.58,tg:1.4,apob:1.22,glucose:6.2,a1c:5.8,igf1:410,testo:58,lh:0.1,estradiol:230,tsh:5.6,ft4:14,ferritin:24}};
-const S={sex:"m",units:"si",stack:[],train:false,hab:{},vals:{},example:true,sel:"hematocrit",q:"",tab:"triage"};
-try{const r=localStorage.getItem("spotter-v1");if(r){const d=JSON.parse(r);Object.assign(S,{sex:d.sex||"m",units:d.units||"si",stack:d.stack||[],train:!!d.train,hab:d.hab||{},vals:d.vals||{},example:!!d.example})}else Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}catch(e){Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}
-function save(){try{localStorage.setItem("spotter-v1",JSON.stringify({sex:S.sex,units:S.units,stack:S.stack,train:S.train,hab:S.hab,vals:S.vals,example:S.example}))}catch(e){}}
+const SAMPLE={stack:["creatine","testc","anavar","mk677"],train:true,cyc:{ph:"on",wk:"9"},vals:{hematocrit:0.55,hemoglobin:182,plt:340,alt:96,ast:71,ggt:24,bili:16,alp:85,ck:2100,creatinine:131,cystatin:0.82,urea:8.4,ldl:4.1,hdl:0.58,tg:1.4,apob:1.22,glucose:6.2,a1c:5.8,igf1:410,testo:58,lh:0.1,estradiol:230,tsh:5.6,ft4:14,ferritin:24}};
+const S={sex:"m",units:"si",stack:[],train:false,hab:{},vals:{},cyc:{ph:"on",wk:""},example:true,sel:"hematocrit",q:"",tab:"triage"};
+try{const r=localStorage.getItem("spotter-v1");if(r){const d=JSON.parse(r);Object.assign(S,{sex:d.sex||"m",units:d.units||"si",stack:d.stack||[],train:!!d.train,hab:d.hab||{},vals:d.vals||{},cyc:d.cyc||{ph:"on",wk:""},example:!!d.example})}else Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}catch(e){Object.assign(S,{stack:[...EXAMPLE.stack],train:EXAMPLE.train,vals:{...EXAMPLE.vals}})}
+function save(){try{localStorage.setItem("spotter-v1",JSON.stringify({sex:S.sex,units:S.units,stack:S.stack,train:S.train,hab:S.hab,vals:S.vals,cyc:S.cyc,example:S.example}))}catch(e){}}
 
 // ---------- math
 function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+0.3275911*x);return s*(1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x))}
@@ -516,13 +533,22 @@ function pdf(m,x){const p=params(m);if(m.dist==="log"){if(x<=0)return 0;const z=
 function optOf(m){if(!m.opt)return null;return m.opt.m||m.opt.f?m.opt[S.sex]:m.opt}
 // direction a value is off in, or null if fine
 function offDir(m,x){if(x==null)return null;const [lo,hi]=ri(m);if(x>hi)return"up";if(x<lo)return"down";const O=optOf(m);if(O){if(O.l[1]!=null&&x>O.l[1])return"up";if(O.l[0]!=null&&x<O.l[0])return"down"}return null}
-function stackComps(){const c=S.stack.map(id=>BYC[id]).filter(Boolean);if(S.train)c.push(TRAIN);return c}
-function causes(m,d){const out=[];stackComps().forEach(c=>c.fx.forEach(f=>{if(f.m===m.id&&f.d===d)out.push({c,f})}));return out}
+// cycle phase: steroids and SARMs can't explain a draw taken before starting, or 12+ weeks after stopping
+const CYC_CLS=new Set(["inj","oral","sarm"]);
+const onCycleStack=()=>S.stack.some(id=>BYC[id]&&CYC_CLS.has(BYC[id].cls));
+const wkN=()=>{const n=parseInt(S.cyc.wk,10);return isFinite(n)&&n>=0?n:null};
+const lapsed=()=>S.cyc.ph==="off"&&wkN()!=null&&wkN()>=12;
+function cycActive(c){if(!CYC_CLS.has(c.cls)||!onCycleStack())return true;return S.cyc.ph==="on"||(S.cyc.ph==="off"&&!lapsed())}
+function allComps(){const c=S.stack.map(id=>BYC[id]).filter(Boolean);if(S.train)c.push(TRAIN);return c}
+function stackComps(){return allComps().filter(cycActive)}
+function causesIn(list,m,d){const out=[];list.forEach(c=>c.fx.forEach(f=>{if(f.m===m.id&&f.d===d)out.push({c,f})}));return out}
+const causes=(m,d)=>causesIn(stackComps(),m,d);
 function triage(){
   const res=[];M.forEach(m=>{const x=S.vals[m.id];if(x==null)return;const d=offDir(m,x);const red=RED.filter(r=>r.m===m.id&&r.test(x,m));
     if(!d&&!red.length)return;const cs=d?causes(m,d):[];
     let cat=cs.some(z=>z.f.k==="risk")?"risk":cs.length?"explained":"unexplained";
-    res.push({m,x,d:d||"up",cs,cat,red})});
+    const gone=d&&!cs.length?causesIn(allComps().filter(c=>!cycActive(c)),m,d).map(z=>z.c):[];
+    res.push({m,x,d:d||"up",cs,cat,red,gone})});
   return res;
 }
 
@@ -547,6 +573,10 @@ function renderStack(){
   const el=document.getElementById("chips");
   el.innerHTML=S.stack.length?S.stack.map(id=>{const c=BYC[id];return'<span class="schip" style="--c:'+CLS[c.cls].c+'">'+esc(c.name)+' <small>'+CLS[c.cls].n+'</small><button aria-label="Remove '+esc(c.name)+'" data-rm="'+id+'">×</button></span>'}).join(""):'<span class="empty">Nothing added yet. Add creatine, TRT, a cycle, peptides, anything.</span>';
   document.getElementById("trainSw").checked=S.train;renderOpts();
+  const cr=document.getElementById("cycrow");cr.style.display=onCycleStack()?"":"none";
+  document.querySelectorAll("#cycSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===S.cyc.ph));
+  document.getElementById("wkLab").style.display=S.cyc.ph==="pre"?"none":"";document.getElementById("wkTxt").textContent=S.cyc.ph==="off"?"weeks since stopping":"weeks in";
+  const wi=document.getElementById("cycWk");if(document.activeElement!==wi)wi.value=S.cyc.wk||"";
 }
 function renderOpts(){const q=document.getElementById("pickQ").value.trim().toLowerCase();let h="";
   Object.keys(CLS).forEach(k=>{const list=COMP.filter(c=>c.cls===k&&(!q||(c.name+" "+c.aka).toLowerCase().includes(q)));if(!list.length)return;
@@ -566,7 +596,9 @@ function renderTriage(){
   const vd=document.getElementById("verdict");
   if(!hasVals)vd.innerHTML='<p class="vline">Add your results to see your triage.</p>';
   else vd.innerHTML='<div class="vbig"><span style="--c:var(--danger)"><b>'+act.length+'</b>act now</span><span style="--c:var(--risk)"><b>'+fix.length+'</b>fix or ask about</span><span style="--c:var(--calm)"><b>'+exp.length+'</b>expected from your stack</span><span style="--c:var(--ok)"><b>'+nFine+'</b>in range</span></div>';
-  const why=t=>t.cs.length?t.cs.map(z=>'<li><span class="tag" style="--c:'+KTAG[z.f.k][1]+'">'+KTAG[z.f.k][0]+'</span><span><strong>'+esc(z.c.name)+':</strong> '+cites(z.f.why)+'</span></li>').join(""):'<li><span class="tag" style="--c:var(--warn)">Unexplained</span><span>Nothing in your stack pushes this '+(t.d==="up"?"up":"down")+'. Bring it to a doctor.</span></li>';
+  const lingerNote=t=>S.cyc.ph==="off"&&!lapsed()&&t.cs.some(z=>CYC_CLS.has(z.c.cls))?'<li><span class="tag" style="--c:var(--calm)">Off cycle</span><span>'+(wkN()!=null?"You're "+wkN()+" week"+(wkN()===1?"":"s")+" off. ":"")+cites("In HAARLEM, blood changes from a cycle were back to baseline about 3 months after stopping. Retest after 12 weeks. [P2] [P34]")+'</span></li>':"";
+  const goneNote=t=>t.gone&&t.gone.length?'<li><span class="tag" style="--c:var(--warn)">'+(S.cyc.ph==="pre"?"Baseline":"Should have cleared")+'</span><span>'+(S.cyc.ph==="pre"?"This draw is from before you started "+esc([...new Set(t.gone.map(c=>c.name.split(" (")[0]))].join(", "))+", so it isn't the cause. Worth sorting out before you start.":cites("You're 12+ weeks off "+[...new Set(t.gone.map(c=>c.name.split(" (")[0]))].join(", ")+". Most people were back to baseline by 3 months, so it's worth a doctor visit. [P2] [P34]"))+'</span></li>':"";
+  const why=t=>goneNote(t)+lingerNote(t)+(t.cs.length?t.cs.map(z=>'<li><span class="tag" style="--c:'+KTAG[z.f.k][1]+'">'+KTAG[z.f.k][0]+'</span><span><strong>'+esc(z.c.name)+':</strong> '+cites(z.f.why)+'</span></li>').join(""):'<li><span class="tag" style="--c:var(--warn)">Unexplained</span><span>Nothing in your stack pushes this '+(t.d==="up"?"up":"down")+'. Bring it to a doctor.</span></li>');
   const card=(t,c)=>{const [lo,hi]=ri(t.m);const acts=(ACT[t.m.id]||{})[t.d]||[];
     return'<article class="card" style="--c:'+c+'"><div class="top"><h3>'+esc(t.m.name)+' <span class="dir">'+(t.d==="up"?"high":"low")+'</span></h3><span class="val">'+fmt(t.m,t.x)+' <small>'+esc(u(t.m))+'</small></span></div><div class="rng">Typical '+fmt(t.m,lo)+'–'+fmt(t.m,hi)+'</div>'+
       t.red.map(r=>'<p class="flagline">'+cites(r.txt)+'</p>').join("")+'<ul class="why">'+why(t)+'</ul>'+
@@ -587,11 +619,11 @@ function renderTriage(){
   if(cls.has("gh"))L.push("Add IGF-1, fasting glucose and A1c. "+cites("[P8]"));
   L.push("Tell the doctor exactly what you take.");
   document.getElementById("checklist").innerHTML=L.map(x=>"<li><span>"+(x.includes("<a")?x:esc(x))+"</span></li>").join("");
-  const need={};stackComps().forEach(c=>c.fx.forEach(fx=>{if(S.vals[fx.m]==null)(need[fx.m]??=new Set()).add(c.name.split(" (")[0])}));
+  const need={};allComps().forEach(c=>c.fx.forEach(fx=>{if(S.vals[fx.m]==null)(need[fx.m]??=new Set()).add(c.name.split(" (")[0])}));
   const keys=Object.keys(need);
-  document.getElementById("watchSub").textContent=keys.length?"Your stack affects these, but you haven't entered them.":stackComps().length?"You've covered every marker your stack affects.":"Add your stack to see what to test.";
+  document.getElementById("watchSub").textContent=keys.length?"Your stack affects these, but you haven't entered them.":allComps().length?"You've covered every marker your stack affects.":"Add your stack to see what to test.";
   document.getElementById("watch").innerHTML=keys.map(id=>'<span>'+esc(BYID[id].name)+'<small>'+esc([...need[id]].join(", "))+'</small></span>').join("");
-  const rows=stackComps();
+  const rows=allComps();
   document.getElementById("fxTable").innerHTML=rows.length?'<tbody>'+rows.map(c=>'<tr><td>'+esc(c.name)+'</td><td>'+(c.fx.length?c.fx.map(x=>'<span class="eff" style="--c:'+KTAG[x.k][1]+'">'+(x.d==="up"?"↑":"↓")+' '+esc(BYID[x.m].name)+'</span>').join(""):'<span class="empty">No known effects on routine markers.</span>')+(c.note?'<div class="note">'+cites(c.note)+'</div>':"")+'</td></tr>').join("")+'</tbody>':'<tbody><tr><td class="empty" style="font-weight:400">Add compounds to see what they do to bloodwork.</td></tr></tbody>';
 }
 
@@ -635,7 +667,16 @@ function renderSources(){const used={};COMP.concat([TRAIN]).forEach(c=>{const s=
 const HAB=[{id:"bp",l:"Blood pressure checked (past month)"},{id:"echo",l:"Had a heart scan (echo)"},{id:"cardio",l:"2+ hrs cardio a week"},{id:"sleep",l:"Sleep 7+ hrs"},{id:"protein",l:"Protein at every meal"},{id:"alcohol",l:"Drink alcohol most weeks"}];
 const hasCls=c=>S.stack.some(id=>BYC[id]&&BYC[id].cls===c);
 const nCls=c=>S.stack.filter(id=>BYC[id]&&BYC[id].cls===c).length;
-function renderHealth(){
+const TL=[
+ {n:"Baseline",w:"before you start",t:["Full panel: blood count, lipids with ApoB, liver, kidney, hormones","Blood pressure","This is what every later test is compared to"]},
+ {n:"On cycle",w:"mid-cycle and at the end",t:["Hematocrit, lipids, liver panel with GGT","Blood pressure, every few weeks","LH near zero is expected now [P34]"]},
+ {n:"Off, 0–3 months",w:"right after stopping",t:["Flags from the cycle can linger here","Most blood changes were back to baseline by 3 months [P2]","Retest around week 12"]},
+ {n:"Off, 3–12 months",w:"recovery check",t:["Testosterone and LH should be back in range for most [P34]","11% still had low testosterone at one year [P34]","Still low or still flagged? See a doctor"]}
+];
+function tlIdx(){if(S.cyc.ph==="pre")return 0;if(S.cyc.ph==="on")return 1;return lapsed()?3:2}
+function renderCycle(){const P=document.getElementById("cycPanel");if(!onCycleStack()){P.style.display="none";return}P.style.display="";const i=tlIdx();
+  document.getElementById("tl").innerHTML=TL.map((s,k)=>'<div class="st'+(k<i?" past":k===i?" now":"")+'"><h4>'+s.n+'</h4><span class="when">'+s.w+'</span><ul>'+s.t.map(x=>'<li>'+cites(x)+'</li>').join("")+'</ul></div>').join("")}
+function renderHealth(){renderCycle();
   document.getElementById("habits").innerHTML=HAB.map(h=>'<button class="cchip" data-hab="'+h.id+'" aria-pressed="'+!!S.hab[h.id]+'">'+h.l+'</button>').join("");
   renderGaps();renderCombos();renderSupport();
 }
@@ -707,9 +748,11 @@ document.addEventListener("click",e=>{
   const c=e.target.closest("a.cite[data-src]");if(c){e.preventDefault();go("sources");const li=document.getElementById("src-"+c.dataset.src);if(li){li.scrollIntoView({block:"center"});li.classList.add("flash");setTimeout(()=>li.classList.remove("flash"),1600)}return}
   const op=e.target.closest("[data-open]");if(op){e.preventDefault();S.sel=op.dataset.open;S.q="";document.getElementById("q").value="";go("bloodwork",S.sel);renderBloodwork();window.scrollTo(0,0);return}
   const g=e.target.closest("[data-go]");if(g){e.preventDefault();go(g.dataset.go);window.scrollTo(0,0);return}
-  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else if(a.dataset.act==="sample"){Object.assign(S,{stack:[...SAMPLE.stack],train:SAMPLE.train,vals:{...SAMPLE.vals},hab:{},sex:"m",units:"si",example:true});seg("sexSeg","sex");seg("unitSeg","units");save();renderAll();go("triage");window.scrollTo(0,0)}else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
+  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else if(a.dataset.act==="sample"){Object.assign(S,{stack:[...SAMPLE.stack],train:SAMPLE.train,vals:{...SAMPLE.vals},cyc:{...SAMPLE.cyc},hab:{},sex:"m",units:"si",example:true});seg("sexSeg","sex");seg("unitSeg","units");save();renderAll();go("triage");window.scrollTo(0,0)}else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
 });
 document.getElementById("habits").addEventListener("click",e=>{const b=e.target.closest("[data-hab]");if(!b)return;S.hab[b.dataset.hab]=!S.hab[b.dataset.hab];save();renderHealth();renderTriage()});
+document.getElementById("cycSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S.cyc.ph=b.dataset.v;S.example=false;save();renderAll()});
+document.getElementById("cycWk").addEventListener("input",e=>{S.cyc.wk=e.target.value.replace(/\D/g,"").slice(0,3);save();renderStack();renderTriage();renderHealth();renderBloodwork()});
 document.getElementById("trainSw").addEventListener("change",e=>{S.train=e.target.checked;S.example=false;save();renderTriage();renderHealth();renderBloodwork()});
 window.addEventListener("hashchange",fromHash);
 document.getElementById("q").addEventListener("input",e=>{S.q=e.target.value;renderBloodwork()});
