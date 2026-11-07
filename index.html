@@ -739,8 +739,24 @@ function heartTiles(){const T=[],sy=meN("sys"),di=meN("dia"),hr=meN("hr"),hct=S.
 function renderHeart(){const T=heartTiles(),known=T.filter(t=>t.r>=0),top=Math.max(-1,...T.map(t=>t.r));
   const sum=!known.length?{n:"Not enough data",c:"var(--muted)",d:"Add your blood pressure and heart rate above."}:top>=3?{n:"High strain",c:"var(--danger)",d:"At least one number needs a doctor soon."}:top>=2?{n:"Moderate strain",c:"var(--risk)",d:"Worth fixing before your next cycle."}:top>=1?{n:"Some strain",c:"var(--warn)",d:"Keep an eye on it."}:{n:"Low strain",c:"var(--ok)",d:"Nothing pushing your heart hard right now."};
   document.getElementById("heart").innerHTML='<div class="hsum" style="--c:'+sum.c+'"><b>'+sum.n+'</b><span>'+sum.d+'</span></div><div class="tiles">'+T.map(t=>'<div class="tile" style="--c:'+t.c+'"><small>'+t.l+'</small><b>'+esc(t.v)+'</b><span>'+t.s+'</span><p>'+cites(t.p)+'</p></div>').join("")+'</div>'}
+// CKD-EPI 2021, race-free (Inker 2021). Creatinine stored in µmol/L.
+function egfr(){const age=meN("age"),cr=S.vals.creatinine,cy=S.vals.cystatin;if(!age||cr==null)return null;
+  const F=S.sex==="f",sc=cr/88.4,k=F?0.7:0.9;
+  const ecr=142*Math.pow(Math.min(sc/k,1),F?-0.241:-0.302)*Math.pow(Math.max(sc/k,1),-1.2)*Math.pow(0.9938,age)*(F?1.012:1);
+  const ecc=cy==null?null:135*Math.pow(Math.min(sc/k,1),F?-0.219:-0.144)*Math.pow(Math.max(sc/k,1),-0.544)*Math.pow(Math.min(cy/0.8,1),-0.323)*Math.pow(Math.max(cy/0.8,1),-0.778)*Math.pow(0.9961,age)*(F?0.963:1);
+  return{ecr,ecc}}
+function gStage(e){return e>=90?{g:"G1",n:"Normal",c:"var(--ok)"}:e>=60?{g:"G2",n:"Mildly lower",c:"var(--ok)"}:e>=45?{g:"G3a",n:"Moderately lower",c:"var(--risk)"}:e>=30?{g:"G3b",n:"Moderately to severely lower",c:"var(--danger)"}:e>=15?{g:"G4",n:"Severely lower",c:"var(--danger)"}:{g:"G5",n:"Kidney failure range",c:"var(--danger)"}}
+function renderKidney(){const el=document.getElementById("kidney"),E=egfr();
+  if(!E){el.innerHTML='<p class="empty">'+(meN("age")?"Enter creatinine on the Bloodwork tab.":"Enter your age above, and creatinine on the Bloodwork tab.")+' Add cystatin C for a number muscle and creatine can\'t skew.</p>';return}
+  const best=E.ecc??E.ecr,st=gStage(best),tile=(l,v,sub)=>{const g=gStage(v);return'<div class="tile" style="--c:'+g.c+'"><small>'+l+'</small><b>'+Math.round(v)+'</b><span>'+g.g+' · '+g.n+'</span><p>'+sub+'</p></div>'};
+  const muscle=S.stack.includes("creatine")||S.train||hasCls("inj")||hasCls("oral")||hasCls("trt");
+  let note;
+  if(E.ecc!=null&&E.ecc-E.ecr>=10)note="Your creatinine-only number reads "+Math.round(E.ecc-E.ecr)+" points lower. That's the usual pattern when muscle mass or creatine inflate creatinine, so trust the combined number. [P13] [P31]";
+  else if(E.ecc!=null)note="Both numbers agree, so creatinine isn't misleading you here. The combined equation is the more accurate one. [P31]";
+  else note=(muscle?"Muscle and creatine raise creatinine, which makes this number read low. ":"")+"Add cystatin C for the more accurate combined estimate. [P13] [P31]";
+  el.innerHTML='<div class="hsum" style="--c:'+st.c+'"><b>'+Math.round(best)+'</b><span>mL/min/1.73 m² · '+st.g+', '+st.n.toLowerCase()+'</span></div><div class="tiles">'+tile("Creatinine only",E.ecr,"Skewed by muscle and creatine.")+(E.ecc!=null?tile("Creatinine + cystatin C",E.ecc,"The more accurate estimate."):'<div class="tile" style="--c:var(--muted)"><small>Creatinine + cystatin C</small><b>–</b><span>Needs cystatin C</span><p>Ask for it with your next draw.</p></div>')+'</div><p class="gnote">'+cites(note)+(best<60?" Under 60 needs a doctor, with a repeat test to confirm.":"")+'</p>'}
 function fillMine(){["age","sys","dia","hr"].forEach(k=>{const el=document.getElementById("me-"+k);if(document.activeElement!==el)el.value=S.me[k]||""})}
-function renderHealth(){fillMine();renderCycle();renderGear();renderHeart();
+function renderHealth(){fillMine();renderCycle();renderGear();renderHeart();renderKidney();
   document.getElementById("habits").innerHTML=HAB.map(h=>'<button class="cchip" data-hab="'+h.id+'" aria-pressed="'+!!S.hab[h.id]+'">'+h.l+'</button>').join("");
   renderGaps();renderCombos();renderSupport();
 }
