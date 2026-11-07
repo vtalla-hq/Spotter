@@ -311,6 +311,8 @@ details.moreinfo summary{cursor:pointer;font:700 18px var(--display);letter-spac
 .doc .meta{color:var(--muted);font-size:13px}
 .doc ul{margin:0;padding-left:18px}
 @media print{body>*:not(#docDlg){display:none!important}#docDlg{position:static;box-shadow:none;max-width:none;width:auto;padding:0;color:#000;background:#fff}#docDlg .foot,#docDlg>p{display:none}.doc{max-height:none;overflow:visible}.doc .cite{display:none}}
+ #shareDlg{max-width:680px}
+#shareDlg canvas{width:100%;height:auto;border-radius:10px;display:block;box-shadow:0 0 0 1px var(--line)}
 footer{max-width:1200px;margin:0 auto;padding:0 20px 32px;font-size:12px;color:var(--muted)}
 footer p{max-width:95ch;margin:0}
 </style>
@@ -345,7 +347,7 @@ footer p{max-width:95ch;margin:0}
     </div>
     <div class="stackfoot">
       <label class="switch"><input type="checkbox" id="trainSw"> Trained hard in the 7 days before the draw</label>
-      <span class="btnrow"><button class="btn" data-act="sample">Try a sample cycle</button><button class="btn" data-act="paste">Paste lab report</button><button class="btn" data-go="bloodwork">Type in results</button><button class="btn" data-act="doc">Doctor sheet</button></span>
+      <span class="btnrow"><button class="btn" data-act="sample">Try a sample cycle</button><button class="btn" data-act="paste">Paste lab report</button><button class="btn" data-go="bloodwork">Type in results</button><button class="btn" data-act="doc">Doctor sheet</button><button class="btn" data-act="share">Share card</button></span>
     </div>
     <div class="cycrow" id="cycrow"><span>When was this blood drawn?</span><span class="seg" id="cycSeg" aria-label="Cycle phase"><button data-v="pre">Before starting</button><button data-v="on">On cycle</button><button data-v="off">Off cycle</button></span><label id="wkLab"><input class="wkin" id="cycWk" inputmode="numeric" aria-label="Weeks"> <span id="wkTxt">weeks in</span></label></div>
   </div>
@@ -430,6 +432,13 @@ footer p{max-width:95ch;margin:0}
   <p style="font-size:14px;color:var(--muted);margin:0 0 6px">A one-page summary to print or show at your appointment. It lists what you take, not how much.</p>
   <div class="doc" id="docBody"></div>
   <div class="foot"><span id="docMsg"></span><button class="btn" id="docCopy">Copy text</button><button class="btn" id="docClose">Close</button><button class="btn primary" id="docPrint">Print</button></div>
+</dialog>
+
+<dialog id="shareDlg" aria-labelledby="shareH">
+  <h2 id="shareH">Share your result</h2>
+  <p style="font-size:14px;color:var(--muted);margin:0 0 10px">Shows your triage counts, not your numbers. Your stack is only included if you tick the box.</p>
+  <canvas id="shareCv" width="1200" height="630"></canvas>
+  <div class="foot"><label class="switch" style="margin-right:auto;font-size:14px"><input type="checkbox" id="shareStack"> Include my stack</label><span id="shareMsg"></span><button class="btn" id="shareClose">Close</button><button class="btn" id="shareDl">Download</button><button class="btn primary" id="shareGo">Share</button></div>
 </dialog>
 
 <script>
@@ -828,6 +837,35 @@ function openDoc(){document.getElementById("docBody").innerHTML=docHTML();docume
 document.getElementById("docClose").onclick=()=>docDlg.close();
 document.getElementById("docPrint").onclick=()=>{try{window.print()}catch(e){}};
 document.getElementById("docCopy").onclick=async()=>{const m=document.getElementById("docMsg");try{await navigator.clipboard.writeText(document.getElementById("docBody").innerText);m.textContent="Copied."}catch(e){m.textContent="Couldn't copy here. Select the text instead."}};
+// ---------- shareable result card (canvas, counts only)
+function shareCounts(){const T=triage(),n=M.filter(m=>S.vals[m.id]!=null).length;
+  return{act:T.filter(t=>t.red.length).length,fix:T.filter(t=>!t.red.length&&t.cat!=="explained").length,exp:T.filter(t=>!t.red.length&&t.cat==="explained").length,ok:n-T.length,n}}
+function siteHost(){return /^https?:/.test(location.protocol)&&location.host&&!/claude|localhost|usercontent/.test(location.host)?location.host:"spotter.vercel.app"}
+function drawShare(){const cv=document.getElementById("shareCv"),x=cv.getContext("2d"),W=1200,H=630,C=shareCounts(),G=gapList(),inc=document.getElementById("shareStack").checked;
+  const col={bg:"#101318",ink:"#f2f4f6",mut:"#97a3ae",line:"#26303a",danger:"#f26b6b",risk:"#f28b54",calm:"#8fb0cc",ok:"#5cc489",acc:"#7aa2ff"};
+  x.fillStyle=col.bg;x.fillRect(0,0,W,H);x.fillStyle=col.acc;x.fillRect(0,0,W,8);
+  x.fillStyle=col.ink;x.font="700 54px 'Barlow Condensed', 'Arial Narrow', sans-serif";x.fillText("SPOTTER",64,100);const bw=x.measureText("SPOTTER").width;
+  x.fillStyle=col.mut;x.font="500 26px Barlow, system-ui, sans-serif";x.fillText("bloodwork for lifters · my triage",64+bw+20,98);
+  x.fillStyle=col.ink;let hs=64;do{x.font="700 "+hs+"px 'Barlow Condensed', 'Arial Narrow', sans-serif";hs-=2}while(x.measureText("I'VE GOT SOMETHING TO ACT ON.").width>W-128&&hs>30);
+  const head=C.act?"I've got something to act on.":C.fix?"A few things to fix.":C.n?"My bloodwork checks out.":"Checking my bloodwork.";x.fillText(head.toUpperCase(),64,196);
+  const cells=[[C.act,"act now",col.danger],[C.fix,"fix or ask",col.risk],[C.exp,"expected",col.calm],[C.ok,"in range",col.ok]],cw=(W-128-3*24)/4;
+  cells.forEach(([v,l,c],i)=>{const cx=64+i*(cw+24),cy=240;x.fillStyle="#151a20";x.beginPath();x.roundRect?x.roundRect(cx,cy,cw,170,14):x.rect(cx,cy,cw,170);x.fill();x.fillStyle=c;x.fillRect(cx,cy,cw,6);
+    x.font="600 84px 'IBM Plex Mono', ui-monospace, monospace";x.fillText(String(v),cx+24,cy+112);x.fillStyle=col.mut;x.font="600 26px Barlow, system-ui, sans-serif";x.fillText(l,cx+24,cy+150)});
+  x.font="500 26px Barlow, system-ui, sans-serif";x.fillStyle=col.ink;let y=468;
+  const parts=[];if(G.length)parts.push("Monitoring "+G.filter(g=>g.done).length+"/"+G.length+" covered");const sy=meN("sys"),di=meN("dia");if(sy&&di)parts.push("BP "+bpCat(sy,di).n.toLowerCase());parts.push(C.n+" markers checked");
+  x.fillText(parts.join("  ·  "),64,y);
+  if(inc&&S.stack.length){y+=44;x.fillStyle=col.mut;let t="Stack: "+S.stack.map(id=>BYC[id].name.split(" (")[0]).join(", ");while(x.measureText(t).width>W-128&&t.length>10)t=t.slice(0,-2);if(t.length<("Stack: "+S.stack.map(id=>BYC[id].name.split(" (")[0]).join(", ")).length)t=t.slice(0,-1)+"…";x.fillText(t,64,y)}
+  x.fillStyle=col.line;x.fillRect(64,H-78,W-128,1);x.fillStyle=col.mut;x.font="500 24px Barlow, system-ui, sans-serif";x.fillText("Is it your stack, or is it a problem? Check yours at",64,H-36);
+  x.fillStyle=col.acc;x.font="600 24px 'IBM Plex Mono', ui-monospace, monospace";x.fillText(siteHost(),W-64-x.measureText(siteHost()).width,H-36)}
+const shareDlg=document.getElementById("shareDlg");
+async function openShare(){try{await document.fonts.ready}catch(e){}drawShare();document.getElementById("shareMsg").textContent="";shareDlg.showModal()}
+const shareBlob=()=>new Promise(r=>{try{document.getElementById("shareCv").toBlob(b=>r(b),"image/png")}catch(e){r(null)}});
+document.getElementById("shareStack").onchange=drawShare;
+document.getElementById("shareClose").onclick=()=>shareDlg.close();
+document.getElementById("shareDl").onclick=async()=>{const b=await shareBlob(),m=document.getElementById("shareMsg");if(!b){m.textContent="Couldn't make the image here.";return}const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="spotter-result.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};
+document.getElementById("shareGo").onclick=async()=>{const b=await shareBlob(),m=document.getElementById("shareMsg");
+  try{const file=b&&new File([b],"spotter-result.png",{type:"image/png"});if(file&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"My Spotter result",text:"Check your bloodwork at https://"+siteHost()});return}
+    if(navigator.share){await navigator.share({title:"Spotter",text:"Check your bloodwork at https://"+siteHost()});return}m.textContent="Sharing isn't supported here. Use Download."}catch(e){if(e&&e.name!=="AbortError")m.textContent="Sharing didn't work here. Use Download."}};
 function fillMine(){["age","sys","dia","hr"].forEach(k=>{const el=document.getElementById("me-"+k);if(document.activeElement!==el)el.value=S.me[k]||""})}
 function renderHealth(){fillMine();renderCycle();renderGear();renderHeart();renderKidney();
   document.getElementById("habits").innerHTML=HAB.map(h=>'<button class="cchip" data-hab="'+h.id+'" aria-pressed="'+!!S.hab[h.id]+'">'+h.l+'</button>').join("");
@@ -901,7 +939,7 @@ document.addEventListener("click",e=>{
   const c=e.target.closest("a.cite[data-src]");if(c){e.preventDefault();go("sources");const li=document.getElementById("src-"+c.dataset.src);if(li){li.scrollIntoView({block:"center"});li.classList.add("flash");setTimeout(()=>li.classList.remove("flash"),1600)}return}
   const op=e.target.closest("[data-open]");if(op){e.preventDefault();S.sel=op.dataset.open;S.q="";document.getElementById("q").value="";go("bloodwork",S.sel);renderBloodwork();window.scrollTo(0,0);return}
   const g=e.target.closest("[data-go]");if(g){e.preventDefault();go(g.dataset.go);window.scrollTo(0,0);return}
-  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else if(a.dataset.act==="doc")openDoc();else if(a.dataset.act==="sample"){Object.assign(S,{stack:[...SAMPLE.stack],train:SAMPLE.train,vals:{...SAMPLE.vals},cyc:{...SAMPLE.cyc},me:{...SAMPLE.me},hab:{},sex:"m",units:"si",example:true});seg("sexSeg","sex");seg("unitSeg","units");save();renderAll();go("triage");window.scrollTo(0,0)}else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
+  const a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="paste")openPaste();else if(a.dataset.act==="doc")openDoc();else if(a.dataset.act==="share")openShare();else if(a.dataset.act==="sample"){Object.assign(S,{stack:[...SAMPLE.stack],train:SAMPLE.train,vals:{...SAMPLE.vals},cyc:{...SAMPLE.cyc},me:{...SAMPLE.me},hab:{},sex:"m",units:"si",example:true});seg("sexSeg","sex");seg("unitSeg","units");save();renderAll();go("triage");window.scrollTo(0,0)}else{S.vals={};S.stack=[];S.train=false;S.example=false;save();renderAll()}}
 });
 document.getElementById("habits").addEventListener("click",e=>{const b=e.target.closest("[data-hab]");if(!b)return;S.hab[b.dataset.hab]=!S.hab[b.dataset.hab];save();renderHealth();renderTriage()});
 document.getElementById("mine").addEventListener("input",e=>{const k=e.target.id.slice(3);if(!k)return;S.me[k]=e.target.value.replace(/[^\d.]/g,"").slice(0,5);S.example=false;save();renderHealth();renderTriage()});
