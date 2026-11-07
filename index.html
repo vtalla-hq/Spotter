@@ -506,6 +506,11 @@ dialog h2{text-transform:none;font-stretch:100%;font-weight:800}
 .fbtypes button{border:1px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 13px var(--sans);cursor:pointer}
 .fbtypes button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 @media print{.fbtn{display:none}}
+/* numbers: plain zeros (mono font draws a dot inside 0) */
+.vbig b,.tile b,.card .val,.big .v,.hsum b,.srow .sc,.num,.gapscore b,.row input,.det .num{font-family:var(--sans);font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.vbig b{font-weight:800;font-size:38px;letter-spacing:-.02em}
+.tile b,.big .v{font-weight:700}
+#map .sc{font-family:var(--sans);font-weight:800}
 </style>
 </head>
 <body>
