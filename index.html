@@ -6,7 +6,7 @@
 <title>Spotter Lifter Bloodwork</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout: dark gym-floor header, chalk-white work surface. Triage first: stack on top, flags sorted by what caused them. */
 :root{
@@ -316,75 +316,93 @@ details.moreinfo summary{cursor:pointer;font:700 18px var(--display);letter-spac
 #shareDlg canvas{width:100%;height:auto;border-radius:10px;display:block;box-shadow:0 0 0 1px var(--line)}
 footer{max-width:1200px;margin:0 auto;padding:0 20px 32px;font-size:12px;color:var(--muted)}
 footer p{max-width:95ch;margin:0}
-/* ---------- theme: warm paper, editorial type */
-:root{--bg:#f5f4f1;--paper:#fbfaf8;--ink:#151513;--muted:#6d6a63;--line:#e3e0d9;--accent:#2d5be3;--accent-soft:#e7ecfc;
-  --ok:#2f7d4f;--calm:#56708a;--warn:#a46b07;--risk:#d0601c;--danger:#c42b2b;
-  --display:"Inter Tight","Inter",system-ui,sans-serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11110f;--paper:#191917;--ink:#ecebe6;--muted:#9b978e;--line:#2b2a26;--accent:#7f9cff;--accent-soft:#1d2440;
-  --ok:#62c48b;--calm:#93acc4;--warn:#e0ac4a;--risk:#f08a50;--danger:#f06a6a;color-scheme:dark}}
-body{font-size:15.5px;-webkit-font-smoothing:antialiased}
-header{background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--ink);border-bottom:1px solid var(--line)}
-.bar{padding:14px 20px}
-.brand{align-items:center;text-decoration:none;color:var(--ink)}
-.brand i{width:26px;height:26px;border-radius:7px;background:var(--ink);position:relative;flex:none}
-.brand i::before{content:"";position:absolute;left:5px;right:5px;top:11.5px;height:3px;border-radius:2px;background:var(--bg)}
-.brand i::after{content:"";position:absolute;left:4px;top:7px;width:4px;height:12px;border-radius:1.5px;background:var(--bg);box-shadow:14px 0 0 var(--bg)}
-.brand b{font:700 21px/1 var(--display);letter-spacing:-.03em}
-.brand span{color:var(--muted)}
-nav a{color:var(--muted);font-weight:500;padding:7px 11px}
+/* ---------- theme: chalk on rubber flooring. Volt accent, plate-coloured organs. */
+html:root:not([data-theme="light"]){--bg:#0d0e0c;--paper:#161714;--paper2:#1e201c;--ink:#f1efe7;--muted:#a3a094;--line:#2c2e29;--accent:#c6f432;--volt:#c6f432;--accent-soft:rgba(198,244,50,.12);
+  --ok:#4ade80;--calm:#9fb4c8;--warn:#facc15;--risk:#fb923c;--danger:#f87171;color-scheme:dark}
+html:root[data-theme="light"]{--bg:#ecebe4;--paper:#fbfaf6;--paper2:#f1f0e9;--ink:#121310;--muted:#5d5a52;--line:#d9d6cb;--accent:#4a7300;--volt:#c6f432;--accent-soft:#eef7d2;
+  --ok:#15803d;--calm:#46627c;--warn:#a16207;--risk:#c2410c;--danger:#b91c1c;color-scheme:light}
+:root{--display:"Archivo","Arial Narrow",system-ui,sans-serif;--sans:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
+body{font-size:15.5px;-webkit-font-smoothing:antialiased;background-color:var(--bg);background-image:radial-gradient(color-mix(in srgb,var(--ink) 5%,transparent) 1px,transparent 1.3px),radial-gradient(color-mix(in srgb,var(--ink) 3%,transparent) 1px,transparent 1.3px);background-size:9px 11px,13px 7px;background-position:0 0,4px 5px}
+header{background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--ink);border-bottom:1px solid var(--line)}
+.bar{padding:12px 20px}
+.brand{align-items:center;text-decoration:none;color:var(--ink);gap:10px}
+.brand i{width:34px;height:20px;position:relative;flex:none}
+.brand i::before{content:"";position:absolute;left:0;right:0;top:8.5px;height:3px;border-radius:2px;background:var(--ink)}
+.brand i::after{content:"";position:absolute;left:5px;top:0;width:6px;height:20px;border-radius:2px;background:var(--volt);box-shadow:18px 0 0 var(--volt)}
+.brand b{font:900 24px/1 var(--display);font-stretch:125%;letter-spacing:-.01em;text-transform:uppercase}
+.brand span{color:var(--muted);font-size:12px}
+nav a{color:var(--muted);font:700 12.5px/1 var(--sans);font-stretch:110%;letter-spacing:.07em;text-transform:uppercase;padding:9px 10px;border-radius:0}
 nav a:hover{color:var(--ink)}
-nav a[aria-current="page"]{color:var(--ink);background:var(--line)}
+nav a[aria-current="page"]{color:var(--ink);background:none;box-shadow:inset 0 -3px 0 var(--volt)}
 nav a.er{color:var(--danger)}
-.seg{background:var(--line);border-radius:9px}
-.seg button{color:var(--muted);border-radius:7px}
-.seg button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.panel,.card,.explist,.ctr{border-radius:16px;box-shadow:none;border:1px solid var(--line)}
+.seg{background:var(--paper2);border-radius:4px;border:1px solid var(--line)}
+.seg button{color:var(--muted);border-radius:3px;font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.themebtn{border:1px solid var(--line);background:var(--paper2);color:var(--ink);width:32px;height:30px;border-radius:4px;cursor:pointer;font-size:15px}
+.panel,.card,.explist,.ctr{border-radius:6px;box-shadow:none;border:1px solid var(--line);background:var(--paper)}
 .card{border-left:4px solid var(--c)}
 .explist{border-left:4px solid var(--calm)}
-.btn{border-radius:10px;padding:8px 14px;font-weight:500}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.primary:hover{filter:brightness(1.08)}
-.eyebrow,.ph,.pop .grp,table.fx th,.card h4,.sheet h3,.scol h3,.doc h3{font:500 11.5px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.group h2,.hhero h1,.hero h1,details.moreinfo summary,.sheet h2,dialog h2,.tl h4,.gverdict b,.hsum b,.erhero h1{font-family:var(--display);text-transform:none;letter-spacing:-.03em}
-.hhero h1,.erhero h1{font-size:clamp(34px,5vw,56px);font-weight:700;line-height:.98}
-.group h2{font-size:24px;font-weight:700}
-details.moreinfo summary{font-size:20px;font-weight:600}
-.sheet h2{font-size:30px}
-.tl h4{font-size:16px;font-weight:700}
-.gverdict b{font-size:28px}
-.hsum b{font-size:30px}
-.vbig b{font-family:var(--display);font-weight:700;letter-spacing:-.04em;font-size:44px}
-.card h3{font-family:var(--display);letter-spacing:-.01em}
-.schip{background:var(--bg);border:1px solid var(--line);box-shadow:inset 3px 0 0 var(--c,var(--accent))}
-.erhero{border-radius:16px}
-dialog{border-radius:16px}
-.notice{border-radius:12px}
-/* hero + stack map */
-.hero2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:36px;align-items:center;padding:26px 0 8px}
-@media (max-width:980px){.hero2{grid-template-columns:1fr;gap:24px}}
-.hcopy h1{font:700 clamp(48px,7vw,92px)/.92 var(--display);letter-spacing:-.055em;margin:0 0 22px}
-.hcopy h1 span{display:block}.hcopy h1 .g{color:#9a968e}.hcopy h1 .b{color:var(--accent)}
-.hcopy p{font-size:18px;line-height:1.55;color:var(--muted);margin:0 0 22px;max-width:46ch}
-.btn.big{padding:12px 20px;font-size:16px;border-radius:12px}
+.btn{border-radius:4px;padding:8px 14px;font:700 13px/1.2 var(--sans);letter-spacing:.04em;text-transform:uppercase;background:var(--paper2);border-color:var(--line)}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--volt);border-color:var(--volt);color:#0d0e0c}
+.btn.primary:hover{filter:brightness(1.06)}
+.eyebrow,.ph,.pop .grp,table.fx th,.card h4,.sheet h3,.scol h3,.doc h3{font:700 11px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.eyebrow::before{content:"";display:inline-block;width:8px;height:8px;background:var(--volt);margin-right:8px;vertical-align:0}
+.group h2,.hhero h1,.hero h1,details.moreinfo summary,.sheet h2,dialog h2,.tl h4,.gverdict b,.hsum b,.erhero h1,.shead h2{font-family:var(--display);font-stretch:118%;text-transform:uppercase;letter-spacing:-.01em}
+.hhero h1,.erhero h1{font-size:clamp(34px,5.5vw,64px);font-weight:900;line-height:.9}
+.group h2{font-size:22px;font-weight:900}
+details.moreinfo summary{font-size:17px;font-weight:800}
+.sheet h2{font-size:28px;font-weight:900}
+.tl h4{font-size:15px;font-weight:800}
+.gverdict b{font-size:26px;font-weight:900}
+.hsum b{font-size:28px;font-weight:900}
+.vbig b{font-family:var(--mono);font-weight:700;letter-spacing:-.03em;font-size:42px}
+.card h3{font-family:var(--display);font-stretch:108%;font-weight:800}
+.schip{background:var(--paper2);border:1px solid var(--line);border-radius:4px;box-shadow:inset 4px 0 0 var(--c,var(--accent))}
+.notice{border-radius:6px;background:color-mix(in srgb,var(--warn) 12%,transparent)}
+.erhero{border-radius:6px}
+dialog{border-radius:8px}
+a.cite,.csep{color:var(--accent)}
+.tag{border-radius:3px}
+input,textarea,select{border-radius:4px!important}
+/* hero + body map */
+.hero2{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.1fr);gap:32px;align-items:center;padding:24px 0 6px}
+@media (max-width:980px){.hero2{grid-template-columns:1fr;gap:22px}}
+.hcopy .kick{font:700 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;display:flex;gap:10px;align-items:center}
+.hcopy .kick i{width:22px;height:3px;background:var(--volt)}
+.hcopy h1{font:900 clamp(56px,8.6vw,118px)/.84 var(--display);font-stretch:112%;letter-spacing:-.03em;text-transform:uppercase;margin:0 0 22px}
+.hcopy h1 span{display:block}.hcopy h1 .b{color:var(--volt);-webkit-text-stroke:0}
+html:root[data-theme="light"] .hcopy h1 .b{color:var(--ink);background:linear-gradient(transparent 58%,var(--volt) 58%,var(--volt) 92%,transparent 92%);display:inline;box-decoration-break:clone}
+.hcopy p{font-size:17.5px;line-height:1.55;color:var(--muted);margin:0 0 22px;max-width:46ch}
+.btn.big{padding:13px 20px;font-size:14px}
 .hcopy .steps{margin-top:22px;font-size:14px}
-.mapcard{border:1px solid var(--line);border-radius:20px;background:var(--paper);background-image:radial-gradient(color-mix(in srgb,var(--muted) 30%,transparent) 1px,transparent 1.2px);background-size:16px 16px;padding:14px 14px 10px}
-.maphead{display:flex;flex-wrap:wrap;gap:4px 10px;justify-content:space-between;align-items:center;font:500 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:2px 4px 6px}
-.leg{display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0}
-.leg i{display:inline-block;width:16px;height:2px;background:var(--c);margin-left:6px}
-.leg i.d{background:none;border-top:2px dashed var(--c);height:0}
-.leg i.a{background:none;border-top:2px dotted var(--c);height:0}
+.bodycard{border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:14px 14px 8px;position:relative;overflow:hidden}
+.bodycard::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 39px,color-mix(in srgb,var(--line) 55%,transparent) 39px 40px);pointer-events:none;opacity:.6}
+.bhead{position:relative;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:6px}
+.bhead .t{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.hchips{position:relative;display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;min-height:28px}
+.hchips button{border:1px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:3px;padding:4px 9px;font:700 12px var(--sans);cursor:pointer;box-shadow:inset 3px 0 0 var(--c)}
+.hchips button:hover,.hchips button:focus-visible,.hchips button.on{border-color:var(--ink)}
+.hchips .hint{font-size:12.5px;color:var(--muted);align-self:center}
+#map{position:relative}
 #map svg{width:100%;height:auto;display:block}
-#map .ed{fill:none;stroke-width:1.4;transition:opacity .15s,stroke-width .15s}
-#map .nd{cursor:pointer;transition:opacity .15s}
-#map .nd text{font:600 12px var(--sans);pointer-events:none}
-#map .nd .bdg{font:600 10px var(--mono)}
-#map.hov .ed:not(.on),#map.hov .nd:not(.on){opacity:.18}
-#map.hov .ed.on{stroke-width:2.4}
-#map .empty{padding:60px 20px;text-align:center}
-.presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.presets button{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:500;cursor:pointer;color:var(--ink)}
+#map .sil{fill:var(--paper2);stroke:color-mix(in srgb,var(--ink) 22%,transparent);stroke-width:1.4}
+#map .spot{cursor:pointer;transition:opacity .15s}
+#map .spot .core{transition:r .25s}
+#map .lbl{font:800 12px var(--sans);font-stretch:110%;text-transform:uppercase;letter-spacing:.04em;fill:var(--ink)}
+#map .lsub{font:500 10.5px var(--mono);fill:var(--muted)}
+#map .sc{font:700 13px var(--mono)}
+#map .lead{fill:none;stroke-width:1;stroke-dasharray:2 3}
+#map.dim .spot:not(.on){opacity:.16}
+#map .pulse{fill:none;stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion:no-preference){#map .hot .pulse{animation:pulse 1.8s ease-out infinite}}
+@keyframes pulse{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(2.1)}}
+#map .empty{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-size:13px;color:var(--muted);margin:0}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;align-items:center}
+.presets .t{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.presets button{border:1px solid var(--line);background:var(--paper);border-radius:3px;padding:6px 11px;font:700 12.5px var(--sans);cursor:pointer;color:var(--ink);text-transform:uppercase;letter-spacing:.03em}
 .presets button:hover{border-color:var(--ink)}
-.presets button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.presets button[aria-pressed="true"]{background:var(--volt);color:#0d0e0c;border-color:var(--volt)}
 /* organ strain */
 .shead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:12px}
 .shead h2{font:700 26px/1.05 var(--display);letter-spacing:-.03em;margin:0}
@@ -414,19 +432,30 @@ dialog{border-radius:16px}
 .det a.mk{color:var(--ink);font-weight:600;text-decoration:none}.det a.mk:hover{text-decoration:underline}
 .untouched{font-size:13px;color:var(--muted);margin:10px 2px 0}
 .snote{font-size:12.5px;color:var(--muted);margin:12px 2px 0}
-.how{margin-top:40px;padding-top:40px;border-top:1px solid var(--line)}
-.how h2{font:700 clamp(30px,4.2vw,52px)/1.02 var(--display);letter-spacing:-.045em;margin:0 0 36px;max-width:20ch}
-.how h2 span{color:#9a968e}
-.how3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;padding-top:24px;border-top:1px solid var(--line)}
+.how{margin-top:36px;padding-top:36px;border-top:1px solid var(--line)}
+.how h2{font:900 clamp(30px,4.4vw,56px)/.95 var(--display);font-stretch:115%;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 30px;max-width:22ch}
+.how h2 span{color:var(--volt)}
+html:root[data-theme="light"] .how h2 span{color:var(--muted)}
+.how3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 @media (max-width:820px){.how3{grid-template-columns:1fr}}
-.how3 .k{font:500 12px var(--mono);color:var(--muted)}
-.how3 h3{font:600 22px/1.1 var(--display);letter-spacing:-.02em;margin:14px 0 8px}
-.how3 p{margin:0;color:var(--muted);line-height:1.6}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:44px;padding-top:28px;border-top:1px solid var(--line)}
+.how3>div{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:18px 18px 20px;position:relative;overflow:hidden}
+.how3>div::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c)}
+.how3 .k{font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.how3 h3{font:900 24px/1 var(--display);font-stretch:118%;text-transform:uppercase;margin:10px 0 8px}
+.how3 p{margin:0;color:var(--muted);line-height:1.55;font-size:14.5px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:28px;border:1px solid var(--line);border-radius:6px;background:var(--paper);overflow:hidden}
 @media (max-width:820px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.stats b{display:block;font:600 clamp(40px,5vw,64px)/1 var(--display);letter-spacing:-.05em}
-.stats span{display:block;font-weight:600;margin-top:10px}
-.stats small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.stats>div{padding:18px 18px 16px;border-left:1px solid var(--line)}
+.stats>div:first-child{border-left:0}
+.stats .lab{font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.stats b{display:block;font:700 clamp(40px,5vw,62px)/1 var(--mono);letter-spacing:-.05em;color:var(--volt);margin:8px 0 6px}
+html:root[data-theme="light"] .stats b{color:var(--ink)}
+.stats small{display:block;color:var(--muted);font-size:13px}
+.srow .nm{font-family:var(--display);font-stretch:110%;font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:14px}
+.srow .nm i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--sc);margin-right:9px}
+.srow .trk .c{background:var(--sc)}
+.srow .trk .p{background:repeating-linear-gradient(135deg,var(--sc) 0 2px,transparent 2px 5px)}
+.srows,.srow>button{border-radius:6px}
 </style>
 </head>
 <body>
@@ -437,6 +466,7 @@ dialog{border-radius:16px}
     <div class="toggles">
       <span class="seg" id="sexSeg" aria-label="Sex"><button data-v="m">Male</button><button data-v="f">Female</button></span>
       <span class="seg" id="unitSeg" aria-label="Units"><button data-v="si">SI</button><button data-v="us">US</button></span>
+      <button class="themebtn" id="themeBtn" aria-label="Switch light or dark" title="Light / dark">☀</button>
     </div>
   </div>
 </header>
@@ -445,13 +475,14 @@ dialog{border-radius:16px}
 <section data-tab="triage">
   <div class="hero2">
     <div class="hcopy">
-      <h1><span>Your stack</span> <span class="g">shows up in</span> <span class="b">your blood.</span></h1>
-      <p>Lab reports flag lifters for everything. Spotter maps each flag to the compound behind it, the organ it's hitting, and the study that says so. Then it tells you what to ignore and what to fix.</p>
+      <p class="kick"><i></i>Bloodwork triage for lifters</p>
+      <h1><span>Lift heavy.</span> <span class="b">Bleed smart.</span></h1>
+      <p>Lab reports flag lifters for everything. Spotter shows which organs your stack is loading, sorts every flag into ignore, fix or act now, and links the study behind each call.</p>
       <div class="btnrow"><button class="btn primary big" data-act="sample">Try a sample cycle</button><button class="btn big" data-go="bloodwork">Enter my results</button></div>
       <ol class="steps"><li class="done" id="st1"><b>1</b>Add your stack</li><li id="st2"><b>2</b>Enter your results</li><li id="st3"><b>3</b>Read your triage</li></ol>
     </div>
     <div class="hmap">
-      <div class="mapcard"><div class="maphead"><span>Stack map</span><span class="leg"><i style="--c:var(--risk)"></i>harm <i class="d" style="--c:var(--muted)"></i>expected <i class="a" style="--c:var(--ok)"></i>lab artifact</span></div><div id="map"></div></div>
+      <div class="bodycard"><div class="bhead"><span class="t">Load map · where your stack hits</span></div><div class="hchips" id="hchips"></div><div id="map"></div></div>
       <div class="presets" id="presets" aria-label="Quick stacks"></div>
     </div>
   </div>
@@ -489,9 +520,9 @@ dialog{border-radius:16px}
   <div class="how">
     <h2>Lab ranges are written for people who don't lift. <span>Spotter reads them for people who do.</span></h2>
     <div class="how3">
-      <div><span class="k">01</span><h3>Map</h3><p>Add your stack and see which organs each compound works on, and whether that's harm, an expected change or just a lab artifact.</p></div>
-      <div><span class="k">02</span><h3>Triage</h3><p>Paste your results. Every flag lands in act now, fix, or expected, with the study behind the call one tap away.</p></div>
-      <div><span class="k">03</span><h3>Hand off</h3><p>Print a doctor sheet with what you take, what's flagged and what to test next. No doses, no judgment, no guessing.</p></div>
+      <div style="--c:#facc15"><span class="k">Warm-up</span><h3>Load your stack</h3><p>Pick from 58 compounds, from creatine to clenbuterol. The load map shows which organs each one works on, and whether that's harm, an expected change or just a lab artifact.</p></div>
+      <div style="--c:#3b82f6"><span class="k">Working set</span><h3>Run your bloods</h3><p>Paste your results. Every flag lands in act now, fix, or expected, with the paper behind the call one tap away.</p></div>
+      <div style="--c:#22c55e"><span class="k">Cool-down</span><h3>Hand it off</h3><p>Print a doctor sheet with what you take, what's flagged and what to test next. No doses, no judgment, no guessing.</p></div>
     </div>
     <div class="stats" id="stats"></div>
   </div>
@@ -939,7 +970,7 @@ function renderSheet(){const m=BYID[S.sel]||M[0],x=S.vals[m.id],[lo,hi]=ri(m),d=
    (acts.length?'<h3>What to do</h3><ul>'+acts.map(a=>'<li>'+cites(a)+'</li>').join("")+'</ul>':"")+
    '<p style="font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:16px">Percentile estimated by fitting a '+(m.dist==="log"?"log-normal":"normal")+' curve to the typical range (2.5th–97.5th). It ignores age.</p>'}
 function renderStats(){const fx=COMP.reduce((a,c)=>a+c.fx.length,0);
-  document.getElementById("stats").innerHTML=[[SRC_ORDER.length,"cited sources","PubMed papers, guidelines and regulators"],[COMP.length,"compounds","supplements to SARMs, GH and GLP-1s"],[M.length,"markers","with SI and US units"],[fx,"mapped effects","each tagged harm, expected or artifact"]].map(([n,l,d])=>'<div><b>'+n+'</b><span>'+l+'</span><small>'+d+'</small></div>').join("")}
+  document.getElementById("stats").innerHTML=[[SRC_ORDER.length,"Cited sources","PubMed papers, guidelines and regulators"],[COMP.length,"Compounds","creatine to clen, SARMs to GLP-1s"],[M.length,"Markers","SI and US units"],[fx,"Mapped effects","each tagged harm, expected or artifact"]].map(([n,l,d])=>'<div><span class="lab">'+l+'</span><b>'+n+'</b><small>'+d+'</small></div>').join("")}
 function renderSources(){const used={};COMP.concat([TRAIN]).forEach(c=>{const s=JSON.stringify(c);(s.match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(c.name.split(" (")[0]))});
   Object.entries(ACT).forEach(([k,v])=>{(JSON.stringify(v).match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(BYID[k].name))});
   RED.forEach(r=>(r.txt.match(/\[(P\d+)\]/g)||[]).forEach(t=>(used[t.slice(1,-1)]??=new Set()).add(BYID[r.m].name+" red flag")));
@@ -1110,34 +1141,40 @@ function renderStrain(){const L=strain(),el=document.getElementById("strain"),P=
   const row=x=>{const sub=[x.C.length?x.C.length+" flagged result"+(x.C.length>1?"s":""):x.labs?"results in range":"no results entered",x.P.length?x.P.length+" stack effect"+(x.P.length>1?"s":""):"no stack effects"].join(" · ");
     const det=x.C.map(c=>c.t?'<li><span class="tag" style="--c:'+(c.t.red.length?"var(--danger)":CAT[c.t.cat].c)+'">'+(c.t.red.length?"Act now":c.t.cat==="risk"?"Real risk":c.t.cat==="unexplained"?"Unexplained":"Expected")+'</span><span><a class="mk" href="#'+c.t.m.id+'" data-open="'+c.t.m.id+'">'+esc(c.t.m.name)+'</a> <span class="num">'+fmt(c.t.m,c.t.x)+' '+esc(u(c.t.m))+'</span>'+(c.t.cs.length?' · from '+esc([...new Set(c.t.cs.map(z=>z.c.name.split(" (")[0]))].join(", ")):"")+'</span></li>':'<li><span class="tag" style="--c:'+c.c+'">'+c.s+'</span><span>'+esc(c.v)+'</span></li>').join("")+
       x.P.map(p=>'<li><span class="tag" style="--c:'+(p.f.k==="risk"?"var(--risk)":"var(--calm)")+'">'+(p.f.k==="risk"?"Harm":"Expected")+'</span><span><strong>'+esc(p.c.name.split(" (")[0])+'</strong>'+(p.f.m?' '+(p.f.d==="up"?"raises":"lowers")+' '+esc(BYID[p.f.m].name)+'. ':': ')+cites(p.f.why)+'</span></li>').join("");
-    return'<div class="srow'+(openSys.has(x.id)?" open":"")+'" id="sys-'+x.id+'" style="--c:'+x.lv.c+'"><button aria-expanded="'+openSys.has(x.id)+'" data-sys="'+x.id+'"><span class="nm">'+x.n+'</span><span class="lv">'+x.lv.n+'</span><span class="sc">'+x.tot+'</span><span class="chev">⌄</span><span class="trk"><i class="c" style="width:'+x.conf+'%"></i><i class="p" style="width:'+(x.tot-x.conf)+'%"></i></span><span class="sub2">'+sub+'</span></button><div class="det"><ul>'+det+'</ul></div></div>'};
+    return'<div class="srow'+(openSys.has(x.id)?" open":"")+'" id="sys-'+x.id+'" style="--c:'+x.lv.c+';--sc:'+SYSC[x.id]+'"><button aria-expanded="'+openSys.has(x.id)+'" data-sys="'+x.id+'"><span class="nm"><i></i>'+x.n+'</span><span class="lv">'+x.lv.n+'</span><span class="sc">'+x.tot+'</span><span class="chev">⌄</span><span class="trk"><i class="c" style="width:'+x.conf+'%"></i><i class="p" style="width:'+(x.tot-x.conf)+'%"></i></span><span class="sub2">'+sub+'</span></button><div class="det"><ul>'+det+'</ul></div></div>'};
   el.innerHTML='<div class="srows">'+on.map(row).join("")+'</div>'+(off.length?'<p class="untouched">Not touched by your stack or results: '+off.map(x=>x.n).join(", ")+'.</p>':"")+'<p class="snote">0–100. Flagged results count most; what your stack is known to do counts less once you have results for that system. A low score means nothing is flagged, not that it\'s safe.</p>'}
 document.getElementById("strain").addEventListener("click",e=>{const b=e.target.closest("[data-sys]");if(!b)return;const id=b.dataset.sys;openSys.has(id)?openSys.delete(id):openSys.add(id);const r=b.parentElement;r.classList.toggle("open");b.setAttribute("aria-expanded",r.classList.contains("open"))});
 
 // ---------- stack map (compound → organ system)
-const PRESETS=[["Creatine","creatine"],["TRT","trt"],["Test cycle","testc"],["Test + Anavar","testc,anavar"],["Test + Tren","testc,tren"],["SARMs","rad,lgd"],["MK-677","mk677"],["Semaglutide","sema"],["Retatrutide","reta"]];
-function renderPresets(){const cur=[...S.stack].sort().join(",");document.getElementById("presets").innerHTML=PRESETS.map(([n,ids])=>'<button data-preset="'+ids+'" aria-pressed="'+(ids.split(",").sort().join(",")===cur)+'">'+n+'</button>').join("")}
-function renderMap(){const el=document.getElementById("map"),comps=S.stack.map(id=>BYC[id]).filter(Boolean),L=strain(),LV=Object.fromEntries(L.map(x=>[x.id,x]));
-  if(!comps.length){el.innerHTML='<p class="empty">Pick a stack below, or add your own, to see where it hits.</p>';return}
-  const E=[];comps.forEach(c=>{const by={};c.fx.forEach(f=>{const sy=SYS_OF[f.m];if(!sy)return;(by[sy]??=[]).push(f)});if(HEART_FX[c.cls])(by.heart??=[]).push({k:"risk"});
-    Object.entries(by).forEach(([sy,fs])=>E.push({c:c.id,s:sy,k:fs.some(f=>f.k==="risk")?"risk":fs.some(f=>f.k==="expected")?"exp":"art",n:fs.length}))});
-  const sys=SYS.filter(x=>E.some(e=>e.s===x.id)||LV[x.id].conf>=20);
-  const nar=el.clientWidth>0&&el.clientWidth<480,W=nar?400:640,pw=t=>Math.max(64,t.length*6.9+30),H=30,cl=(x,w)=>Math.min(W-w/2-4,Math.max(w/2+4,x)),short=c=>c.name.split(" (")[0].replace(" monohydrate","").replace("Methandrostenolone","Dianabol").replace("Thyroid hormone","Thyroid");
-  const rowsOf=(arr,max)=>{const r=[];for(let i=0;i<arr.length;i+=max)r.push(arr.slice(i,i+max));return r};
-  const cr=rowsOf(comps,nar?3:4),sr=rowsOf(sys,nar?3:sys.length>5?Math.ceil(sys.length/2):5);
-  const pos={};let y=34;cr.forEach(r=>{r.forEach((c,i)=>{const w=pw(short(c));pos["c"+c.id]={x:cl(W*(i+.5)/r.length,w),y,w}});y+=44});
-  y+=80;sr.forEach((r,ri)=>{r.forEach((s,i)=>{const w=pw(s.sn)+16,n=Math.max(r.length,sr[0].length);pos["s"+s.id]={x:cl(W*(i+.5+(ri%2&&r.length<n?.5:0))/n,w),y,w}});y+=58});
-  const Hh=y-10;let h='<svg viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Map of where your stack acts">';
-  E.forEach(e=>{const a=pos["c"+e.c],b=pos["s"+e.s];if(!a||!b)return;const m=(a.y+b.y)/2;h+='<path class="ed" data-c="'+e.c+'" data-s="'+e.s+'" d="M'+a.x.toFixed(1)+','+(a.y+H/2)+' C'+a.x.toFixed(1)+','+m+' '+b.x.toFixed(1)+','+m+' '+b.x.toFixed(1)+','+(b.y-H/2)+'" stroke="'+(e.k==="risk"?"var(--risk)":e.k==="exp"?"var(--muted)":"var(--ok)")+'"'+(e.k==="risk"?"":e.k==="exp"?' stroke-dasharray="4 4"':' stroke-dasharray="1.5 4" stroke-linecap="round"')+'/>'});
-  comps.forEach(c=>{const p=pos["c"+c.id],t=short(c);h+='<g class="nd" data-c="'+c.id+'" tabindex="0" role="button" aria-label="'+esc(t)+'"><rect x="'+(p.x-p.w/2)+'" y="'+(p.y-H/2)+'" width="'+p.w+'" height="'+H+'" rx="8" fill="var(--ink)"/><text x="'+p.x+'" y="'+(p.y+4)+'" text-anchor="middle" fill="var(--paper)">'+esc(t)+'</text></g>'});
-  sys.forEach(s=>{const p=pos["s"+s.id],x=LV[s.id];h+='<g class="nd" data-s="'+s.id+'" tabindex="0" role="button" aria-label="'+esc(s.n)+', strain '+x.tot+'"><rect x="'+(p.x-p.w/2)+'" y="'+(p.y-H/2)+'" width="'+p.w+'" height="'+H+'" rx="8" fill="var(--paper)" stroke="var(--line)"/><circle cx="'+(p.x-p.w/2+14)+'" cy="'+p.y+'" r="4.5" fill="'+x.lv.c+'"/><text x="'+(p.x+6)+'" y="'+(p.y+4)+'" text-anchor="middle" fill="var(--ink)">'+esc(s.sn)+'</text>'+(x.tot?'<rect x="'+(p.x+p.w/2-24)+'" y="'+(p.y-H/2-9)+'" width="28" height="16" rx="8" fill="'+x.lv.c+'"/><text class="bdg" x="'+(p.x+p.w/2-10)+'" y="'+(p.y-H/2+3)+'" text-anchor="middle" fill="#fff">'+x.tot+'</text>':"")+'</g>'});
-  el.innerHTML=h+'</svg>'}
-const mapEl=document.getElementById("map");
-function mapHi(g){mapEl.querySelectorAll(".on").forEach(n=>n.classList.remove("on"));if(!g){mapEl.classList.remove("hov");return}mapEl.classList.add("hov");g.classList.add("on");
-  const c=g.dataset.c,s=g.dataset.s;mapEl.querySelectorAll(".ed").forEach(e=>{if((c&&e.dataset.c===c)||(s&&e.dataset.s===s)){e.classList.add("on");const o=mapEl.querySelector(c?'.nd[data-s="'+e.dataset.s+'"]':'.nd[data-c="'+e.dataset.c+'"]');if(o)o.classList.add("on")}})}
-mapEl.addEventListener("mouseover",e=>mapHi(e.target.closest(".nd")));mapEl.addEventListener("mouseleave",()=>mapHi(null));
-mapEl.addEventListener("focusin",e=>mapHi(e.target.closest(".nd")));mapEl.addEventListener("focusout",()=>mapHi(null));
-mapEl.addEventListener("click",e=>{const g=e.target.closest(".nd[data-s]");if(!g)return;const id=g.dataset.s;openSys.add(id);renderStrain();const r=document.getElementById("sys-"+id);if(r)r.scrollIntoView({behavior:"smooth",block:"center"})});
+const PRESETS=[["Natty","creatine,ashwa"],["TRT","trt,hcg"],["First cycle","testc,ai"],["Test + Anavar","testc,anavar"],["Blast","testc,tren,dbol"],["SARMs","rad,lgd,cardarine"],["Cut","testc,clen,t3"],["Show prep","testc,tren,diuretic,clen,insulin"],["GH stack","mk677,tesa,ipa"],["GLP-1","reta,creatine"],["Peptides","bpc,tb500,mt2"]];
+function renderPresets(){const cur=[...S.stack].sort().join(",");document.getElementById("presets").innerHTML='<span class="t">Load a stack</span>'+PRESETS.map(([n,ids])=>'<button data-preset="'+ids+'" aria-pressed="'+(ids.split(",").sort().join(",")===cur)+'">'+n+'</button>').join("")}
+// ---------- load map: organs on a body, sized and coloured by strain
+const SYSC={blood:"#ef4444",heart:"#fb7185",lipids:"#facc15",liver:"#f97316",hpta:"#3b82f6",sugar:"#22c55e",kidney:"#a78bfa",muscle:"#2dd4bf",thyroid:"#e879f9",iron:"#94a3b8"};
+const SPOT={hpta:[280,54,"R"],thyroid:[280,98,"L"],heart:[298,150,"R"],lipids:[262,178,"L"],liver:[252,220,"L"],sugar:[306,232,"R"],kidney:[280,274,"R"],blood:[158,214,"L"],iron:[402,214,"R"],muscle:[252,412,"L"]};
+const SIL='<g transform="translate(80,0)"><circle cx="200" cy="52" r="30"/><rect x="186" y="78" width="28" height="24" rx="6"/><path d="M120,108 Q200,92 280,108 L300,128 Q306,170 292,214 L268,300 Q262,320 250,330 L150,330 Q138,320 132,300 L108,214 Q94,170 100,128 Z"/><path d="M104,120 Q78,128 70,170 L56,260 Q52,282 62,286 Q73,288 77,266 L97,190 Q105,160 113,150 Z"/><path d="M296,120 Q322,128 330,170 L344,260 Q348,282 338,286 Q327,288 323,266 L303,190 Q295,160 287,150 Z"/><path d="M152,326 L198,326 L194,470 Q192,502 177,502 Q162,502 160,470 L148,390 Z"/><path d="M248,326 L202,326 L206,470 Q208,502 223,502 Q238,502 240,470 L252,390 Z"/></g>';
+function compSys(c){const set=new Set();c.fx.forEach(f=>{if(SYS_OF[f.m])set.add(SYS_OF[f.m])});if(c.heart||HEART_FX[c.cls])set.add("heart");return set}
+function renderMap(){const el=document.getElementById("map"),L=strain(),LV=Object.fromEntries(L.map(x=>[x.id,x])),comps=S.stack.map(id=>BYC[id]).filter(Boolean);
+  document.getElementById("hchips").innerHTML=comps.length?comps.map(c=>'<button data-hc="'+c.id+'" style="--c:'+CLS[c.cls].c+'">'+esc(c.name.split(" (")[0])+'</button>').join("")+'<span class="hint">hover to see where it hits</span>':'<span class="hint">Nothing loaded yet. Pick a stack below.</span>';
+  const W=560,H=520;let h='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Body map showing strain on each organ system"><g class="sil">'+SIL+'</g>';
+  // labels: resolve overlaps per side
+  const lab={L:[],R:[]};SYS.forEach(sy=>{const [x,y,side]=SPOT[sy.id];lab[side].push({sy,x,y,ly:y})});
+  ["L","R"].forEach(k=>{const a=lab[k].sort((p,q)=>p.y-q.y);for(let i=1;i<a.length;i++)if(a[i].ly-a[i-1].ly<40)a[i].ly=a[i-1].ly+40;const over=a.length?a[a.length-1].ly-(H-24):0;if(over>0)a.forEach(o=>o.ly-=over)});
+  [...lab.L,...lab.R].forEach(o=>{const x=LV[o.sy.id],c=SYSC[o.sy.id],on=x.tot>0,r=6+Math.min(x.tot,100)*.15,left=SPOT[o.sy.id][2]==="L",lx=left?112:448,ta=left?"end":"start";
+    h+='<g class="spot'+(x.tot>=45?" hot":"")+'" data-s="'+o.sy.id+'" tabindex="0" role="button" aria-label="'+esc(o.sy.n)+', strain '+x.tot+'">'+
+      '<path class="lead" d="M'+o.x+','+o.y+' L'+(left?lx+18:lx-18)+','+o.ly+' L'+(left?lx+4:lx-4)+','+o.ly+'" stroke="'+(on?c:"var(--muted)")+'"/>'+
+      '<circle class="pulse" cx="'+o.x+'" cy="'+o.y+'" r="'+r+'" stroke="'+c+'"/>'+
+      '<circle class="core" cx="'+o.x+'" cy="'+o.y+'" r="'+r+'" fill="'+(on?c:"var(--paper)")+'" fill-opacity="'+(on?(.35+x.tot/180).toFixed(2):1)+'" stroke="'+(on?c:"var(--muted)")+'" stroke-width="2"/>'+
+      '<text class="lbl" x="'+lx+'" y="'+(o.ly-2)+'" text-anchor="'+ta+'">'+esc(o.sy.sn)+'</text>'+
+      '<text class="lsub" x="'+lx+'" y="'+(o.ly+13)+'" text-anchor="'+ta+'"><tspan class="sc" fill="'+(on?x.lv.c:"var(--muted)")+'">'+(on?x.tot:"–")+'</tspan> '+(on?x.lv.n.toLowerCase():"no load")+'</text></g>'});
+  el.innerHTML=h+'</svg>'+(!comps.length&&!Object.keys(S.vals).length?'<p class="empty">Load a stack to light it up.</p>':"")}
+const mapEl=document.getElementById("map"),hcEl=document.getElementById("hchips");
+function mapHi(id){mapEl.classList.toggle("dim",!!id);hcEl.querySelectorAll("[data-hc]").forEach(b=>b.classList.toggle("on",b.dataset.hc===id));if(!id)return;const set=compSys(BYC[id]);mapEl.querySelectorAll(".spot").forEach(g=>g.classList.toggle("on",set.has(g.dataset.s)))}
+hcEl.addEventListener("mouseover",e=>{const b=e.target.closest("[data-hc]");mapHi(b?b.dataset.hc:null)});hcEl.addEventListener("mouseleave",()=>mapHi(null));
+hcEl.addEventListener("focusin",e=>{const b=e.target.closest("[data-hc]");if(b)mapHi(b.dataset.hc)});hcEl.addEventListener("focusout",()=>mapHi(null));
+hcEl.addEventListener("click",e=>{const b=e.target.closest("[data-hc]");if(b)mapHi(b.classList.contains("on")?null:b.dataset.hc)});
+function openSpot(id){openSys.add(id);renderStrain();const r=document.getElementById("sys-"+id);if(r)r.scrollIntoView({behavior:"smooth",block:"center"})}
+mapEl.addEventListener("click",e=>{const g=e.target.closest(".spot");if(g)openSpot(g.dataset.s)});
+mapEl.addEventListener("keydown",e=>{const g=e.target.closest(".spot");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();openSpot(g.dataset.s)}});
 document.getElementById("presets").addEventListener("click",e=>{const b=e.target.closest("[data-preset]");if(!b)return;S.stack=b.dataset.preset.split(",");if(!onCycleStack())S.cyc.ph="on";S.example=false;save();renderAll()});
 function fillMine(){["age","sys","dia","hr"].forEach(k=>{const el=document.getElementById("me-"+k);if(document.activeElement!==el)el.value=S.me[k]||""})}
 function renderHealth(){fillMine();renderCycle();renderGear();renderHeart();renderKidney();
@@ -1202,6 +1239,8 @@ let mapW=0;window.addEventListener("resize",()=>{const w=document.getElementById
 function renderAll(){renderStack();renderTriage();renderHealth();renderBloodwork();renderER()}
 
 // ---------- events
+(function(){let t=null;try{t=localStorage.getItem("spotter-theme")}catch(e){}if(t)document.documentElement.setAttribute("data-theme",t)})();
+document.getElementById("themeBtn").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme")==="light"?"dark":"light";document.documentElement.setAttribute("data-theme",cur);try{localStorage.setItem("spotter-theme",cur)}catch(e){}};
 function seg(id,key){document.querySelectorAll("#"+id+" button").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.v===S[key]);b.onclick=()=>{S[key]=b.dataset.v;save();seg(id,key);renderAll()}})}
 seg("sexSeg","sex");seg("unitSeg","units");
 const pop=document.getElementById("pop"),pickBtn=document.getElementById("pickBtn");
