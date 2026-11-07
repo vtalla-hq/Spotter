@@ -663,7 +663,23 @@ function comboList(){const C=[],orals=nCls("oral"),injs=S.stack.filter(id=>BYC[i
   return C}
 function renderCombos(){const C=comboList(),el=document.getElementById("combos");
   el.innerHTML=!S.stack.length?'<li class="empty" style="background:none;border:0;padding:0">Add your stack to check for risky combos.</li>':C.length?C.map(c=>'<li style="--c:'+c.c+'"><strong>'+esc(c.t)+'</strong><span>'+cites(c.d)+'</span></li>').join(""):'<li style="--c:var(--ok)"><strong>No risky combos found</strong><span>Nothing in your stack doubles up on the same harm.</span></li>'}
-function renderSupport(){document.getElementById("support").innerHTML=''}
+const SUP=[
+ {g:"proven",n:"Cardio, 2+ hours a week",helps:["hdl"],d:"Raised HDL across trials; session length mattered most. [P17]"},
+ {g:"proven",n:"Psyllium fibre",helps:["ldl","apob"],d:"Across 28 trials, about 10 g a day lowered LDL by 0.33 mmol/L and lowered ApoB. [P25]"},
+ {g:"proven",n:"Less saturated fat",helps:["ldl","apob"],d:"Swapping it for unsaturated fats lowers LDL. [P18]"},
+ {g:"proven",n:"Prescription omega-3",helps:["tg"],d:"Prescription-strength omega-3 lowered triglycerides 20–30%. Ask a doctor; store-bought fish oil isn't a substitute. [P29]"},
+ {g:"proven",n:"Sleep 7–9 hours",helps:["testo"],d:"A week of 5-hour nights cut testosterone 10–15%. [P20]"},
+ {g:"proven",n:"Creatine",helps:[],d:"Safe for healthy kidneys. It only raises creatinine on tests. [P11]"},
+ {g:"proven",n:"Vitamin D in winter, if low",helps:[],d:"Fixing a deficiency is guideline-backed. Test first. [P30]"},
+ {g:"proven",n:"Iron every other day, if ferritin is low",helps:["ferritin"],d:"Absorbed better than daily dosing. [P23]"},
+ {g:"weak",n:"Citrus bergamot",helps:["ldl"],d:"Lowered lipids in 14 small trials, but reviewers say better studies are needed. [P26]"},
+ {g:"weak",n:"TUDCA",helps:["alt","ast"],d:"Studied in liver diseases, but we found no controlled trials in steroid users. It doesn't make an oral safe."},
+ {g:"avoid",n:"Red yeast rice",helps:["ldl"],d:"Its active ingredient is identical to the statin lovastatin, doses vary wildly between brands, and some contain a kidney toxin. [P27]"}
+];
+const GRADE={proven:{n:"Proven",c:"var(--ok)"},weak:{n:"Weak evidence",c:"var(--warn)"},avoid:{n:"Avoid",c:"var(--danger)"}};
+function renderSupport(){const flagged=new Set(triage().map(t=>t.m.id));
+  document.getElementById("support").innerHTML=Object.keys(GRADE).map(k=>{const L=SUP.filter(x=>x.g===k).map(x=>({...x,rel:x.helps.filter(m=>flagged.has(m))})).sort((a,b)=>b.rel.length-a.rel.length);
+    return'<div class="scol"><h3 style="--c:'+GRADE[k].c+'"><i></i>'+GRADE[k].n+'</h3>'+L.map(x=>'<div class="sitem"><strong>'+esc(x.n)+'</strong><span>'+cites(x.d)+'</span>'+(x.rel.length&&k!=="avoid"?'<br><span class="rel">Targets your '+esc(x.rel.map(m=>BYID[m].name).join(", "))+'</span>':"")+'</div>').join("")+'</div>'}).join("")}
 
 function renderAll(){renderStack();renderTriage();renderHealth();renderBloodwork()}
 
