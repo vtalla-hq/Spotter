@@ -19,7 +19,7 @@ function load(): State {
 }
 
 // ---------- routing: /, /health, /bloodwork/:marker, /progress, /er, /sources
-export const TABS = ["triage", "health", "bloodwork", "progress", "er", "sources"] as const;
+export const TABS = ["triage", "health", "bloodwork", "progress", "ask", "er", "sources"] as const;
 export type Tab = (typeof TABS)[number];
 
 interface Route {

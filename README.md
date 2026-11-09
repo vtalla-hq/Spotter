@@ -14,6 +14,7 @@ Standard lab reports flag lifters for everything: high creatinine from creatine,
 
 - **Upload your report**: drop in a lab PDF or a phone photo. PDFs are read from their text layer, rebuilding table rows from word positions; scans and photos go through OCR (Tesseract, run in the browser). The parser finds each marker, skips look-alikes (Non-HDL, free testosterone, MCHC, urine tests), takes the result instead of the reference range, reads the unit off the line or infers it from what's plausible, fixes OCR slips, and finds the collection date. You review every value before it's used.
 - **Progress**: save each draw by date. An overview of every marker you track, a detailed chart with cycle phases shaded, a projection of when a trend crosses a line ("at this rate your hematocrit hits 54% around Dec 14"), recovery against your own pre-cycle baseline, and what changed since the last draw.
+- **Ask anything**: questions answered from PubMed. Claude searches PubMed, reads the abstracts, and answers with every claim cited; citations to anything it didn't read are dropped server-side. Every cited study is added to a shared library on the Sources tab, so the evidence base grows as people ask. Won't give doses, cycles or PCT.
 - **Accounts**: sign in to see your progress on any device, end-to-end encrypted (see below).
 - 58 compounds: supplements, TRT, injectable and oral steroids, prohormones, SARMs and research chems, GH and secretagogues, GLP-1 drugs, peptides, ancillaries, fat burners, and other drugs lifters use
 - 27 lifter-relevant markers with typical adult ranges, SI/US units and sex-specific ranges, per-marker distribution curves and estimated percentiles
@@ -35,6 +36,8 @@ src/engine/       rules engine (pure)
   parse.ts        lab report parser (text, PDF text, OCR output)
   trends.ts       draw series, linear fit, threshold projections, recovery
   vault.ts        AES-GCM encryption and draw merging for accounts
+src/ask/          PubMed client, the Ask agent loop, rate limit + study library
+api/ask.ts        Vercel function behind the Ask tab (streams progress)
 src/features/     OCR/PDF extraction, analytics, account client
 src/ui/           React components
 ```
@@ -42,7 +45,7 @@ src/ui/           React components
 ```bash
 npm install
 npm run dev       # http://localhost:5173
-npm test          # 149 unit tests (Vitest)
+npm test          # 159 unit tests (Vitest)
 npm run build
 ```
 
@@ -60,9 +63,19 @@ Off until configured:
 2. In Supabase → Authentication → URL Configuration, set the site URL to `https://spotterlabs.vercel.app` and add `https://spotterlabs.vercel.app/**` as a redirect URL (used by the confirmation email).
 3. In Vercel → Settings → Environment Variables, set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (Supabase → Project Settings → API), then redeploy.
 
+## Ask (optional)
+
+Off until configured. In Vercel → Settings → Environment Variables:
+
+- `ANTHROPIC_API_KEY` (Secret): from console.anthropic.com. Set a monthly spend limit there too.
+- `SUPABASE_SERVICE_ROLE_KEY` (Secret, optional): turns on the shared study library and a database-backed rate limit. Run `supabase/ask.sql` first. Without it, Ask still works with a best-effort in-memory limit.
+- Optional: `ASK_MODEL` (default `claude-haiku-5-5`), `ASK_PER_DAY` (15 per person), `ASK_GLOBAL_PER_DAY` (400), `NCBI_API_KEY` (faster PubMed).
+
+Questions are never stored. Context from your results is opt-in and sends only compound names and which markers are high or low, never values.
+
 ## Analytics
 
-Page views per tab, plus milestones counted once per session: `results_analyzed`, `report_imported`, `report_pdf` / `report_ocr`, `draw_saved`, `returned_with_second_draw`, `account_created`, `signed_in`. Custom events need Vercel Pro, so each milestone is also sent as a virtual page view under `/_m/…`, which shows up in the Pages panel on the free plan.
+Page views per tab, plus milestones counted once per session: `results_analyzed`, `report_imported`, `report_pdf` / `report_ocr`, `draw_saved`, `returned_with_second_draw`, `account_created`, `signed_in`, `asked`. Custom events need Vercel Pro, so each milestone is also sent as a virtual page view under `/_m/…`, which shows up in the Pages panel on the free plan.
 
 ## Not medical advice
 

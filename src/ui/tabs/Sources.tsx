@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { shortName } from "../../engine/ctx";
 import { ACT } from "../../engine/data/actions";
 import { COMP, TRAIN } from "../../engine/data/compounds";
@@ -51,6 +51,7 @@ export function SourcesTab() {
             </li>
           ))}
         </ol>
+        <AskLibrary />
         <p style={{ marginTop: 16 }}>
           <strong>How triage works.</strong> A marker is flagged when it's outside its typical adult range, or far from its guideline target for
           lipids and glucose. Spotter then checks your stack and your training for anything known to push that marker the same way. If something
@@ -72,5 +73,56 @@ export function SourcesTab() {
         </p>
       </div>
     </section>
+  );
+}
+
+interface LibStudy {
+  pmid: string;
+  title: string;
+  journal: string | null;
+  year: number | null;
+  types: string[];
+  url: string;
+  cited: number;
+}
+
+/** Studies the Ask feature has read and cited, shared by everyone. Grows as people ask. */
+function AskLibrary() {
+  const [list, setList] = useState<LibStudy[] | null>(null);
+  const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+  useEffect(() => {
+    if (!url || !key) return;
+    fetch(`${url}/rest/v1/studies?select=pmid,title,journal,year,types,url,cited&order=cited.desc,last_at.desc&limit=200`, {
+      headers: { apikey: key, authorization: `Bearer ${key}` },
+    })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((d) => setList(Array.isArray(d) ? d : []))
+      .catch(() => setList([]));
+  }, [url, key]);
+  if (!list?.length) return null;
+  return (
+    <>
+      <p className="eyebrow" style={{ marginTop: 26 }}>
+        Added by Ask · {list.length} stud{list.length === 1 ? "y" : "ies"}
+      </p>
+      <p>Papers the Ask tab has read and cited to answer people's questions. The library grows every time someone asks.</p>
+      <ol className="srclist lib">
+        {list.map((s) => (
+          <li key={s.pmid}>
+            <span className="n">{s.cited}×</span>
+            <div>
+              <a href={s.url} target="_blank" rel="noopener">
+                {s.title}
+              </a>{" "}
+              <span className="num" style={{ fontSize: 12, color: "var(--muted)" }}>
+                {[s.journal, s.year].filter(Boolean).join(", ")} · PMID {s.pmid}
+              </span>
+              {s.types?.length > 0 && <div className="used">{s.types.slice(0, 2).join(", ")}</div>}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </>
   );
 }

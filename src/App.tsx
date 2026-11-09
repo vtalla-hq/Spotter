@@ -6,6 +6,7 @@ import { HealthTab } from "./ui/tabs/Health";
 import { BloodworkTab } from "./ui/tabs/Bloodwork";
 import { TrendsTab } from "./ui/tabs/Progress";
 import { ErTab } from "./ui/tabs/Er";
+import { AskTab } from "./ui/tabs/Ask";
 import { SourcesTab } from "./ui/tabs/Sources";
 import { DoctorDialog } from "./ui/dialogs/DoctorDialog";
 import { FeedbackDialog } from "./ui/dialogs/FeedbackDialog";
@@ -57,6 +58,7 @@ export default function App() {
         {route.tab === "health" && <HealthTab />}
         {route.tab === "bloodwork" && <BloodworkTab />}
         {route.tab === "progress" && <TrendsTab />}
+        {route.tab === "ask" && <AskTab />}
         {route.tab === "er" && <ErTab />}
         {route.tab === "sources" && <SourcesTab />}
       </main>

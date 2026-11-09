@@ -5,9 +5,10 @@ import { useOpenDialog } from "../App";
 
 const NAV: [Tab, string][] = [
   ["triage", "Triage"],
-  ["health", "Health check"],
+  ["health", "Health"],
   ["bloodwork", "Bloodwork"],
   ["progress", "Progress"],
+  ["ask", "Ask"],
   ["er", "ER signs"],
   ["sources", "Sources"],
 ];
