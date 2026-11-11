@@ -84,13 +84,20 @@ export interface BpCat {
   low?: boolean;
 }
 
+// Typo / wrong-field check, not a clinical cutoff: values outside these can't be a real resting reading.
 const BAD: BpCat = { n: "Check this reading", c: "var(--muted)", r: -1, bad: true };
 
-/** ACC/AHA 2017 categories for high, plus low and implausible readings */
+/** Mean arterial pressure */
+export const mapOf = (sy: number, di: number) => (sy + 2 * di) / 3;
+
+/**
+ * High: ACC/AHA 2017 [P33]. Low: under 90/60 [P68]. Very low: mean arterial pressure
+ * under 65, the minimum doctors aim for when treating shock [P70].
+ */
 export function bpCat(sy: number, di: number): BpCat {
   if (sy < 50 || sy > 300 || di < 20 || di > 200 || di >= sy) return BAD;
   if (sy > 180 || di > 120) return { n: "Crisis range", c: "var(--danger)", r: 4 };
-  if (sy < 70 || di < 40) return { n: "Very low", c: "var(--danger)", r: 3, low: true };
+  if (mapOf(sy, di) < 65) return { n: "Very low", c: "var(--danger)", r: 3, low: true };
   if (sy >= 140 || di >= 90) return { n: "Stage 2 high", c: "var(--danger)", r: 3 };
   if (sy >= 130 || di >= 80) return { n: "Stage 1 high", c: "var(--risk)", r: 2 };
   if (sy >= 120) return { n: "Elevated", c: "var(--warn)", r: 1 };
@@ -98,14 +105,16 @@ export function bpCat(sy: number, di: number): BpCat {
   return { n: "Normal", c: "var(--ok)", r: 0 };
 }
 
-/** Resting heart rate. Trained people often sit in the 40s–50s, so that only flags when untrained. */
+/**
+ * Resting heart rate. Under 50 is bradycardia [P71]. In trained athletes 30+ is a normal
+ * adaptation and under 30 needs a workup [P72].
+ */
 export function hrCat(hr: number, trained: boolean): BpCat {
   if (hr < 20 || hr > 250) return BAD;
   if (hr > 100) return { n: "Fast", c: "var(--danger)", r: 3 };
   if (hr >= 85) return { n: "Upper normal", c: "var(--warn)", r: 1 };
   if (hr < 30) return { n: "Very slow", c: "var(--danger)", r: 3, low: true };
-  if (hr < 40) return trained ? { n: "Slow", c: "var(--warn)", r: 1, low: true } : { n: "Slow", c: "var(--risk)", r: 2, low: true };
-  if (hr < 60) return trained ? { n: "Athlete-low", c: "var(--ok)", r: 0, low: true } : { n: "Slow", c: "var(--warn)", r: 1, low: true };
+  if (hr < 50) return trained ? { n: "Athlete-low", c: "var(--ok)", r: 0, low: true } : { n: "Slow", c: "var(--risk)", r: 2, low: true };
   return { n: "Normal", c: "var(--ok)", r: 0 };
 }
 
@@ -132,8 +141,8 @@ export function heartTiles(ctx: Ctx): Tile[] {
       p: b.bad
         ? "That can't be a real reading. Check the top number is systolic and the bottom diastolic, like 120/80."
         : b.r >= 4 ? "Recheck after 5 minutes sitting. With chest pain, shortness of breath, vision changes or weakness, go to the ER."
-        : b.low && b.r >= 3 ? "This low is dangerous. If you're dizzy, confused, cold or clammy, or fainted, go to the ER. Otherwise recheck now."
-        : b.low ? "Often fine if you feel normal. Dizziness on standing, fainting or blurred vision means see a doctor, especially on diuretics or after a big cut."
+        : b.low && b.r >= 3 ? "Below the pressure doctors aim to keep people in shock above. Recheck now; if you're dizzy, confused, cold and sweaty, or fainted, go to the ER. [P70] [P68]"
+        : b.low ? "Often normal for you if you feel fine. Dizziness, fainting or blurred vision means see a doctor. Dehydration and some drugs, including diuretics, can cause it. [P68] [P69]"
         : b.r >= 2 ? "Confirm with readings on 2+ different days. [P33]" : "Under 130/80 is the guideline target. [P33]",
     });
   } else T.push({ l: "Blood pressure", v: "–", s: "Not entered", c: "var(--muted)", r: -1, p: "Androgens raised blood pressure during cycles. [P2]" });
@@ -144,10 +153,9 @@ export function heartTiles(ctx: Ctx): Tile[] {
       p: h.bad
         ? "That can't be a real resting heart rate. Count your pulse for 30 seconds and double it."
         : hr > 100 ? "Over 100 at rest needs a doctor, especially on thyroid hormone or stimulants."
-        : h.r >= 3 ? "This slow is dangerous. With dizziness, fainting, chest pain or shortness of breath, go to the ER."
-        : hr < 40 ? "Under 40 needs an ECG, even if you're fit. Sooner if you get dizzy, faint or short of breath."
-        : h.low && !ctx.s.train ? "Under 60 is common in trained people. If you don't train hard, or you feel dizzy or tired, get it checked."
-        : h.low ? "Low resting rates are common in trained people." : "Measure lying down, first thing in the morning.",
+        : h.r >= 3 ? "Under 30 needs a doctor's workup even in trained athletes. With dizziness, fainting or shortness of breath, go to the ER. [P72]"
+        : h.low && !ctx.s.train ? "Under 50 counts as a slow heart rate. If you don't train hard, or you feel dizzy, tired or short of breath, get it checked. [P71]"
+        : h.low ? "Down to 30 is a normal adaptation in trained athletes, as long as you feel fine. [P72]" : "Measure lying down, first thing in the morning.",
     });
   } else T.push({ l: "Resting heart rate", v: "–", s: "Not entered", c: "var(--muted)", r: -1, p: "Measure lying down, first thing in the morning." });
   const H = BYID.hematocrit;

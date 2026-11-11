@@ -69,7 +69,12 @@ export const SRC: Record<string, Source> = {
  P64:{t:"Hartgens F, et al. Effects of androgenic-anabolic steroids on apolipoproteins and lipoprotein (a). Br J Sports Med. 2004;38(3):253–259.",u:"https://pubmed.ncbi.nlm.nih.gov/15155420/",id:"PMID 15155420"},
  P65:{t:"Dickerman RD, et al. Anabolic steroid-induced hepatotoxicity: is it overstated? Clin J Sport Med. 1999;9(1):34–39.",u:"https://pubmed.ncbi.nlm.nih.gov/10336050/",id:"PMID 10336050"},
  P66:{t:"Ohlander SJ, et al. Erythrocytosis following testosterone therapy. Sex Med Rev. 2018;6(1):77–85.",u:"https://pubmed.ncbi.nlm.nih.gov/28526632/",id:"PMID 28526632"},
- P67:{t:"Windfeld-Mathiasen J, et al. Mortality among users of anabolic steroids. JAMA. 2024;331(14):1229–1230.",u:"https://doi.org/10.1001/jama.2024.3180",id:"doi 10.1001/jama.2024.3180"}
+ P67:{t:"Windfeld-Mathiasen J, et al. Mortality among users of anabolic steroids. JAMA. 2024;331(14):1229–1230.",u:"https://doi.org/10.1001/jama.2024.3180",id:"doi 10.1001/jama.2024.3180"},
+ P68:{t:"National Heart, Lung, and Blood Institute (NIH). Low blood pressure.",u:"https://www.nhlbi.nih.gov/health/low-blood-pressure",id:"NHLBI"},
+ P69:{t:"Mayo Clinic. Low blood pressure (hypotension): symptoms and causes.",u:"https://www.mayoclinic.org/diseases-conditions/low-blood-pressure/symptoms-causes/syc-20355465",id:"Mayo Clinic"},
+ P70:{t:"Evans L, et al. Surviving Sepsis Campaign: international guidelines for management of sepsis and septic shock 2021. Crit Care Med. 2021;49(11):e1063–e1143.",u:"https://pubmed.ncbi.nlm.nih.gov/34605781/",id:"PMID 34605781"},
+ P71:{t:"Kusumoto FM, et al. 2018 ACC/AHA/HRS guideline on the evaluation and management of patients with bradycardia and cardiac conduction delay. J Am Coll Cardiol. 2019;74(7):e51–e156.",u:"https://pubmed.ncbi.nlm.nih.gov/30412709/",id:"PMID 30412709"},
+ P72:{t:"Drezner JA, et al. International criteria for electrocardiographic interpretation in athletes: consensus statement. Br J Sports Med. 2017;51(9):704–731.",u:"https://pubmed.ncbi.nlm.nih.gov/28258178/",id:"PMID 28258178"}
 };
 
 export const SRC_ORDER = Object.keys(SRC);
