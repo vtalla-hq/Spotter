@@ -4,6 +4,7 @@ import { BYC } from "./data/compounds";
 import { SAMPLE } from "./data/sample";
 import {
   bpCat,
+  hrCat,
   comboList,
   compSys,
   egfrFrom,
@@ -65,7 +66,36 @@ describe("blood pressure (ACC/AHA 2017)", () => {
     [118, 82, "Stage 1 high"],
     [142, 85, "Stage 2 high"],
     [181, 100, "Crisis range"],
+    [85, 55, "Low"],
+    [100, 58, "Low"],
+    [65, 40, "Very low"],
+    [1, 1, "Check this reading"],
+    [80, 120, "Check this reading"],
+    [400, 80, "Check this reading"],
   ])("%i/%i is %s", (s, d, n) => expect(bpCat(s, d).n).toBe(n));
+});
+
+describe("resting heart rate", () => {
+  it.each([
+    [1, false, "Check this reading"],
+    [300, true, "Check this reading"],
+    [25, true, "Very slow"],
+    [35, true, "Slow"],
+    [50, true, "Athlete-low"],
+    [50, false, "Slow"],
+    [70, false, "Normal"],
+    [90, false, "Upper normal"],
+    [110, false, "Fast"],
+  ])("%i bpm (trained %s) is %s", (h, t, n) => expect(hrCat(h, t).n).toBe(n));
+  it("doesn't call an impossible heart rate normal", () => {
+    const t = heartTiles(makeCtx(st({ me: { hr: "1", sys: "1", dia: "1" } })));
+    expect(t.find((x) => x.l === "Resting heart rate")?.s).toBe("Check this reading");
+    expect(t.find((x) => x.l === "Blood pressure")?.s).toBe("Check this reading");
+    expect(heartSummary(t).n).toBe("Not enough data");
+  });
+  it("counts a very slow heart rate as strain", () => {
+    expect(heartSummary(heartTiles(makeCtx(st({ me: { hr: "28" } })))).n).toBe("High strain");
+  });
 });
 
 describe("heart tiles", () => {

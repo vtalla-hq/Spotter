@@ -1,6 +1,6 @@
 import { BYC, CLS } from "./data/compounds";
 import type { Ctx } from "./ctx";
-import { bpCat, egfr, gapList } from "./health";
+import { bpCat, egfr, gapList, hrCat } from "./health";
 import { triage, type Flag } from "./triage";
 import { fmt, unitLabel } from "./units";
 
@@ -56,7 +56,11 @@ export function doctorSheet(ctx: Ctx, T: Flag[] = triage(ctx)): DoctorSheet {
   T.filter((t) => !t.red.length && t.cat === "unexplained").forEach((t) =>
     Q.push(`My ${t.m.name.toLowerCase()} is ${t.d === "up" ? "high" : "low"} and my stack doesn't explain it. What could be causing it?`),
   );
-  if (sy && di && bpCat(sy, di).r >= 2) Q.push(`My blood pressure is ${sy}/${di}. Should we confirm it with home readings?`);
+  const B = sy && di ? bpCat(sy, di) : null;
+  const H = hr ? hrCat(hr, s.train) : null;
+  if (B && !B.bad && B.low) Q.push(`My blood pressure is ${sy}/${di}. Is that too low, and could anything I take be causing it?`);
+  else if (B && B.r >= 2) Q.push(`My blood pressure is ${sy}/${di}. Should we confirm it with home readings?`);
+  if (H && !H.bad && H.low && H.r >= 1) Q.push(`My resting heart rate is ${hr} bpm. Should I get an ECG?`);
   if ((ctx.cls("inj") || ctx.cls("oral")) && !s.hab.echo) Q.push("Should I get an echocardiogram?");
   if (ctx.has("creatine") && E && E.ecc == null) Q.push("Can we add cystatin C, since creatine raises creatinine?");
   return {
@@ -65,8 +69,8 @@ export function doctorSheet(ctx: Ctx, T: Flag[] = triage(ctx)): DoctorSheet {
     stack: s.stack.filter((id) => BYC[id]).map((id) => ({ name: BYC[id].name, cls: CLS[BYC[id].cls].n })),
     phase,
     trained: s.train,
-    bp: sy && di ? `${sy}/${di} mmHg (${bpCat(sy, di).n.toLowerCase()})` : "not recorded",
-    hr: hr ? hr + " bpm" : "not recorded",
+    bp: B && !B.bad ? `${sy}/${di} mmHg (${B.n.toLowerCase()})` : "not recorded",
+    hr: H && !H.bad ? `${hr} bpm (${H.n.toLowerCase()})` : "not recorded",
     egfr: E ? `${Math.round(E.ecr)} (creatinine)` + (E.ecc != null ? `, ${Math.round(E.ecc)} (creatinine + cystatin C)` : "") : "",
     rows,
     tests,

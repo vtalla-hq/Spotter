@@ -88,7 +88,7 @@ export default function ShareDialog({ open, onClose }: { open: boolean; onClose:
       if (G.length) parts.push(`Monitoring ${G.filter((g) => g.done).length}/${G.length} covered`);
       const sy = ctx.me("sys");
       const di = ctx.me("dia");
-      if (sy && di) parts.push("BP " + bpCat(sy, di).n.toLowerCase());
+      if (sy && di && !bpCat(sy, di).bad) parts.push("BP " + bpCat(sy, di).n.toLowerCase());
       parts.push(C.n + " markers checked");
       x.fillText(parts.join("  ·  "), 64, y);
       if (inc && s.stack.length) {

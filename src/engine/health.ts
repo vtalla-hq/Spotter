@@ -77,15 +77,35 @@ export const showGear = (ctx: Ctx) => gearSignals(ctx) != null && !(ctx.s.cyc.ph
 export interface BpCat {
   n: string;
   c: string;
+  /** severity, -1 = reading can't be right */
   r: number;
+  /** true when the number isn't a plausible reading (typo, wrong field) */
+  bad?: boolean;
+  low?: boolean;
 }
 
-/** ACC/AHA 2017 categories */
+const BAD: BpCat = { n: "Check this reading", c: "var(--muted)", r: -1, bad: true };
+
+/** ACC/AHA 2017 categories for high, plus low and implausible readings */
 export function bpCat(sy: number, di: number): BpCat {
+  if (sy < 50 || sy > 300 || di < 20 || di > 200 || di >= sy) return BAD;
   if (sy > 180 || di > 120) return { n: "Crisis range", c: "var(--danger)", r: 4 };
+  if (sy < 70 || di < 40) return { n: "Very low", c: "var(--danger)", r: 3, low: true };
   if (sy >= 140 || di >= 90) return { n: "Stage 2 high", c: "var(--danger)", r: 3 };
   if (sy >= 130 || di >= 80) return { n: "Stage 1 high", c: "var(--risk)", r: 2 };
   if (sy >= 120) return { n: "Elevated", c: "var(--warn)", r: 1 };
+  if (sy < 90 || di < 60) return { n: "Low", c: "var(--warn)", r: 1, low: true };
+  return { n: "Normal", c: "var(--ok)", r: 0 };
+}
+
+/** Resting heart rate. Trained people often sit in the 40s–50s, so that only flags when untrained. */
+export function hrCat(hr: number, trained: boolean): BpCat {
+  if (hr < 20 || hr > 250) return BAD;
+  if (hr > 100) return { n: "Fast", c: "var(--danger)", r: 3 };
+  if (hr >= 85) return { n: "Upper normal", c: "var(--warn)", r: 1 };
+  if (hr < 30) return { n: "Very slow", c: "var(--danger)", r: 3, low: true };
+  if (hr < 40) return trained ? { n: "Slow", c: "var(--warn)", r: 1, low: true } : { n: "Slow", c: "var(--risk)", r: 2, low: true };
+  if (hr < 60) return trained ? { n: "Athlete-low", c: "var(--ok)", r: 0, low: true } : { n: "Slow", c: "var(--warn)", r: 1, low: true };
   return { n: "Normal", c: "var(--ok)", r: 0 };
 }
 
@@ -109,15 +129,25 @@ export function heartTiles(ctx: Ctx): Tile[] {
     const b = bpCat(sy, di);
     T.push({
       l: "Blood pressure", v: sy + "/" + di, s: b.n, c: b.c, r: b.r,
-      p: b.r >= 4 ? "Recheck after 5 minutes sitting. With chest pain, shortness of breath, vision changes or weakness, go to the ER." : b.r >= 2 ? "Confirm with readings on 2+ different days. [P33]" : "Under 130/80 is the guideline target. [P33]",
+      p: b.bad
+        ? "That can't be a real reading. Check the top number is systolic and the bottom diastolic, like 120/80."
+        : b.r >= 4 ? "Recheck after 5 minutes sitting. With chest pain, shortness of breath, vision changes or weakness, go to the ER."
+        : b.low && b.r >= 3 ? "This low is dangerous. If you're dizzy, confused, cold or clammy, or fainted, go to the ER. Otherwise recheck now."
+        : b.low ? "Often fine if you feel normal. Dizziness on standing, fainting or blurred vision means see a doctor, especially on diuretics or after a big cut."
+        : b.r >= 2 ? "Confirm with readings on 2+ different days. [P33]" : "Under 130/80 is the guideline target. [P33]",
     });
   } else T.push({ l: "Blood pressure", v: "–", s: "Not entered", c: "var(--muted)", r: -1, p: "Androgens raised blood pressure during cycles. [P2]" });
   if (hr) {
-    const r = hr > 100 ? 3 : hr >= 85 ? 1 : 0;
+    const h = hrCat(hr, ctx.s.train);
     T.push({
-      l: "Resting heart rate", v: hr + " bpm", s: hr > 100 ? "Fast" : hr >= 85 ? "Upper normal" : "Normal",
-      c: r >= 3 ? "var(--danger)" : r ? "var(--warn)" : "var(--ok)", r,
-      p: hr > 100 ? "Over 100 at rest needs a doctor, especially on thyroid hormone or stimulants." : hr < 60 ? "Low resting rates are common in trained people." : "Measure lying down, first thing in the morning.",
+      l: "Resting heart rate", v: hr + " bpm", s: h.n, c: h.c, r: h.r,
+      p: h.bad
+        ? "That can't be a real resting heart rate. Count your pulse for 30 seconds and double it."
+        : hr > 100 ? "Over 100 at rest needs a doctor, especially on thyroid hormone or stimulants."
+        : h.r >= 3 ? "This slow is dangerous. With dizziness, fainting, chest pain or shortness of breath, go to the ER."
+        : hr < 40 ? "Under 40 needs an ECG, even if you're fit. Sooner if you get dizzy, faint or short of breath."
+        : h.low && !ctx.s.train ? "Under 60 is common in trained people. If you don't train hard, or you feel dizzy or tired, get it checked."
+        : h.low ? "Low resting rates are common in trained people." : "Measure lying down, first thing in the morning.",
     });
   } else T.push({ l: "Resting heart rate", v: "–", s: "Not entered", c: "var(--muted)", r: -1, p: "Measure lying down, first thing in the morning." });
   const H = BYID.hematocrit;
@@ -303,19 +333,25 @@ export function strain(ctx: Ctx, T: Flag[] = triage(ctx)): Strain[] {
       const db = ctx.me("dia");
       const hr = ctx.me("hr");
       if (sb && db) {
-        labs++;
         const b = bpCat(sb, db);
-        const w = [0, 10, 25, 45, 70][b.r];
-        if (w) {
-          conf = comb(conf, w);
-          C.push({ v: `Blood pressure ${sb}/${db}`, s: b.n, w, c: b.c });
+        if (!b.bad) {
+          labs++;
+          const w = [0, 10, 25, 45, 70][b.r];
+          if (w) {
+            conf = comb(conf, w);
+            C.push({ v: `Blood pressure ${sb}/${db}`, s: b.n, w, c: b.c });
+          }
         }
       }
       if (hr) {
-        labs++;
-        if (hr > 100) {
-          conf = comb(conf, 30);
-          C.push({ v: `Resting heart rate ${hr} bpm`, s: "Fast", w: 30, c: "var(--danger)" });
+        const h = hrCat(hr, ctx.s.train);
+        if (!h.bad) {
+          labs++;
+          const w = h.r >= 3 ? 30 : h.r === 2 ? 15 : 0;
+          if (w) {
+            conf = comb(conf, w);
+            C.push({ v: `Resting heart rate ${hr} bpm`, s: h.n, w, c: h.c });
+          }
         }
       }
     }
