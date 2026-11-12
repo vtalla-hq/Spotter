@@ -127,30 +127,14 @@ export function TriageTab() {
             hard in the 7 days before the draw
           </label>
           <span className="btnrow">
-            <button className="btn" onClick={sample}>
-              Try a sample cycle
-            </button>
             <button className="btn" onClick={() => open("import")}>
-              Upload or paste report
+              {hasVals ? "Import results" : "Upload or paste report"}
             </button>
-            <Go tab="bloodwork" className="btn" style={{ textDecoration: "none", color: "inherit" }}>
-              Type in results
+            <Go tab="bloodwork" className="btn">
+              {hasVals ? "Edit results" : "Type in results"}
             </Go>
-            {hasVals && (
-              <>
-                <button className="btn" onClick={() => open("save")}>
-                  Save this draw
-                </button>
-                <button className="btn" onClick={() => open("doc")}>
-                  Doctor sheet
-                </button>
-                <button className="btn" onClick={() => open("share")}>
-                  Share card
-                </button>
-              </>
-            )}
             {!!anything && (
-              <button className="btn" onClick={clear}>
+              <button className="btn ghost" onClick={clear}>
                 Clear all
               </button>
             )}
@@ -201,27 +185,36 @@ export function TriageTab() {
         {!hasVals ? (
           <p className="vline">Add your results to see your triage.</p>
         ) : (
-          <div className="vbig">
-            <span style={vars({ "--c": "var(--danger)" })}>
-              <b>{B.act.length}</b>act now
+          <>
+            <div className="vbig">
+              {(
+                [
+                  [B.act.length, "act now", "var(--danger)"],
+                  [B.fix.length, "fix or ask about", "var(--risk)"],
+                  [B.exp.length, "expected from your stack", "var(--calm)"],
+                  [B.fine, "in range", "var(--ok)"],
+                ] as const
+              ).map(([n, l, c]) => (
+                <span key={l} className={n ? undefined : "zero"} style={vars({ "--c": c })}>
+                  <b>{n}</b>
+                  {l}
+                </span>
+              ))}
+            </div>
+            <span className="btnrow">
+              <button className="btn" onClick={() => open("save")}>
+                Save draw
+              </button>
+              <button className="btn" onClick={() => open("doc")}>
+                Doctor sheet
+              </button>
+              <button className="btn" onClick={() => open("share")}>
+                Share
+              </button>
             </span>
-            <span style={vars({ "--c": "var(--risk)" })}>
-              <b>{B.fix.length}</b>fix or ask about
-            </span>
-            <span style={vars({ "--c": "var(--calm)" })}>
-              <b>{B.exp.length}</b>expected from your stack
-            </span>
-            <span style={vars({ "--c": "var(--ok)" })}>
-              <b>{B.fine}</b>in range
-            </span>
-          </div>
+          </>
         )}
       </div>
-
-      {(s.stack.length > 0 || hasVals) && <StrainPanel open={openSys} setOpen={setOpenSys} />}
-
-      {s.stack.length > 0 && <HealthLink />}
-      {s.draws.length > 0 && <TrendsLink />}
 
       <div className="groups">
         {B.act.length > 0 && (
@@ -283,6 +276,15 @@ export function TriageTab() {
         )}
       </div>
 
+      {(s.stack.length > 0 || hasVals) && <StrainPanel open={openSys} setOpen={setOpenSys} />}
+
+      {(s.stack.length > 0 || s.draws.length > 0) && (
+        <div className="hlinks">
+          {s.stack.length > 0 && <HealthLink />}
+          {s.draws.length > 0 && <TrendsLink />}
+        </div>
+      )}
+
       <Prep />
 
       <div className="how">
@@ -290,7 +292,7 @@ export function TriageTab() {
           Lab ranges are written for people who don't lift. <span>Spotter reads them for people who do.</span>
         </h2>
         <div className="how3">
-          <div style={vars({ "--c": "#facc15" })}>
+          <div>
             <span className="k">Warm-up</span>
             <h3>Load your stack</h3>
             <p>
@@ -298,12 +300,12 @@ export function TriageTab() {
               change or just a lab artifact.
             </p>
           </div>
-          <div style={vars({ "--c": "#3b82f6" })}>
+          <div>
             <span className="k">Working set</span>
             <h3>Run your bloods</h3>
             <p>Upload a photo or PDF of your report. Every flag lands in act now, fix, or expected, with the paper behind the call one tap away.</p>
           </div>
-          <div style={vars({ "--c": "#22c55e" })}>
+          <div>
             <span className="k">Cool-down</span>
             <h3>Track it</h3>
             <p>Save each draw to see your trend, when a marker will cross a line, and how far you've recovered. Print a doctor sheet any time.</p>
