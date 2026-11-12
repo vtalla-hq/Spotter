@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useStore, type Tab } from "./store";
 import { Seg } from "./bits";
 import { useAccount } from "./account";
@@ -17,9 +18,11 @@ export function Header() {
   const { s, set, route, go } = useStore();
   const A = useAccount();
   const open = useOpenDialog();
+  const [dark, setDark] = useState(() => document.documentElement.getAttribute("data-theme") === "dark");
   const toggleTheme = () => {
-    const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    const cur = dark ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", cur);
+    setDark(!dark);
     try {
       localStorage.setItem("spotter-theme", cur);
     } catch {
@@ -72,8 +75,8 @@ export function Header() {
             options={[["si", "SI"], ["us", "US"]]}
             onChange={(units) => set((x) => ({ ...x, units }))}
           />
-          <button className="themebtn" aria-label="Switch light or dark" title="Light / dark" onClick={toggleTheme}>
-            ☾
+          <button className="themebtn" aria-label={dark ? "Switch to light mode" : "Switch to dark mode"} title={dark ? "Light mode" : "Dark mode"} onClick={toggleTheme}>
+            {dark ? "☀" : "☾"}
           </button>
           <button className={"acct" + (A.account ? " in" : "")} onClick={() => open("account")} title={A.account?.email}>
             {A.account ? (
