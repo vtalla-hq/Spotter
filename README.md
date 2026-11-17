@@ -45,13 +45,13 @@ src/ui/           React components
 ```bash
 npm install
 npm run dev       # http://localhost:5173
-npm test          # 159 unit tests (Vitest)
+npm test          # 188 unit tests (Vitest)
 npm run build
 ```
 
 ## Privacy
 
-Everything runs in your browser and is saved to local storage. Uploaded reports are read on your device: the OCR engine and English model are served from this site (`scripts/copy-ocr-assets.mjs`), so nothing goes to a third party. Analytics are cookieless Vercel Web Analytics and never include values or what you take.
+Everything runs in your browser and is saved to local storage. Uploaded reports are read on your device: the OCR engine and English model are served from this site (`scripts/copy-ocr-assets.mjs`) under a versioned path that browsers cache for good, so nothing goes to a third party and the ~4 MB engine downloads once. Analytics are cookieless Vercel Web Analytics and never include values or what you take.
 
 ## Accounts (optional)
 
@@ -69,7 +69,11 @@ Off until configured. In Vercel → Settings → Environment Variables:
 
 - `ANTHROPIC_API_KEY` (Secret): from console.anthropic.com. Set a monthly spend limit there too.
 - `SUPABASE_SERVICE_ROLE_KEY` (Secret, optional): turns on the shared study library and a database-backed rate limit. Run `supabase/ask.sql` first. Without it, Ask still works with a best-effort in-memory limit.
-- Optional: `ASK_MODEL` (default `claude-haiku-5-5`), `ASK_PER_DAY` (15 per person), `ASK_GLOBAL_PER_DAY` (400), `NCBI_API_KEY` (faster PubMed).
+- Optional: `ASK_MODEL` (default `claude-haiku-5-5`), `ASK_PER_DAY` (15 per person), `ASK_GLOBAL_PER_DAY` (400), `NCBI_API_KEY` (faster PubMed; strongly recommended past a handful of concurrent users, since NCBI allows 3 requests a second without one and 10 with).
+
+Built to stay cheap as traffic grows: the system prompt, library and tools are prompt-cached across everyone's questions, and each turn of the tool loop caches the conversation so far; the model's tool calls run in parallel; PubMed searches and abstracts are cached in memory per warm instance; calls to Anthropic and NCBI retry rate limits and overloads with backoff. Both SQL files are safe to re-run, so run `supabase/ask.sql` again after updating to pick up changes. The rate-limit table cleans itself daily.
+
+**Monitoring cost.** Every answer logs one JSON line, `{"ev":"ask","ok":true,"ms":…,"turns":…,"input":…,"output":…,"cacheRead":…,"cacheWrite":…,"searches":…,"cited":…}` (no question text, no IP). Filter Vercel logs on `"ev":"ask"`. A healthy cache shows `cacheRead` well above `input` from the second question of a session onward.
 
 Questions are never stored. Context from your results is opt-in and sends only compound names and which markers are high or low, never values.
 
