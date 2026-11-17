@@ -1,12 +1,16 @@
-// Copies the OCR engine and English model into public/ocr so reports are read
-// entirely on the user's device, with no third-party CDN involved.
-import { copyFileSync, mkdirSync } from "node:fs";
+// Copies the OCR engine and English model into public/ocr/<version> so reports
+// are read entirely on the user's device, with no third-party CDN involved.
+// The versioned folder lets vercel.json cache these files as immutable.
+import { copyFileSync, mkdirSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { createRequire } from "node:module";
+import { ocrVersion } from "./ocr-version.mjs";
 
 const require = createRequire(import.meta.url);
 const pkgDir = (name) => dirname(require.resolve(name + "/package.json"));
-const out = "public/ocr";
+const root = "public/ocr";
+const out = join(root, ocrVersion());
+rmSync(root, { recursive: true, force: true });
 mkdirSync(join(out, "lang"), { recursive: true });
 
 const files = [

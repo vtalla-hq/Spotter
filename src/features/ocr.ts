@@ -16,6 +16,7 @@ export interface Extracted {
 }
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+const OCR = `${BASE}/ocr/${__OCR_VER__}`;
 
 // ---------- PDF text layer
 interface Word {
@@ -63,9 +64,9 @@ type TWorker = Awaited<ReturnType<typeof import("tesseract.js")["createWorker"]>
 async function ocrWorker(progress: Progress, label: () => string): Promise<TWorker> {
   const { createWorker, OEM } = await import("tesseract.js");
   const w = await createWorker("eng", OEM.LSTM_ONLY, {
-    workerPath: `${BASE}/ocr/worker.min.js`,
-    corePath: `${BASE}/ocr`,
-    langPath: `${BASE}/ocr/lang`,
+    workerPath: `${OCR}/worker.min.js`,
+    corePath: OCR,
+    langPath: `${OCR}/lang`,
     gzip: true,
     logger: (m: { status: string; progress: number }) => {
       if (m.status === "recognizing text") progress(label(), Math.round(m.progress * 100));
