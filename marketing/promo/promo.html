@@ -1,0 +1,97 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;width:1080px;height:1920px;overflow:hidden;font-family:Archivo,sans-serif;background:#0d0e0c;color:#f1efe7}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}
+.big{font:900 150px/0.9 Archivo;font-stretch:78%;text-transform:uppercase;letter-spacing:-.01em}
+.mid{font:900 96px/0.95 Archivo;font-stretch:80%;text-transform:uppercase}
+.mono{font:800 40px/1.2 "JetBrains Mono";letter-spacing:.06em;text-transform:uppercase}
+.c{position:absolute;left:80px;right:80px}
+.red{color:#f87171}.org{color:#fb923c}.grn{color:#4ade80}.mut{color:#a3a094}
+.phone{position:absolute;left:150px;top:420px;width:780px;height:1380px;border-radius:70px;background:#000;padding:22px;box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 3px #333}
+.screen{width:100%;height:100%;border-radius:50px;overflow:hidden;position:relative;background:#f6f6f3}
+.screen img{position:absolute;left:0;top:0;width:100%}
+.card{position:absolute;left:70px;right:70px;border-radius:24px;padding:40px 48px;background:#161714;border:4px solid}
+.card .k{font:800 34px "JetBrains Mono";letter-spacing:.08em;text-transform:uppercase}
+.card .m{font:900 92px/1 Archivo;font-stretch:80%;margin:14px 0 8px;color:#f1efe7}
+.card .w{font:500 42px/1.25 Archivo;color:#c9c6bb}
+.light{background:#f6f6f3;color:#1b1c19}
+.logo{display:flex;align-items:center;gap:28px;font:900 120px Archivo;letter-spacing:.04em}
+.flash{position:absolute;inset:0;background:#fff;pointer-events:none}
+</style></head><body>
+<div class="scene" id="s1">
+  <div class="c mono mut" id="pov" style="top:560px">POV:</div>
+  <div class="c big" id="hook" style="top:640px">your labs<br>came back</div>
+  <div class="c" id="cnt" style="top:1080px;font:900 260px/1 Archivo;font-stretch:78%" ><span class="red" id="n">0</span> <span class="mid">flags</span></div>
+</div>
+<div class="scene" id="s2">
+  <div class="c" id="m1" style="top:430px"><div class="mono mut">lab report:</div><div class="mid red">Creatinine HIGH</div><div class="mono mut" style="margin-top:20px">"kidney problem?"</div></div>
+  <div class="c" id="m2" style="top:830px"><div class="mono mut">you:</div><div class="mid">on creatine</div></div>
+  <div class="c" id="m3" style="top:1150px"><div class="mono mut">lab report:</div><div class="mid red">CK 2100 · AST 71</div></div>
+  <div class="c" id="m4" style="top:1460px"><div class="mono mut">you:</div><div class="mid">hit legs tuesday</div></div>
+</div>
+<div class="scene light" id="s3">
+  <div class="c mid" style="top:120px;color:#1b1c19">Spotter sorts<br>every flag</div>
+  <div class="phone"><div class="screen"><img id="full" src="app-full.png"></div></div>
+</div>
+<div class="scene" id="s4">
+  <div class="c mono mut" style="top:150px">your stack · your cycle week · your training</div>
+  <div class="card" id="c1" style="top:300px;border-color:#f87171"><div class="k red">● Act now</div><div class="m">Hematocrit 55%</div><div class="w">Past the 54% line guidelines use. Doctor, this week.</div></div>
+  <div class="card" id="c2" style="top:830px;border-color:#fb923c"><div class="k org">● Fix or ask about</div><div class="m">HDL 0.58</div><div class="w">Real harm from your stack. Here's what helps.</div></div>
+  <div class="card" id="c3" style="top:1360px;border-color:#4ade80"><div class="k grn">● Expected from your stack</div><div class="m">Creatinine · CK</div><div class="w">Creatine and leg day. No harm. Stop panicking.</div></div>
+</div>
+<div class="scene light" id="s5">
+  <div class="c mid" id="t5" style="top:120px;color:#1b1c19">every call<br>backed by a study</div>
+  <div class="phone"><div class="screen"><img id="shot5" src="app-sources.png"></div></div>
+</div>
+<div class="scene" id="s6">
+  <div class="c big" id="p1" style="top:520px">Private.</div>
+  <div class="c mid mut" id="p2" style="top:720px">Runs in your browser.<br>Your numbers never<br>leave your phone.</div>
+  <div class="c big grn" id="p3" style="top:1220px">Free.</div>
+</div>
+<div class="scene light" id="s7">
+  <div class="c" id="lg" style="top:560px"><div class="logo"><svg width="150" height="150" viewBox="0 0 32 32" fill="#1b1c19"><rect x="4" y="14.5" width="24" height="3" rx="1.5"/><rect x="8" y="8" width="5" height="16" rx="1.5"/><rect x="19" y="8" width="5" height="16" rx="1.5"/></svg>SPOTTER</div></div>
+  <div class="c mid" id="tag" style="top:830px;color:#1b1c19">Is it your stack,<br>or is it a problem?</div>
+  <div class="c mono" id="url" style="top:1260px;color:#1b1c19">spotterlabs.vercel.app</div>
+  <div class="c mono" id="sub" style="top:1340px;color:#66645d;font-size:32px">bloodwork triage for lifters · free</div>
+</div>
+<div class="flash" id="flash" style="opacity:0"></div>
+<script>
+// from offsets.json written by capture.cjs; update it if the triage layout changes
+const OFF = {"verdict":1902.40625,"h":7884};
+const SC = [["s1",0,2.5],["s2",2.5,6],["s3",6,10],["s4",10,13.5],["s5",13.5,16],["s6",16,18],["s7",18,21]];
+const $ = id => document.getElementById(id);
+const clamp = (x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const ease = x => 1-Math.pow(1-clamp(x),3);
+const pop = (el,t,t0,from=1.35)=>{ const k=ease((t-t0)/0.18); el.style.opacity=t<t0?0:1; el.style.transform=`scale(${from+(1-from)*k})`; el.style.transformOrigin='left center'; };
+const slide = (el,t,t0,dx=1100)=>{ const k=ease((t-t0)/0.25); el.style.opacity=t<t0?0:1; el.style.transform=`translateX(${dx*(1-k)}px)`; };
+window.render = (t) => {
+  for (const [id,a,b] of SC) $(id).style.display = (t>=a && t<b) ? 'block' : 'none';
+  // flash on every cut
+  const cut = SC.map(s=>s[1]).filter(x=>x>0).find(x=>t>=x && t<x+0.12);
+  $('flash').style.opacity = cut!==undefined ? (1-(t-cut)/0.12)*0.5 : 0;
+  // s1
+  pop($('pov'),t,0.0,1); pop($('hook'),t,0.25); pop($('cnt'),t,1.0);
+  $('n').textContent = Math.round(17*clamp((t-1.0)/0.9));
+  const shake = t>1.9 && t<2.5 ? Math.sin(t*90)*10 : 0; $('cnt').style.translate = `${shake}px 0`;
+  // s2 (beats)
+  pop($('m1'),t,2.5); pop($('m2'),t,3.3); pop($('m3'),t,4.3); pop($('m4'),t,5.1);
+  // s3 phone scroll to verdict
+  const img=$('full'); const scale = 736/390; const target = (OFF.verdict-60)*scale;
+  img.style.transform = `translateY(${-target*ease((t-6.6)/2.0)}px)`;
+  const ph = document.querySelector('#s3 .phone'); const k3=ease((t-6)/0.35); ph.style.transform=`translateY(${(1-k3)*900}px)`;
+  // s4 cards
+  slide($('c1'),t,10.05); slide($('c2'),t,10.8,-1100); slide($('c3'),t,11.55);
+  // s5 sources then ask
+  const showAsk = t>=14.8; $('shot5').src = showAsk ? 'app-ask.png' : 'app-sources.png';
+  $('t5').innerHTML = showAsk ? 'ask anything.<br>answered from pubmed' : 'every call<br>backed by a study';
+  const ph5=document.querySelector('#s5 .phone'); const k5=ease((t-13.5)/0.35); ph5.style.transform=`translateY(${(1-k5)*900}px)`;
+  $('shot5').style.transform = `translateY(${-140*clamp((t-13.8)/1)}px)`;
+  // s6
+  pop($('p1'),t,16.0); pop($('p2'),t,16.5,1.1); pop($('p3'),t,17.2);
+  // s7
+  pop($('lg'),t,18.0); pop($('tag'),t,18.5,1.15); pop($('url'),t,19.1,1); pop($('sub'),t,19.3,1);
+};
+render(0);
+</script></body></html>
