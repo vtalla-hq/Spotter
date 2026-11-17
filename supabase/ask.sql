@@ -14,6 +14,7 @@ create table if not exists public.studies (
   last_at  timestamptz not null default now()
 );
 alter table public.studies enable row level security;
+drop policy if exists "anyone can read the library" on public.studies;
 create policy "anyone can read the library" on public.studies for select to anon, authenticated using (true);
 
 create table if not exists public.ask_usage (
@@ -24,11 +25,21 @@ create table if not exists public.ask_usage (
 );
 alter table public.ask_usage enable row level security; -- no policies: service key only
 
+-- Counts one use and returns today's total. The first global use of each day
+-- also clears counters older than a week, so the table stays small without a cron job.
 create or replace function public.ask_bump(k text) returns int
-language sql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public as $$
+declare
+  total int;
+begin
   insert into ask_usage (key, day, n) values (k, current_date, 1)
   on conflict (key, day) do update set n = ask_usage.n + 1
-  returning n;
+  returning n into total;
+  if k = 'global' and total = 1 then
+    delete from ask_usage where day < current_date - 7;
+  end if;
+  return total;
+end;
 $$;
 
 create or replace function public.add_studies(rows jsonb) returns void
@@ -44,5 +55,8 @@ $$;
 revoke execute on function public.ask_bump(text) from public, anon, authenticated;
 revoke execute on function public.add_studies(jsonb) from public, anon, authenticated;
 
--- tidy old rate-limit rows now and then
+-- the library is read on every Sources visit, ordered by citations
+create index if not exists studies_cited_idx on public.studies (cited desc, last_at desc);
+
+-- tidy old rate-limit rows (ask_bump keeps doing this daily from now on)
 delete from public.ask_usage where day < current_date - 7;

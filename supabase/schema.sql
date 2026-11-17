@@ -14,7 +14,11 @@ create table if not exists public.vaults (
 alter table public.vaults enable row level security;
 revoke all on public.vaults from anon;
 
+drop policy if exists "read own vault" on public.vaults;
 create policy "read own vault"   on public.vaults for select to authenticated using (auth.uid() = user_id);
+drop policy if exists "insert own vault" on public.vaults;
 create policy "insert own vault" on public.vaults for insert to authenticated with check (auth.uid() = user_id);
+drop policy if exists "update own vault" on public.vaults;
 create policy "update own vault" on public.vaults for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+drop policy if exists "delete own vault" on public.vaults;
 create policy "delete own vault" on public.vaults for delete to authenticated using (auth.uid() = user_id);
