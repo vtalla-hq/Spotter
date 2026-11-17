@@ -1,0 +1,30 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      # typechecks, then builds (and copies the OCR assets)
+      - run: npm run build
+      - name: Bundle size budget
+        run: |
+          main=$(ls dist/assets/index-*.js)
+          size=$(gzip -c "$main" | wc -c)
+          echo "main bundle: $size bytes gzipped"
+          test "$size" -lt 110000 || { echo "::error::Main bundle grew past 110 kB gzipped ($size). Lazy-load the new code."; exit 1; }
