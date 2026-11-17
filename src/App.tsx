@@ -89,6 +89,9 @@ export default function App() {
           illegal to sell for human use, or veterinary products with little human data. If you have chest pain, yellow eyes or skin, dark urine
           with muscle pain, or sudden swelling or shortness of breath, get urgent care.
         </p>
+        <p>
+          <a href="/learn">Bloodwork guide: every marker and compound</a>
+        </p>
       </footer>
       <button className="fbtn" aria-haspopup="dialog" onClick={() => setDlg("feedback")}>
         Feedback
