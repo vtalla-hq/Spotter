@@ -39,6 +39,9 @@ src/engine/       rules engine (pure)
 src/ask/          PubMed client, the Ask agent loop, rate limit + study library
 api/ask.ts        Vercel function behind the Ask tab (streams progress)
 src/features/     OCR/PDF extraction, analytics, account client
+src/seo/          static /learn pages, sitemap and robots.txt (written after vite build)
+marketing/        promo video, its source, and the content prompt pack
+docs/SCALING.md   what grows with traffic, what to fix first, growth levers
 src/ui/           React components
 ```
 
