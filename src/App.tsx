@@ -2,12 +2,6 @@ import { createContext, lazy, Suspense, useContext, useEffect, useState } from "
 import { Header } from "./ui/Header";
 import { useStore } from "./ui/store";
 import { TriageTab } from "./ui/tabs/Triage";
-import { HealthTab } from "./ui/tabs/Health";
-import { BloodworkTab } from "./ui/tabs/Bloodwork";
-import { TrendsTab } from "./ui/tabs/Progress";
-import { ErTab } from "./ui/tabs/Er";
-import { AskTab } from "./ui/tabs/Ask";
-import { SourcesTab } from "./ui/tabs/Sources";
 import { DoctorDialog } from "./ui/dialogs/DoctorDialog";
 import { FeedbackDialog } from "./ui/dialogs/FeedbackDialog";
 import { ImportDialog } from "./ui/dialogs/ImportDialog";
@@ -17,6 +11,29 @@ import { milestone, trackPage } from "./features/analytics";
 
 // Share pulls in canvas code most visitors never need
 const ShareDialog = lazy(() => import("./ui/dialogs/ShareDialog"));
+
+// Triage is the landing tab and ships in the main bundle; the rest load when opened
+const named = <K extends string>(p: Promise<Record<K, React.ComponentType>>, k: K) => p.then((m) => ({ default: m[k] }));
+const loadTab = {
+  health: () => named(import("./ui/tabs/Health"), "HealthTab"),
+  bloodwork: () => named(import("./ui/tabs/Bloodwork"), "BloodworkTab"),
+  progress: () => named(import("./ui/tabs/Progress"), "TrendsTab"),
+  ask: () => named(import("./ui/tabs/Ask"), "AskTab"),
+  er: () => named(import("./ui/tabs/Er"), "ErTab"),
+  sources: () => named(import("./ui/tabs/Sources"), "SourcesTab"),
+};
+const HealthTab = lazy(loadTab.health);
+const BloodworkTab = lazy(loadTab.bloodwork);
+const TrendsTab = lazy(loadTab.progress);
+const AskTab = lazy(loadTab.ask);
+const ErTab = lazy(loadTab.er);
+const SourcesTab = lazy(loadTab.sources);
+/** Warm the other tabs once the browser is idle, so switching stays instant. */
+function prefetchTabs() {
+  const go = () => Object.values(loadTab).forEach((f) => f().catch(() => {}));
+  if ("requestIdleCallback" in window) requestIdleCallback(go, { timeout: 4000 });
+  else setTimeout(go, 2000);
+}
 
 export type DialogName = "import" | "doc" | "share" | "feedback" | "account" | "save";
 const DialogCtx = createContext<(d: DialogName) => void>(() => {});
@@ -41,6 +58,8 @@ export default function App() {
     if (realDraws >= 2) milestone("returned_with_second_draw", { draws: realDraws });
   }, [realDraws]);
 
+  useEffect(prefetchTabs, []);
+
   // back from the confirmation email: open sign-in
   useEffect(() => {
     if (new URLSearchParams(location.search).has("signin")) {
@@ -55,12 +74,14 @@ export default function App() {
       <Header />
       <main>
         {route.tab === "triage" && <TriageTab />}
-        {route.tab === "health" && <HealthTab />}
-        {route.tab === "bloodwork" && <BloodworkTab />}
-        {route.tab === "progress" && <TrendsTab />}
-        {route.tab === "ask" && <AskTab />}
-        {route.tab === "er" && <ErTab />}
-        {route.tab === "sources" && <SourcesTab />}
+        <Suspense fallback={null}>
+          {route.tab === "health" && <HealthTab />}
+          {route.tab === "bloodwork" && <BloodworkTab />}
+          {route.tab === "progress" && <TrendsTab />}
+          {route.tab === "ask" && <AskTab />}
+          {route.tab === "er" && <ErTab />}
+          {route.tab === "sources" && <SourcesTab />}
+        </Suspense>
       </main>
       <footer>
         <p>
