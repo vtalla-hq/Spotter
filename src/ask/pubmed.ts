@@ -15,7 +15,14 @@ export interface Study {
   url: string;
 }
 
+import { TtlCache } from "./cache";
+import { fetchRetry } from "./http";
+
 const EU = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+
+// per-instance caches: the same searches and papers come up again and again
+export const searchCache = new TtlCache<Study[]>(300, 6 * 3600_000);
+export const abstractCache = new TtlCache<Study>(2000, 24 * 3600_000);
 export const pubmedUrl = (pmid: string) => `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`;
 
 type Fetch = typeof fetch;
@@ -43,8 +50,7 @@ const first = (xml: string, tag: string) => {
   const m = xml.match(new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)</${tag}>`));
   return m ? decode(m[1]) : "";
 };
-const all = (xml: string, tag: string) =>
-  [...xml.matchAll(new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)</${tag}>`, "g"))].map((m) => m);
+const all = (xml: string, tag: string) => [...xml.matchAll(new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)</${tag}>`, "g"))].map((m) => m);
 
 /** Parse an efetch PubmedArticleSet into studies with abstracts. */
 export function parseArticles(xml: string, maxAbstract = 2200): Study[] {
@@ -64,7 +70,9 @@ export function parseArticles(xml: string, maxAbstract = 2200): Study[] {
       title: first(a, "ArticleTitle"),
       journal: first(a, "ISOAbbreviation") || first(a, "Title"),
       year: Number.isFinite(year) ? year : null,
-      types: all(a, "PublicationType").map((t) => decode(t[1])).filter((t) => t !== "Journal Article"),
+      types: all(a, "PublicationType")
+        .map((t) => decode(t[1]))
+        .filter((t) => t !== "Journal Article"),
       abstract: abstract || "(no abstract)",
       url: pubmedUrl(pmid),
     };
@@ -90,23 +98,50 @@ export function parseSummary(json: any, ids: string[]): Study[] {
     });
 }
 
-export async function search(query: string, opts: { max?: number; apiKey?: string; fetch?: Fetch } = {}): Promise<Study[]> {
+// NCBI allows 3 requests/s without a key (10 with one) and answers 429 past that
+const ncbi = (f: Fetch, url: string) => fetchRetry(url, undefined, { fetch: f, tries: 4, baseMs: 400 });
+
+export async function search(
+  query: string,
+  opts: { max?: number; apiKey?: string; fetch?: Fetch; noCache?: boolean } = {},
+): Promise<Study[]> {
   const f = opts.fetch ?? fetch;
   const max = Math.min(Math.max(opts.max ?? 8, 1), 12);
-  const s = await f(EU + "esearch.fcgi?" + params({ term: query, retmax: String(max), sort: "relevance", retmode: "json" }, opts.apiKey));
+  const ck = max + "|" + query.trim().toLowerCase().replace(/\s+/g, " ");
+  const hit = opts.noCache ? undefined : searchCache.get(ck);
+  if (hit) return hit;
+  const s = await ncbi(
+    f,
+    EU + "esearch.fcgi?" + params({ term: query, retmax: String(max), sort: "relevance", retmode: "json" }, opts.apiKey),
+  );
   if (!s.ok) throw new Error("PubMed search failed (" + s.status + ")");
   const ids: string[] = (await s.json())?.esearchresult?.idlist ?? [];
   if (!ids.length) return [];
-  const sum = await f(EU + "esummary.fcgi?" + params({ id: ids.join(","), retmode: "json" }, opts.apiKey));
+  const sum = await ncbi(f, EU + "esummary.fcgi?" + params({ id: ids.join(","), retmode: "json" }, opts.apiKey));
   if (!sum.ok) throw new Error("PubMed summary failed (" + sum.status + ")");
-  return parseSummary(await sum.json(), ids);
+  const out = parseSummary(await sum.json(), ids);
+  if (!opts.noCache) searchCache.set(ck, out);
+  return out;
 }
 
-export async function abstracts(pmids: string[], opts: { apiKey?: string; fetch?: Fetch } = {}): Promise<Study[]> {
+export async function abstracts(pmids: string[], opts: { apiKey?: string; fetch?: Fetch; noCache?: boolean } = {}): Promise<Study[]> {
   const f = opts.fetch ?? fetch;
   const ids = [...new Set(pmids.map((p) => String(p).replace(/\D/g, "")).filter(Boolean))].slice(0, 10);
   if (!ids.length) return [];
-  const r = await f(EU + "efetch.fcgi?" + params({ id: ids.join(","), rettype: "abstract", retmode: "xml" }, opts.apiKey));
-  if (!r.ok) throw new Error("PubMed fetch failed (" + r.status + ")");
-  return parseArticles(await r.text());
+  const cached = new Map<string, Study>();
+  if (!opts.noCache)
+    for (const id of ids) {
+      const a = abstractCache.get(id);
+      if (a) cached.set(id, a);
+    }
+  const need = ids.filter((id) => !cached.has(id));
+  if (need.length) {
+    const r = await ncbi(f, EU + "efetch.fcgi?" + params({ id: need.join(","), rettype: "abstract", retmode: "xml" }, opts.apiKey));
+    if (!r.ok) throw new Error("PubMed fetch failed (" + r.status + ")");
+    for (const a of parseArticles(await r.text())) {
+      cached.set(a.pmid, a);
+      if (!opts.noCache) abstractCache.set(a.pmid, a);
+    }
+  }
+  return ids.map((id) => cached.get(id)).filter((a): a is Study => !!a);
 }

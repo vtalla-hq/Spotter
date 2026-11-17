@@ -47,15 +47,22 @@ export async function POST(req: Request): Promise<Response> {
   const who = await hashKey(ip, process.env.ASK_SALT ?? apiKey.slice(-12));
   try {
     if (store) {
-      const [mine, all] = await Promise.all([bump(store, who), bump(store, "global")]);
+      // person first, so someone who's over their limit doesn't eat into the global budget
+      const mine = await bump(store, who);
       if (mine > PER_DAY) return json(429, { t: "error", m: `That's ${PER_DAY} questions today. Come back tomorrow.` });
+      const all = await bump(store, "global");
       if (all > GLOBAL_PER_DAY) return json(429, { t: "error", m: "Ask is at its daily limit. Try again tomorrow." });
     } else {
       const day = new Date().toISOString().slice(0, 10);
+      // drop yesterday's counters so a long-lived instance doesn't grow forever
+      for (const k of mem.keys()) if (!k.startsWith(day)) mem.delete(k);
       const k = day + who;
       const n = (mem.get(k) ?? 0) + 1;
       mem.set(k, n);
       if (n > PER_DAY) return json(429, { t: "error", m: `That's ${PER_DAY} questions today. Come back tomorrow.` });
+      const g = (mem.get(day + "global") ?? 0) + 1;
+      mem.set(day + "global", g);
+      if (g > GLOBAL_PER_DAY) return json(429, { t: "error", m: "Ask is at its daily limit. Try again tomorrow." });
     }
   } catch {
     /* if the limiter is down, still answer */
@@ -65,6 +72,7 @@ export async function POST(req: Request): Promise<Response> {
   const stream = new ReadableStream({
     async start(ctrl) {
       const send = (o: unknown) => ctrl.enqueue(enc.encode(JSON.stringify(o) + "\n"));
+      const t0 = Date.now();
       try {
         const res = await ask(q, {
           apiKey,
@@ -75,8 +83,12 @@ export async function POST(req: Request): Promise<Response> {
           onStatus: (m) => send({ t: "status", m }),
         });
         if (store) await addStudies(store, res.studies).catch(() => {});
-        send({ t: "done", ...res, studies: res.studies.map(({ abstract: _a, ...s }) => s) });
+        const { usage, ...out } = res;
+        // one line per answer for cost and latency monitoring (no question text, no IP)
+        console.log(JSON.stringify({ ev: "ask", ok: true, ms: Date.now() - t0, ...usage, searches: res.searches.length, cited: res.studies.length }));
+        send({ t: "done", ...out, studies: res.studies.map(({ abstract: _a, ...s }) => s) });
       } catch (e) {
+        console.log(JSON.stringify({ ev: "ask", ok: false, ms: Date.now() - t0 }));
         console.error(e);
         send({ t: "error", m: "Couldn't answer that right now. Try again in a minute." });
       }

@@ -1,3 +1,4 @@
+import { fetchRetry } from "./http";
 import { abstracts, search, type Study } from "./pubmed";
 
 /**
@@ -20,7 +21,25 @@ export interface AskResult {
   studies: Study[];
   /** search queries the model ran, for transparency */
   searches: string[];
+  /** token usage summed over every model call, for cost monitoring (server-side only) */
+  usage: Usage;
 }
+
+export interface Usage {
+  turns: number;
+  input: number;
+  output: number;
+  cacheRead: number;
+  cacheWrite: number;
+}
+
+const addUsage = (u: Usage, r: any) => {
+  u.turns++;
+  u.input += r?.input_tokens ?? 0;
+  u.output += r?.output_tokens ?? 0;
+  u.cacheRead += r?.cache_read_input_tokens ?? 0;
+  u.cacheWrite += r?.cache_creation_input_tokens ?? 0;
+};
 
 type Fetch = typeof fetch;
 
@@ -106,6 +125,8 @@ export async function ask(
     ncbiKey?: string;
     fetch?: Fetch;
     onStatus?: (msg: string) => void;
+    /** override backoff waits (tests) */
+    sleep?: (ms: number) => Promise<void>;
   },
 ): Promise<AskResult> {
   const f = opts.fetch ?? fetch;
@@ -114,67 +135,96 @@ export async function ask(
   const read = new Map<string, Study>();
   const searches: string[] = [];
   const messages: Msg[] = [{ role: "user", content: q + contextLine(opts.context) }];
-  const system = SYSTEM + (opts.library ? `\n\nSpotter's library (already vetted; read before citing):\n${opts.library}` : "");
+  // Prompt caching. The system prompt + library + tools are identical for every
+  // question, so they get an explicit breakpoint and are read from cache across
+  // people. The top-level breakpoint follows the growing conversation, so each
+  // turn of the tool loop only pays full price for what's new since the last.
+  const system = [
+    {
+      type: "text",
+      text: SYSTEM + (opts.library ? `\n\nSpotter's library (already vetted; read before citing):\n${opts.library}` : ""),
+      cache_control: { type: "ephemeral" },
+    },
+  ];
+  const usage: Usage = { turns: 0, input: 0, output: 0, cacheRead: 0, cacheWrite: 0 };
 
   for (let turn = 0; turn < MAX_TURNS; turn++) {
     const last = turn === MAX_TURNS - 1;
     status(turn === 0 ? "Thinking about where to look…" : "Reading the evidence…");
-    const r = await f("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-api-key": opts.apiKey, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({
-        model: opts.model ?? "claude-haiku-5-5",
-        max_tokens: 1400,
-        system,
-        tools: TOOLS,
-        // on the last turn, make it answer with what it has
-        tool_choice: last ? { type: "none" } : { type: "auto" },
-        messages,
-      }),
-    });
+    const r = await fetchRetry(
+      "https://api.anthropic.com/v1/messages",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-api-key": opts.apiKey, "anthropic-version": "2023-06-01" },
+        body: JSON.stringify({
+          model: opts.model ?? "claude-haiku-5-5",
+          max_tokens: 1400,
+          cache_control: { type: "ephemeral" },
+          system,
+          tools: TOOLS,
+          // on the last turn, make it answer with what it has
+          tool_choice: last ? { type: "none" } : { type: "auto" },
+          messages,
+        }),
+      },
+      { fetch: f, tries: 3, baseMs: 800, sleep: opts.sleep },
+    );
     if (!r.ok) throw new Error(`Model error ${r.status}: ${(await r.text()).slice(0, 200)}`);
     const res = await r.json();
+    addUsage(usage, res.usage);
     messages.push({ role: "assistant", content: res.content });
     const uses = (res.content as any[]).filter((b) => b.type === "tool_use");
     if (!uses.length || res.stop_reason !== "tool_use") {
-      const text = (res.content as any[]).filter((b) => b.type === "text").map((b) => b.text).join("\n").trim();
+      const text = (res.content as any[])
+        .filter((b) => b.type === "text")
+        .map((b) => b.text)
+        .join("\n")
+        .trim();
       const { text: answer, cited } = cleanCitations(text, new Set(read.keys()));
-      return { answer, studies: cited.map((id) => read.get(id)!).filter(Boolean), searches };
+      return { answer, studies: cited.map((id) => read.get(id)!).filter(Boolean), searches, usage };
     }
-    const results = [];
-    for (const u of uses) {
-      try {
-        if (u.name === "search_pubmed") {
-          const query = String(u.input?.query ?? "").slice(0, 300);
-          searches.push(query);
-          status(`Searching PubMed: “${query}”`);
-          const hits = await search(query, { apiKey: opts.ncbiKey, fetch: f });
-          results.push({
-            type: "tool_result",
-            tool_use_id: u.id,
-            content: hits.length
-              ? hits.map((h) => `PMID ${h.pmid} | ${h.year ?? "?"} | ${h.journal} | ${h.types.join(", ") || "Article"} | ${h.title}`).join("\n")
-              : "No results. Try broader or different terms.",
-          });
-        } else if (u.name === "read_abstracts") {
-          const ids: string[] = (u.input?.pmids ?? []).slice(0, 6);
-          status(`Reading ${ids.length} abstract${ids.length === 1 ? "" : "s"}…`);
-          const arts = await abstracts(ids, { apiKey: opts.ncbiKey, fetch: f });
-          arts.forEach((a) => read.set(a.pmid, a));
-          results.push({
-            type: "tool_result",
-            tool_use_id: u.id,
-            content: arts.length
-              ? arts.map((a) => `PMID ${a.pmid} (${a.year ?? "?"}, ${a.journal}${a.types.length ? ", " + a.types.join(", ") : ""})\n${a.title}\n${a.abstract}`).join("\n\n---\n\n")
-              : "Couldn't fetch those PMIDs.",
-          });
-        } else {
-          results.push({ type: "tool_result", tool_use_id: u.id, content: "Unknown tool.", is_error: true });
+    // run the turn's tool calls in parallel (results keep the order of the calls)
+    const results = await Promise.all(
+      uses.map(async (u) => {
+        try {
+          if (u.name === "search_pubmed") {
+            const query = String(u.input?.query ?? "").slice(0, 300);
+            searches.push(query);
+            status(`Searching PubMed: “${query}”`);
+            const hits = await search(query, { apiKey: opts.ncbiKey, fetch: f });
+            return {
+              type: "tool_result",
+              tool_use_id: u.id,
+              content: hits.length
+                ? hits
+                    .map((h) => `PMID ${h.pmid} | ${h.year ?? "?"} | ${h.journal} | ${h.types.join(", ") || "Article"} | ${h.title}`)
+                    .join("\n")
+                : "No results. Try broader or different terms.",
+            };
+          } else if (u.name === "read_abstracts") {
+            const ids: string[] = (u.input?.pmids ?? []).slice(0, 6);
+            status(`Reading ${ids.length} abstract${ids.length === 1 ? "" : "s"}…`);
+            const arts = await abstracts(ids, { apiKey: opts.ncbiKey, fetch: f });
+            arts.forEach((a) => read.set(a.pmid, a));
+            return {
+              type: "tool_result",
+              tool_use_id: u.id,
+              content: arts.length
+                ? arts
+                    .map(
+                      (a) =>
+                        `PMID ${a.pmid} (${a.year ?? "?"}, ${a.journal}${a.types.length ? ", " + a.types.join(", ") : ""})\n${a.title}\n${a.abstract}`,
+                    )
+                    .join("\n\n---\n\n")
+                : "Couldn't fetch those PMIDs.",
+            };
+          }
+          return { type: "tool_result", tool_use_id: u.id, content: "Unknown tool.", is_error: true };
+        } catch (e) {
+          return { type: "tool_result", tool_use_id: u.id, content: "Tool failed: " + (e as Error).message, is_error: true };
         }
-      } catch (e) {
-        results.push({ type: "tool_result", tool_use_id: u.id, content: "Tool failed: " + (e as Error).message, is_error: true });
-      }
-    }
+      }),
+    );
     messages.push({ role: "user", content: results });
   }
   throw new Error("Ran out of steps before answering.");
