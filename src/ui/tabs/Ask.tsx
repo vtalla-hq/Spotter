@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { BYC } from "../../engine/data/compounds";
+import { BYID } from "../../engine/data/markers";
 import type { Study } from "../../ask/pubmed";
 import { milestone } from "../../features/analytics";
 import { useStore } from "../store";
@@ -59,15 +60,25 @@ export function AskTab() {
             sex: s.sex,
             stack: s.stack.map((id) => BYC[id]?.name.split(" (")[0]).filter(Boolean),
             phase: ctx.onCycleStack ? { pre: "before starting a cycle", on: "on cycle", off: "off cycle" }[s.cyc.ph] : undefined,
-            // names and direction only, never the numbers
             flags: T.map((t) => `${t.m.name} ${t.d === "up" ? "high" : "low"}`),
+            labs: Object.entries(s.vals)
+              .filter(([id]) => BYID[id])
+              .map(([id, x]) => `${BYID[id].name} ${x} ${BYID[id].unit}`),
           }
         : undefined;
+    // last 5 Q&As (10 messages), oldest first
+    const history = hist
+      .slice(0, 5)
+      .reverse()
+      .flatMap((a) => [
+        { role: "user", content: a.q },
+        { role: "assistant", content: a.answer },
+      ]);
     try {
       const r = await fetch("/api/ask", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ q: text, context }),
+        body: JSON.stringify({ q: text, context, history }),
       });
       if (!r.body || !r.headers.get("content-type")?.includes("ndjson")) {
         const j = await r.json().catch(() => null);
@@ -120,7 +131,7 @@ export function AskTab() {
           <textarea
             ref={box}
             value={q}
-            maxLength={500}
+            maxLength={2000}
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
@@ -135,13 +146,12 @@ export function AskTab() {
           <div className="askfoot">
             {hasMine ? (
               <label className="switch">
-                <input type="checkbox" checked={useMine} onChange={(e) => setUseMine(e.target.checked)} /> Use my stack and which results are flagged
-                (not the numbers)
+                <input type="checkbox" checked={useMine} onChange={(e) => setUseMine(e.target.checked)} /> Use my stack and results
               </label>
             ) : (
               <span />
             )}
-            <span className="cnt">{q.length}/500</span>
+            <span className="cnt">{q.length}/2000</span>
             <button className="btn primary" disabled={!!busy || q.trim().length < 4}>
               {busy ? "Working…" : "Ask"}
             </button>
@@ -171,7 +181,7 @@ export function AskTab() {
           </div>
         )}
         <p className="gnote">
-          Your question goes to Spotter's server, PubMed and an AI model (Claude) to write the answer, and isn't saved anywhere but this browser.
+          Your question goes to Spotter's server, PubMed and an AI model (via Groq) to write the answer, and isn't saved anywhere but this browser.
           Don't include your name. Spotter won't give doses, cycles or PCT protocols.
         </p>
       </div>

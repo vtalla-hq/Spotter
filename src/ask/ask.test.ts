@@ -54,6 +54,9 @@ describe("citations", () => {
     expect(r.text).toBe("Made up claim. Real [PMID:11111111].");
     expect(r.cited).toEqual(["11111111"]);
   });
+  it("handles gpt-oss lenticular brackets", () => {
+    expect(cleanCitations("X 【PMID:11111111】.", read).text).toBe("X [PMID:11111111].");
+  });
   it("splits grouped citations", () => {
     expect(cleanCitations("X [PMID: 11111111, 22222222, 99999999]", read).text).toBe("X [PMID:11111111][PMID:22222222]");
   });
@@ -82,37 +85,45 @@ describe("the ask loop", () => {
       if (url.includes("esummary")) return ok({ result: { "11111111": { title: "Androgens", source: "X", pubdate: "2021" }, "22222222": { title: "Creatine", source: "Y", pubdate: "2019" } } });
       if (url.includes("efetch")) return ok(XML, true);
       turn++;
-      if (turn === 1) return ok({ stop_reason: "tool_use", content: [{ type: "tool_use", id: "a", name: "search_pubmed", input: { query: "steroids hematocrit" } }] });
-      if (turn === 2) return ok({ stop_reason: "tool_use", content: [{ type: "tool_use", id: "b", name: "read_abstracts", input: { pmids: ["11111111"] } }] });
-      return ok({ stop_reason: "end_turn", content: [{ type: "text", text: "Yes, it rises [PMID:11111111], maybe a lot [PMID:33333333]." }] });
+      const tool = (id: string, name: string, args: unknown) => ok({ choices: [{ message: { content: null, tool_calls: [{ id, type: "function", function: { name, arguments: JSON.stringify(args) } }] } }] });
+      if (turn === 1) return { ok: false, status: 400, text: async () => "model gone" } as Response;
+      if (turn === 2) return tool("a", "search_pubmed", { query: "steroids hematocrit" });
+      if (turn === 3) return tool("b", "read_abstracts", { pmids: ["11111111"] });
+      return ok({ choices: [{ message: { content: "Yes, it rises [PMID:11111111], maybe a lot [PMID:33333333]." } }] });
     }) as unknown as typeof fetch;
     return { f, calls };
   }
 
-  it("searches, reads, answers and keeps only real citations", async () => {
+  it("falls back, searches, reads, answers and keeps only real citations", async () => {
     const { f, calls } = fakeFetch();
     const status: string[] = [];
-    const r = await ask("Does test raise hematocrit?", { apiKey: "k", fetch: f, onStatus: (m) => status.push(m) });
+    const history = [{ role: "user" as const, content: "earlier q" }, { role: "assistant" as const, content: "earlier a" }];
+    const r = await ask("Does test raise hematocrit?", { apiKey: "k", fetch: f, history, onStatus: (m) => status.push(m) });
     expect(r.answer).toBe("Yes, it rises [PMID:11111111], maybe a lot.");
     expect(r.studies.map((s) => s.pmid)).toEqual(["11111111"]);
     expect(r.searches).toEqual(["steroids hematocrit"]);
     expect(status.some((m) => m.includes("Searching PubMed"))).toBe(true);
     // the model saw the search results and the abstract
-    const lastModelCall = calls.filter((c) => c.url.includes("anthropic")).pop()!;
-    const toolText = JSON.stringify(lastModelCall.body.messages);
+    const modelCalls = calls.filter((c) => c.url.includes("groq"));
+    expect(modelCalls[0].body.model).toBe("openai/gpt-oss-120b");
+    expect(modelCalls[1].body.model).toBe("openai/gpt-oss-20b");
+    const last = modelCalls.pop()!.body;
+    expect(last.max_tokens).toBe(800);
+    const toolText = JSON.stringify(last.messages);
     expect(toolText).toContain("PMID 11111111");
     expect(toolText).toContain("Steroids raise hematocrit");
-    expect(lastModelCall.body.system).toContain("Never give doses");
+    expect(last.messages[0].content).toContain("Never give doses");
+    expect(last.messages[1].content).toBe("earlier q");
   });
 
   it("forces an answer on the last turn", async () => {
     let n = 0;
     const f = (async (url: string, init?: RequestInit) => {
-      if (!url.includes("anthropic")) return { ok: true, json: async () => ({ esearchresult: { idlist: [] } }) } as Response;
+      if (!url.includes("groq")) return { ok: true, json: async () => ({ esearchresult: { idlist: [] } }) } as Response;
       n++;
       const body = JSON.parse(String(init!.body));
-      if (body.tool_choice.type === "none") return { ok: true, json: async () => ({ stop_reason: "end_turn", content: [{ type: "text", text: "Not enough evidence." }] }) } as Response;
-      return { ok: true, json: async () => ({ stop_reason: "tool_use", content: [{ type: "tool_use", id: "x" + n, name: "search_pubmed", input: { query: "q" } }] }) } as Response;
+      if (body.tool_choice === "none") return { ok: true, json: async () => ({ choices: [{ message: { content: "Not enough evidence." } }] }) } as Response;
+      return { ok: true, json: async () => ({ choices: [{ message: { tool_calls: [{ id: "x" + n, function: { name: "search_pubmed", arguments: '{"query":"q"}' } }] } }] }) } as Response;
     }) as unknown as typeof fetch;
     const r = await ask("Anything?", { apiKey: "k", fetch: f });
     expect(r.answer).toBe("Not enough evidence.");

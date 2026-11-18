@@ -1,19 +1,12 @@
 // Vercel function: POST /api/ask
 // Streams newline-delimited JSON: {t:"status",m} … then {t:"done",answer,studies,searches} or {t:"error",m}.
-import { ask, MAX_QUESTION, type AskContext } from "../src/ask/agent";
+import { ask, MAX_QUESTION, type AskContext, type Turn } from "../src/ask/agent";
 import { addStudies, bump, hashKey, type StoreCfg } from "../src/ask/store";
-import { SRC } from "../src/engine/data/sources";
 
 export const config = { maxDuration: 60 };
 
 const PER_DAY = Number(process.env.ASK_PER_DAY ?? 15);
 const GLOBAL_PER_DAY = Number(process.env.ASK_GLOBAL_PER_DAY ?? 400);
-
-// Spotter's own vetted sources that have PMIDs, offered to the model first
-const LIBRARY = Object.values(SRC)
-  .filter((s) => s.id.startsWith("PMID"))
-  .map((s) => `PMID ${s.id.replace(/\D/g, "")}: ${s.t.slice(0, 150)}`)
-  .join("\n");
 
 // fallback limiter when the database isn't configured (per warm instance, best effort)
 const mem = new Map<string, number>();
@@ -23,10 +16,10 @@ function json(status: number, body: unknown) {
 }
 
 export async function POST(req: Request): Promise<Response> {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) return json(503, { t: "error", m: "Ask isn't switched on yet." });
 
-  let body: { q?: unknown; context?: AskContext };
+  let body: { q?: unknown; context?: AskContext; history?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -37,6 +30,12 @@ export async function POST(req: Request): Promise<Response> {
   if (q.length > MAX_QUESTION) return json(400, { t: "error", m: `Keep it under ${MAX_QUESTION} characters.` });
 
   const ctx = sanitize(body.context);
+  const history: Turn[] = Array.isArray(body.history)
+    ? body.history
+        .filter((t: any) => (t?.role === "user" || t?.role === "assistant") && typeof t.content === "string")
+        .slice(-10)
+        .map((t: any) => ({ role: t.role, content: t.content.slice(0, MAX_QUESTION) }))
+    : [];
   const store: StoreCfg | null =
     process.env.SUPABASE_SERVICE_ROLE_KEY && (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL)
       ? { url: (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL)!, serviceKey: process.env.SUPABASE_SERVICE_ROLE_KEY }
@@ -68,9 +67,10 @@ export async function POST(req: Request): Promise<Response> {
       try {
         const res = await ask(q, {
           apiKey,
-          model: process.env.ASK_MODEL,
+          baseUrl: process.env.AI_BASE_URL || undefined,
+          model: process.env.AI_MODEL || undefined,
+          history,
           context: ctx,
-          library: LIBRARY,
           ncbiKey: process.env.NCBI_API_KEY,
           onStatus: (m) => send({ t: "status", m }),
         });
@@ -78,7 +78,8 @@ export async function POST(req: Request): Promise<Response> {
         send({ t: "done", ...res, studies: res.studies.map(({ abstract: _a, ...s }) => s) });
       } catch (e) {
         console.error(e);
-        send({ t: "error", m: "Couldn't answer that right now. Try again in a minute." });
+        const busy = String(e).includes("Model error 429");
+        send({ t: "error", m: busy ? "Ask is busy right now (rate limited). Try again in a minute." : "Couldn't answer that right now. Try again in a minute." });
       }
       ctrl.close();
     },
@@ -95,5 +96,6 @@ function sanitize(c: any): AskContext | undefined {
     stack: strs(c.stack, 20),
     phase: typeof c.phase === "string" ? c.phase.slice(0, 60) : undefined,
     flags: strs(c.flags, 20),
+    labs: strs(c.labs, 60),
   };
 }

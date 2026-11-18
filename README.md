@@ -14,7 +14,7 @@ Standard lab reports flag lifters for everything: high creatinine from creatine,
 
 - **Upload your report**: drop in a lab PDF or a phone photo. PDFs are read from their text layer, rebuilding table rows from word positions; scans and photos go through OCR (Tesseract, run in the browser). The parser finds each marker, skips look-alikes (Non-HDL, free testosterone, MCHC, urine tests), takes the result instead of the reference range, reads the unit off the line or infers it from what's plausible, fixes OCR slips, and finds the collection date. You review every value before it's used.
 - **Progress**: save each draw by date. An overview of every marker you track, a detailed chart with cycle phases shaded, a projection of when a trend crosses a line ("at this rate your hematocrit hits 54% around Dec 14"), recovery against your own pre-cycle baseline, and what changed since the last draw.
-- **Ask anything**: questions answered from PubMed. Claude searches PubMed, reads the abstracts, and answers with every claim cited; citations to anything it didn't read are dropped server-side. Every cited study is added to a shared library on the Sources tab, so the evidence base grows as people ask. Won't give doses, cycles or PCT.
+- **Ask anything**: questions answered from PubMed. An AI model (Groq, OpenAI-compatible) searches PubMed, reads the abstracts, and answers with every claim cited; citations to anything it didn't read are dropped server-side. Every cited study is added to a shared library on the Sources tab, so the evidence base grows as people ask. Won't give doses, cycles or PCT.
 - **Accounts**: sign in to see your progress on any device, end-to-end encrypted (see below).
 - 58 compounds: supplements, TRT, injectable and oral steroids, prohormones, SARMs and research chems, GH and secretagogues, GLP-1 drugs, peptides, ancillaries, fat burners, and other drugs lifters use
 - 27 lifter-relevant markers with typical adult ranges, SI/US units and sex-specific ranges, per-marker distribution curves and estimated percentiles
@@ -67,9 +67,9 @@ Off until configured:
 
 Off until configured. In Vercel → Settings → Environment Variables:
 
-- `ANTHROPIC_API_KEY` (Secret): from console.anthropic.com. Set a monthly spend limit there too.
+- `GROQ_API_KEY` (Secret): free key from console.groq.com.
 - `SUPABASE_SERVICE_ROLE_KEY` (Secret, optional): turns on the shared study library and a database-backed rate limit. Run `supabase/ask.sql` first. Without it, Ask still works with a best-effort in-memory limit.
-- Optional: `ASK_MODEL` (default `claude-haiku-5-5`), `ASK_PER_DAY` (15 per person), `ASK_GLOBAL_PER_DAY` (400), `NCBI_API_KEY` (faster PubMed).
+- Optional: `AI_BASE_URL` (default `https://api.groq.com/openai/v1`), `AI_MODEL` (default `openai/gpt-oss-120b`, falls back to `openai/gpt-oss-20b` on error), `ASK_PER_DAY` (15 per person), `ASK_GLOBAL_PER_DAY` (400), `NCBI_API_KEY` (faster PubMed).
 
 Questions are never stored. Context from your results is opt-in and sends only compound names and which markers are high or low, never values.
 
