@@ -1,7 +1,7 @@
 // Vercel function: POST /api/ask
 // Streams newline-delimited JSON: {t:"status",m} … then {t:"done",answer,studies,searches} or {t:"error",m}.
-import { ask, MAX_QUESTION, type AskContext, type Turn } from "../src/ask/agent";
-import { addStudies, bump, hashKey, type StoreCfg } from "../src/ask/store";
+import { ask, MAX_QUESTION, type AskContext, type Turn } from "../src/ask/agent.js";
+import { addStudies, bump, hashKey, type StoreCfg } from "../src/ask/store.js";
 
 export const config = { maxDuration: 60 };
 

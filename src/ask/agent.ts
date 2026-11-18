@@ -1,4 +1,4 @@
-import { abstracts, search, type Study } from "./pubmed";
+import { abstracts, search, type Study } from "./pubmed.js";
 
 /**
  * The Ask engine: an OpenAI-compatible chat model (Groq by default) with two tools, PubMed search and abstract reading.
