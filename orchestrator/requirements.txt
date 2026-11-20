@@ -1,0 +1,13 @@
+langgraph==1.2.24
+langgraph-checkpoint-redis==0.6.0
+anthropic==2.11.0
+openai==3.57.0
+celery==5.7.0
+redis==8.1.0
+fastapi==0.165.0
+uvicorn==0.54.0
+psycopg[binary]==3.3.9
+pydantic==2.14.4
+httpx==0.28.1
+scrapling[fetchers]==0.5.1
+pytest==9.2.0

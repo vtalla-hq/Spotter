@@ -40,6 +40,7 @@ src/ask/          PubMed client, the Ask agent loop, rate limit + study library
 api/ask.ts        Vercel function behind the Ask tab (streams progress)
 src/features/     OCR/PDF extraction, analytics, account client
 src/ui/           React components
+orchestrator/     Python research agent: LangGraph + Claude, Redis, Postgres, Celery, FastAPI (see its README)
 ```
 
 ```bash
