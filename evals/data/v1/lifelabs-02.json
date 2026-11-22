@@ -1,0 +1,85 @@
+{
+  "id": "lifelabs-02",
+  "dataset": "v1",
+  "layout": "lifelabs",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-10-18",
+  "markers": [
+    {
+      "id": "plt",
+      "value": 117,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 4.5,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 20,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 53,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 75,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 3.97,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 20.7,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "estradiol",
+      "value": 549,
+      "unit": "si",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "direct-bili",
+      "page": 1
+    },
+    {
+      "key": "ck-mb",
+      "page": 1
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 1
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

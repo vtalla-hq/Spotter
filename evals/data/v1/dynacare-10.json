@@ -1,0 +1,115 @@
+{
+  "id": "dynacare-10",
+  "dataset": "v1",
+  "layout": "dynacare",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-08-12",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 0.43,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 312,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 4.1,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 6.3,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 4.7,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 43,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ldl",
+      "value": 4.22,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 16,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 0.2,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "estradiol",
+      "value": 31,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 17.4,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 191,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 3.1,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "egfr",
+      "page": 1
+    },
+    {
+      "key": "ck-mb",
+      "page": 1
+    },
+    {
+      "key": "free-testo",
+      "page": 2
+    },
+    {
+      "key": "urine-glucose",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

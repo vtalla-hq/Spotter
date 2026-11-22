@@ -1,0 +1,149 @@
+{
+  "id": "lifelabs-10",
+  "dataset": "v1",
+  "layout": "lifelabs",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-03-11",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 0.42,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 215,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 2.7,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "creatinine",
+      "value": 102,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "cystatin",
+      "value": 0.64,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "urea",
+      "value": 9.5,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "bili",
+      "value": 26,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "alt",
+      "value": 8,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ast",
+      "value": 55,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "alp",
+      "value": 69,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ggt",
+      "value": 47,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ck",
+      "value": 68,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 1.62,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 19.7,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 3.2,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 1.02,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 15,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 329,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 5.04,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 428,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "non-hdl",
+      "page": 2
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

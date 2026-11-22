@@ -1,0 +1,99 @@
+{
+  "id": "labcorp-09",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-02-02",
+  "markers": [
+    {
+      "id": "hemoglobin",
+      "value": 13.9,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 6.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 4.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 27,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 91,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 179,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "apob",
+      "value": 0.71,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 549,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "lh",
+      "value": 2.6,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tsh",
+      "value": 0.29,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ferritin",
+      "value": 19,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "egfr",
+      "page": 1
+    },
+    {
+      "key": "free-testo",
+      "page": 1
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 1
+    },
+    {
+      "key": "free-psa",
+      "page": 1
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

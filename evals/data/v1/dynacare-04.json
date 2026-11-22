@@ -1,0 +1,141 @@
+{
+  "id": "dynacare-04",
+  "dataset": "v1",
+  "layout": "dynacare",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-06-22",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 0.42,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 162,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 7.4,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 5.3,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 1.23,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 4.7,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 2,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 39,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 40,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 79,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ldl",
+      "value": 1.72,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 0.9,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 27.7,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 3.74,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 11,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 234,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 1.72,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 26,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "mpv",
+      "page": 1
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 2
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

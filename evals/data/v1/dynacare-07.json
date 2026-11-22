@@ -1,0 +1,121 @@
+{
+  "id": "dynacare-07",
+  "dataset": "v1",
+  "layout": "dynacare",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-09-07",
+  "markers": [
+    {
+      "id": "plt",
+      "value": 199,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 1.39,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 3.5,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 2,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 26,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 33,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 63,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 298,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 0.96,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 2.37,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 0.94,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "estradiol",
+      "value": 12,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 12.6,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 2.18,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "mpv",
+      "page": 1
+    },
+    {
+      "key": "non-hdl",
+      "page": 2
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

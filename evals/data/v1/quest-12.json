@@ -1,0 +1,79 @@
+{
+  "id": "quest-12",
+  "dataset": "v1",
+  "layout": "quest",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-06-20",
+  "markers": [
+    {
+      "id": "glucose",
+      "value": 92,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 32,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 125,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 244,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 116,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "estradiol",
+      "value": 109.3,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tsh",
+      "value": 3.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "igf1",
+      "value": 303,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ferritin",
+      "value": 321,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "ck-mb",
+      "page": 1
+    },
+    {
+      "key": "free-testo",
+      "page": 1
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

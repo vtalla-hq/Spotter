@@ -1,0 +1,75 @@
+{
+  "id": "labcorp-11",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-06-25",
+  "markers": [
+    {
+      "id": "glucose",
+      "value": 130,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.79,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 6.1,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "apob",
+      "value": 86,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 1633,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "lh",
+      "value": 0.2,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "igf1",
+      "value": 745,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ferritin",
+      "value": 195,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "non-hdl",
+      "page": 1
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

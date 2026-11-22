@@ -1,0 +1,75 @@
+{
+  "id": "quest-04",
+  "dataset": "v1",
+  "layout": "quest",
+  "sex": "f",
+  "units": "us",
+  "drawDate": "2026-04-18",
+  "markers": [
+    {
+      "id": "a1c",
+      "value": 5.2,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 1.33,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 16,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 132,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 599,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 33,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hdl",
+      "value": 122,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ferritin",
+      "value": 169,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "non-hdl",
+      "page": 1
+    },
+    {
+      "key": "free-testo",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

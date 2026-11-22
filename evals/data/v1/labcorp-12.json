@@ -1,0 +1,121 @@
+{
+  "id": "labcorp-12",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-05-04",
+  "markers": [
+    {
+      "id": "hemoglobin",
+      "value": 4.7,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 364,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 94,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 15,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 5.7,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 116,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 47,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hdl",
+      "value": 24,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 111,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 4.3,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "estradiol",
+      "value": 110.8,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 1.35,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 2.83,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 470,
+      "unit": "us",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mpv",
+      "page": 1
+    },
+    {
+      "key": "direct-bili",
+      "page": 1
+    },
+    {
+      "key": "free-testo",
+      "page": 2
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 2
+    },
+    {
+      "key": "urine-glucose",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

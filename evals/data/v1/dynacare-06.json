@@ -1,0 +1,141 @@
+{
+  "id": "dynacare-06",
+  "dataset": "v1",
+  "layout": "dynacare",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-07-20",
+  "markers": [
+    {
+      "id": "hemoglobin",
+      "value": 156,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 301,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 4.8,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "creatinine",
+      "value": 126,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "cystatin",
+      "value": 0.63,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "urea",
+      "value": 5.3,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "potassium",
+      "value": 4.3,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ast",
+      "value": 36,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "alp",
+      "value": 113,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ggt",
+      "value": 53,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ck",
+      "value": 237,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 2.47,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 17.9,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 0.9,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "estradiol",
+      "value": 65,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 11.9,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 255,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 143,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "mpv",
+      "page": 1
+    },
+    {
+      "key": "free-testo",
+      "page": 2
+    },
+    {
+      "key": "urine-glucose",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

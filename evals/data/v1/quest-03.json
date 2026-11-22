@@ -1,0 +1,147 @@
+{
+  "id": "quest-03",
+  "dataset": "v1",
+  "layout": "quest",
+  "sex": "f",
+  "units": "us",
+  "drawDate": "2026-01-21",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 56.5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 13.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 248,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 103,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "a1c",
+      "value": 5,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "creatinine",
+      "value": 0.58,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "cystatin",
+      "value": 0.79,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "potassium",
+      "value": 3.8,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "alt",
+      "value": 24,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ast",
+      "value": 122,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "alp",
+      "value": 48,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ggt",
+      "value": 37,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ck",
+      "value": 155,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "tg",
+      "value": 310,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ldl",
+      "value": 97,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 74,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 275,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 0.61,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 145,
+      "unit": "us",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "ck-mb",
+      "page": 2
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 2
+    },
+    {
+      "key": "free-testo",
+      "page": 2
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

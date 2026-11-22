@@ -1,0 +1,75 @@
+{
+  "id": "dynacare-11",
+  "dataset": "v1",
+  "layout": "dynacare",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-08-03",
+  "markers": [
+    {
+      "id": "hemoglobin",
+      "value": 244,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 518,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 5.4,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 4.5,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 31,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 6,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 108,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ldl",
+      "value": 6,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "igf1",
+      "value": 37,
+      "unit": "si",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "chol-hdl-ratio",
+      "page": 1
+    },
+    {
+      "key": "acr",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

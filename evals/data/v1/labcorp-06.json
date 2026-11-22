@@ -1,0 +1,139 @@
+{
+  "id": "labcorp-06",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-07-10",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 18.1,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 16,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 282,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 145,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 3.7,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 0.7,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 20,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 247,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 24,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ldl",
+      "value": 99,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 63,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 56,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 0.2,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 1.64,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 1.39,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 240,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 1.61,
+      "unit": "us",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "direct-bili",
+      "page": 1
+    },
+    {
+      "key": "non-hdl",
+      "page": 2
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 2
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

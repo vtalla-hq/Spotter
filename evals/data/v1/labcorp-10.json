@@ -1,0 +1,117 @@
+{
+  "id": "labcorp-10",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "f",
+  "units": "us",
+  "drawDate": "2026-06-19",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 43.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 14.9,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 203,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "creatinine",
+      "value": 0.92,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 0.9,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 150,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 43,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 106,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ldl",
+      "value": 163,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 103,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 39,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 5.3,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 3.51,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 7,
+      "unit": "us",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "direct-bili",
+      "page": 1
+    },
+    {
+      "key": "acr",
+      "page": 2
+    },
+    {
+      "key": "urine-glucose",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

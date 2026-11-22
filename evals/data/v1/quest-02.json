@@ -1,0 +1,87 @@
+{
+  "id": "quest-02",
+  "dataset": "v1",
+  "layout": "quest",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-02-13",
+  "markers": [
+    {
+      "id": "hemoglobin",
+      "value": 19.7,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 117,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 91,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 5.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "creatinine",
+      "value": 0.9,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.19,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 400,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ldl",
+      "value": 221,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hdl",
+      "value": 42,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ft4",
+      "value": 2.16,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "igf1",
+      "value": 779,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "free-testo",
+      "page": 1
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

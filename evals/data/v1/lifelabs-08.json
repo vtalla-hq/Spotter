@@ -1,0 +1,109 @@
+{
+  "id": "lifelabs-08",
+  "dataset": "v1",
+  "layout": "lifelabs",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-05-14",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 0.49,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 6.4,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.75,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 6.6,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 40,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 105,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 1179,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 2.56,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "apob",
+      "value": 1.91,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 22,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "igf1",
+      "value": 425,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "psa",
+      "value": 3.05,
+      "unit": "si",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "mpv",
+      "page": 1
+    },
+    {
+      "key": "egfr",
+      "page": 1
+    },
+    {
+      "key": "non-hdl",
+      "page": 1
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 1
+    },
+    {
+      "key": "free-psa",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

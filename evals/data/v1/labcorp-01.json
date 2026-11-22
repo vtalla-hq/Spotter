@@ -1,0 +1,87 @@
+{
+  "id": "labcorp-01",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-10-05",
+  "markers": [
+    {
+      "id": "plt",
+      "value": 176,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 59,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 17,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 149,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 104,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "estradiol",
+      "value": 27.3,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ft4",
+      "value": 2.21,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "egfr",
+      "page": 1
+    },
+    {
+      "key": "non-hdl",
+      "page": 1
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 1
+    },
+    {
+      "key": "free-psa",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

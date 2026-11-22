@@ -4,3 +4,5 @@ dist
 .env.local
 *.log
 public/ocr
+evals/out
+evals/data/private

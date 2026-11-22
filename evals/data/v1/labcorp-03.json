@@ -1,0 +1,133 @@
+{
+  "id": "labcorp-03",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-07-10",
+  "markers": [
+    {
+      "id": "hemoglobin",
+      "value": 4.1,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 4.9,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "creatinine",
+      "value": 1.05,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.81,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 4.8,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 4.5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 28,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 172,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ldl",
+      "value": 4.32,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 24,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 86,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 563,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 1.1,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 0.28,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 194,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 5.2,
+      "unit": "us",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "egfr",
+      "page": 1
+    },
+    {
+      "key": "non-hdl",
+      "page": 2
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 2
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 2
+    },
+    {
+      "key": "urine-glucose",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

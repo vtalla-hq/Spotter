@@ -1,0 +1,127 @@
+{
+  "id": "labcorp-05",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-08-15",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 44.7,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 23.5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 340,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 78,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "creatinine",
+      "value": 1.38,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "cystatin",
+      "value": 0.84,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "potassium",
+      "value": 3.9,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "alt",
+      "value": 143,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ast",
+      "value": 12,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "alp",
+      "value": 99,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ggt",
+      "value": 63,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ldl",
+      "value": 182,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 63,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 448,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 0.2,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 391,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 5.44,
+      "unit": "us",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "egfr",
+      "page": 2
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 2
+    },
+    {
+      "key": "urine-glucose",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

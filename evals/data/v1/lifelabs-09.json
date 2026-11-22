@@ -1,0 +1,147 @@
+{
+  "id": "lifelabs-09",
+  "dataset": "v1",
+  "layout": "lifelabs",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-07-13",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 0.43,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 139,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 4.7,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "a1c",
+      "value": 4.5,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "cystatin",
+      "value": 1.33,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "urea",
+      "value": 5.9,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "potassium",
+      "value": 6.8,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "bili",
+      "value": 9,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ast",
+      "value": 15,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "alp",
+      "value": 94,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ggt",
+      "value": 5,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ck",
+      "value": 102,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 1.32,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 26.3,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 1.3,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 2.83,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 607,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 4.42,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 219,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "egfr",
+      "page": 2
+    },
+    {
+      "key": "direct-bili",
+      "page": 2
+    },
+    {
+      "key": "non-hdl",
+      "page": 2
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

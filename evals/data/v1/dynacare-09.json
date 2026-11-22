@@ -1,0 +1,87 @@
+{
+  "id": "dynacare-09",
+  "dataset": "v1",
+  "layout": "dynacare",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-03-28",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 0.48,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 171,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 1.39,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 5.4,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 46,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 69,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 47,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 181,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 21.6,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "tsh",
+      "value": 5.12,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "igf1",
+      "value": 230,
+      "unit": "si",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "free-testo",
+      "page": 1
+    },
+    {
+      "key": "urine-glucose",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

@@ -1,0 +1,111 @@
+{
+  "id": "dynacare-12",
+  "dataset": "v1",
+  "layout": "dynacare",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-08-01",
+  "markers": [
+    {
+      "id": "plt",
+      "value": 208,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "creatinine",
+      "value": 39,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.8,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 4.2,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 8,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 68,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 154,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ldl",
+      "value": 6.55,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "hdl",
+      "value": 1.1,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "apob",
+      "value": 1.92,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 16.6,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "estradiol",
+      "value": 124,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ft4",
+      "value": 29,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "igf1",
+      "value": 30,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "psa",
+      "value": 4.72,
+      "unit": "si",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "ck-mb",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

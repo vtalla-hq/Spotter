@@ -1,0 +1,109 @@
+{
+  "id": "dynacare-02",
+  "dataset": "v1",
+  "layout": "dynacare",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-10-16",
+  "markers": [
+    {
+      "id": "glucose",
+      "value": 4.2,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 4.5,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 1.35,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 3.2,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 111,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 166,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 3.49,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 1.37,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 1.26,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 0.9,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 833,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 0.14,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "egfr",
+      "page": 1
+    },
+    {
+      "key": "direct-bili",
+      "page": 1
+    },
+    {
+      "key": "free-testo",
+      "page": 2
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 2
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

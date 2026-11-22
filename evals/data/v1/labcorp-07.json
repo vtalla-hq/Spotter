@@ -1,0 +1,93 @@
+{
+  "id": "labcorp-07",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-03-01",
+  "markers": [
+    {
+      "id": "creatinine",
+      "value": 1.18,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 1.32,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 0.5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 42,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 24,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 104,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 405,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "lh",
+      "value": 7.7,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "estradiol",
+      "value": 39.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tsh",
+      "value": 3.69,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ft4",
+      "value": 1.63,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "psa",
+      "value": 2.86,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "egfr",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

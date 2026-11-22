@@ -1,0 +1,129 @@
+{
+  "id": "quest-05",
+  "dataset": "v1",
+  "layout": "quest",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-06-23",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 58.7,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 16.5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 97,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "creatinine",
+      "value": 0.98,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "urea",
+      "value": 11,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "potassium",
+      "value": 4.6,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "bili",
+      "value": 1,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "alt",
+      "value": 44,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "alp",
+      "value": 158,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ggt",
+      "value": 57,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "tg",
+      "value": 164,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 57,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 731,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 7.1,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 1.25,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 1.61,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 261,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 1.47,
+      "unit": "us",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "urine-glucose",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

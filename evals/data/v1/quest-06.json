@@ -1,0 +1,99 @@
+{
+  "id": "quest-06",
+  "dataset": "v1",
+  "layout": "quest",
+  "sex": "f",
+  "units": "us",
+  "drawDate": "2026-06-21",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 38,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 13,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 265,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 90,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 5.7,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 11,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 32,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 739,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ldl",
+      "value": 99,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 14,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "non-hdl",
+      "page": 1
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 1
+    },
+    {
+      "key": "free-psa",
+      "page": 1
+    },
+    {
+      "key": "acr",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

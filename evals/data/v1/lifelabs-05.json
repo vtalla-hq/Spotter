@@ -1,0 +1,103 @@
+{
+  "id": "lifelabs-05",
+  "dataset": "v1",
+  "layout": "lifelabs",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-02-20",
+  "markers": [
+    {
+      "id": "hemoglobin",
+      "value": 24.1,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 5.5,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "creatinine",
+      "value": 98,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.77,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 4.3,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 72,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 34,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 0.43,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 447,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "lh",
+      "value": 1.9,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "estradiol",
+      "value": 72,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "tsh",
+      "value": 5.37,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ferritin",
+      "value": 11,
+      "unit": "si",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "direct-bili",
+      "page": 1
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

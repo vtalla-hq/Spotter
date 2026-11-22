@@ -1,0 +1,113 @@
+{
+  "id": "lifelabs-04",
+  "dataset": "v1",
+  "layout": "lifelabs",
+  "sex": "f",
+  "units": "si",
+  "drawDate": "2026-07-05",
+  "markers": [
+    {
+      "id": "glucose",
+      "value": 7.3,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 4.6,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.84,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "potassium",
+      "value": 5.4,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 8,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 10,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 124,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 62,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 13,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "lh",
+      "value": 0.2,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "tsh",
+      "value": 3.21,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ft4",
+      "value": 5.9,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "igf1",
+      "value": 320,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ferritin",
+      "value": 118,
+      "unit": "si",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "ck-mb",
+      "page": 1
+    },
+    {
+      "key": "non-hdl",
+      "page": 1
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 1
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

@@ -1,0 +1,105 @@
+{
+  "id": "labcorp-08",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-10-09",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 45.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 15.5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 125,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 103,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 4.6,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "creatinine",
+      "value": 0.75,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.35,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 0.3,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 68,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 26,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 143,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 113,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "lh",
+      "value": 2.9,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "estradiol",
+      "value": 4,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "urine-glucose",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

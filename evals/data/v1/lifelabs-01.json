@@ -1,0 +1,117 @@
+{
+  "id": "lifelabs-01",
+  "dataset": "v1",
+  "layout": "lifelabs",
+  "sex": "f",
+  "units": "si",
+  "drawDate": "2026-09-14",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 0.39,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 270,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "creatinine",
+      "value": 54,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.98,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 8.1,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 38,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 85,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 2.74,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 0.18,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 2.1,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "estradiol",
+      "value": 3281,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 2.22,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 8.3,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 14,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "chol-hdl-ratio",
+      "page": 2
+    },
+    {
+      "key": "non-hdl",
+      "page": 2
+    },
+    {
+      "key": "free-testo",
+      "page": 2
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

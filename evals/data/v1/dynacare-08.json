@@ -1,0 +1,125 @@
+{
+  "id": "dynacare-08",
+  "dataset": "v1",
+  "layout": "dynacare",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-02-25",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 0.41,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 201,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 5.6,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "a1c",
+      "value": 7.6,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "creatinine",
+      "value": 31,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "cystatin",
+      "value": 1.08,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "urea",
+      "value": 5.5,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "bili",
+      "value": 11,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "alp",
+      "value": 122,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ggt",
+      "value": 49,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "tg",
+      "value": 3.31,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ldl",
+      "value": 4.37,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 25.6,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 28.5,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 5.28,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 544,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "ck-mb",
+      "page": 2
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 2
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 2
+    },
+    {
+      "key": "urine-glucose",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

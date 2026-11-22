@@ -1,0 +1,141 @@
+{
+  "id": "lifelabs-03",
+  "dataset": "v1",
+  "layout": "lifelabs",
+  "sex": "m",
+  "units": "si",
+  "drawDate": "2026-04-20",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 0.5,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 140,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 128,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 5.8,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "creatinine",
+      "value": 70,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "cystatin",
+      "value": 0.73,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "urea",
+      "value": 6.8,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "bili",
+      "value": 11,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "alt",
+      "value": 38,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ast",
+      "value": 7,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ggt",
+      "value": 43,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ck",
+      "value": 141,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "tg",
+      "value": 2.85,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ldl",
+      "value": 4.21,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 1.29,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "estradiol",
+      "value": 84,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 0.28,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 122,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "psa",
+      "value": 0.82,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 239,
+      "unit": "si",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mpv",
+      "page": 1
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

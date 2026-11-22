@@ -1,0 +1,77 @@
+{
+  "id": "quest-11",
+  "dataset": "v1",
+  "layout": "quest",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-09-19",
+  "markers": [
+    {
+      "id": "hemoglobin",
+      "value": 14.6,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 1.17,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 183,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ldl",
+      "value": 145,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "apob",
+      "value": 107,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "lh",
+      "value": 2.5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "estradiol",
+      "value": 4.9,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "psa",
+      "value": 2.71,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mch",
+      "page": 1
+    },
+    {
+      "key": "bioavail-testo",
+      "page": 1
+    },
+    {
+      "key": "free-psa",
+      "page": 1
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}

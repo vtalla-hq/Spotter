@@ -8,7 +8,7 @@ Goal: measure how accurately the existing upload path (`src/features/ocr.ts` →
 2. **Runner**: real `extractText` + `parseReport` over the set, with metrics
 3. **Baseline**: `evals/results.md` + `evals/baseline.json`, worst failures listed
 4. **Fixes**: one entry per failure category, either fixed (with a regression test in `parse.test.ts`) or written off with a reason. Before/after numbers.
-5. **LLM experiment**: Haiku vs Sonnet vs rules on the low-confidence subset. Recommendation.
+5. **LLM experiment**: gpt-oss-20b vs gpt-oss-120b (Groq) vs rules on the low-confidence subset. Recommendation.
 6. **CI**: a GitHub Action that fails when the eval drops below the baseline
 
 ## 1. Golden set (`evals/`)
@@ -74,9 +74,9 @@ evals/
   - OCR mean confidence below 70. This needs one small change to `ocr.ts`: return Tesseract's `data.confidence` as an optional `confidence` on `Extracted`.
 
   The thresholds get tuned once on the baseline numbers, before any model is called, and are reported along with how many reports they flag and how many failures they catch.
-- **Function**: `api/extract.ts` (Vercel, same style as `api/ask.ts`) takes `{ text, units, sex }`, where `text` is the extracted text only, never the file. It calls Claude with a strict output schema: `{ date: string|null, markers: [{ id: enum(27 ids), value: number, unit: "si"|"us", line: string }] }`. The output is validated server-side, and anything that isn't a known id or whose `line` isn't in the input text is dropped. It needs `ANTHROPIC_API_KEY`, and when that's missing it returns 503 the way Ask does.
-- **Experiment** (`evals/llm.ts`): calls the same handler locally, on the flagged subset only, for Haiku and Sonnet (current model ids, looked up at run time). It reports the same metrics as the rules (rules / rules+Haiku / rules+Sonnet), plus cost per report from token counts and latency (median and p95). The set is synthetic, so no user data goes anywhere. I'll ask for an Anthropic key through the secure credential form when I get here. Only `api.groq.com` is set up today.
-- **Recommendation** in `results.md`. If it ships: an off-by-default checkbox on each upload, worded along the lines of "Send the extracted text (not the file) to Anthropic to double-check the values. Not stored." Plus a README Privacy section update. The review step still applies to every value. If it doesn't ship, the function and checkbox stay out of the app and the experiment code stays in `evals/`.
+- **Function**: `api/extract.ts` (Vercel, same style as `api/ask.ts`) takes `{ text, units, sex }`, where `text` is the extracted text only, never the file. It calls Groq's OpenAI-compatible API (the same `GROQ_API_KEY` / `AI_BASE_URL` as Ask) with a strict JSON output schema: `{ date: string|null, markers: [{ id: enum(27 ids), value: number, unit: "si"|"us", line: string }] }`. The output is validated server-side, and anything that isn't a known id or whose `line` isn't in the input text is dropped. When `GROQ_API_KEY` is missing it returns 503, the way Ask does.
+- **Experiment** (`evals/llm.ts`): calls the same handler locally, on the flagged subset only, for `openai/gpt-oss-20b` and `openai/gpt-oss-120b` on Groq. It reports the same metrics as the rules (rules / rules+20b / rules+120b), plus tokens, cost per report at Groq's list price (the free tier costs nothing, but the paid-tier price is shown for scale) and latency (median and p95). The set is synthetic, so no user data goes anywhere.
+- **Recommendation** in `results.md`. If it ships: an off-by-default checkbox on each upload, worded along the lines of "Send the extracted text (not the file) to an AI service (Groq) to double-check the values. Not stored." Plus a README Privacy section update. The review step still applies to every value. If it doesn't ship, the function and checkbox stay out of the app and the experiment code stays in `evals/`.
 
 ## 5. CI (`.github/workflows/eval.yml`)
 

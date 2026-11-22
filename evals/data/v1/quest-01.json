@@ -1,0 +1,153 @@
+{
+  "id": "quest-01",
+  "dataset": "v1",
+  "layout": "quest",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-05-04",
+  "markers": [
+    {
+      "id": "hematocrit",
+      "value": 15.6,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hemoglobin",
+      "value": 21.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "plt",
+      "value": 558,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 99,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "a1c",
+      "value": 5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "cystatin",
+      "value": 0.84,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 17,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 1,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ast",
+      "value": 33,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 123,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ck",
+      "value": 109,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ldl",
+      "value": 50,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "hdl",
+      "value": 40,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 39,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 601,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "lh",
+      "value": 7.5,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "estradiol",
+      "value": 41.3,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 4.7,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 1.74,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "igf1",
+      "value": 395,
+      "unit": "us",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "mchc",
+      "page": 1
+    },
+    {
+      "key": "chol-hdl-ratio",
+      "page": 2
+    },
+    {
+      "key": "free-testo",
+      "page": 2
+    },
+    {
+      "key": "free-psa",
+      "page": 2
+    },
+    {
+      "key": "acr",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

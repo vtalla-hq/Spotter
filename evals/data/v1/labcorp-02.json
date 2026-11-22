@@ -1,0 +1,121 @@
+{
+  "id": "labcorp-02",
+  "dataset": "v1",
+  "layout": "labcorp",
+  "sex": "f",
+  "units": "us",
+  "drawDate": "2026-05-23",
+  "markers": [
+    {
+      "id": "plt",
+      "value": 291,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "glucose",
+      "value": 106,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "creatinine",
+      "value": 1.38,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "cystatin",
+      "value": 0.7,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "urea",
+      "value": 4.5,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "potassium",
+      "value": 4.1,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "alt",
+      "value": 9,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ast",
+      "value": 28,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "alp",
+      "value": 110,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "tg",
+      "value": 228,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ldl",
+      "value": 225,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "apob",
+      "value": 158,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "testo",
+      "value": 1.5,
+      "unit": "si",
+      "page": 2
+    },
+    {
+      "id": "tsh",
+      "value": 1.57,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ft4",
+      "value": 1.7,
+      "unit": "us",
+      "page": 2
+    },
+    {
+      "id": "ferritin",
+      "value": 126,
+      "unit": "us",
+      "page": 2
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "direct-bili",
+      "page": 2
+    },
+    {
+      "key": "ck-mb",
+      "page": 2
+    },
+    {
+      "key": "urine-creatinine",
+      "page": 2
+    }
+  ],
+  "photoPages": 1
+}

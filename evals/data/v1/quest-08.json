@@ -1,0 +1,81 @@
+{
+  "id": "quest-08",
+  "dataset": "v1",
+  "layout": "quest",
+  "sex": "m",
+  "units": "us",
+  "drawDate": "2026-06-26",
+  "markers": [
+    {
+      "id": "hemoglobin",
+      "value": 10.4,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 12,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "bili",
+      "value": 0.5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "alt",
+      "value": 85,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "alp",
+      "value": 70,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "ggt",
+      "value": 5,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "tg",
+      "value": 251,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "hdl",
+      "value": 48,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "apob",
+      "value": 69,
+      "unit": "us",
+      "page": 1
+    },
+    {
+      "id": "testo",
+      "value": 767,
+      "unit": "us",
+      "page": 1
+    }
+  ],
+  "lookalikes": [
+    {
+      "key": "free-testo",
+      "page": 1
+    },
+    {
+      "key": "free-psa",
+      "page": 1
+    }
+  ],
+  "photoPages": 1
+}
