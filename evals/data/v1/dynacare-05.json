@@ -8,85 +8,85 @@
   "markers": [
     {
       "id": "hemoglobin",
-      "value": 164,
+      "value": 167,
       "unit": "si",
       "page": 1
     },
     {
       "id": "plt",
-      "value": 182,
+      "value": 465,
       "unit": "si",
       "page": 1
     },
     {
       "id": "creatinine",
-      "value": 76,
+      "value": 66,
       "unit": "si",
       "page": 1
     },
     {
       "id": "cystatin",
-      "value": 0.65,
+      "value": 1.1,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alt",
-      "value": 148,
+      "value": 7,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alp",
-      "value": 57,
+      "value": 157,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ldl",
-      "value": 2.39,
+      "value": 5.99,
       "unit": "si",
       "page": 1
     },
     {
       "id": "hdl",
-      "value": 0.92,
+      "value": 1.78,
       "unit": "si",
       "page": 1
     },
     {
       "id": "testo",
-      "value": 21.7,
+      "value": 10.2,
       "unit": "si",
       "page": 1
     },
     {
       "id": "lh",
-      "value": 7.9,
+      "value": 6.9,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ft4",
-      "value": 24.6,
+      "value": 16.9,
       "unit": "si",
       "page": 1
     },
     {
       "id": "igf1",
-      "value": 183,
+      "value": 203,
       "unit": "si",
       "page": 1
     },
     {
       "id": "psa",
-      "value": 3.1,
+      "value": 1.32,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ferritin",
-      "value": 182,
+      "value": 367,
       "unit": "si",
       "page": 1
     }

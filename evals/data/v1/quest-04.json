@@ -14,7 +14,7 @@
     },
     {
       "id": "cystatin",
-      "value": 1.33,
+      "value": 1.13,
       "unit": "us",
       "page": 1
     },
@@ -44,19 +44,19 @@
     },
     {
       "id": "tg",
-      "value": 33,
+      "value": 38,
       "unit": "us",
       "page": 1
     },
     {
       "id": "hdl",
-      "value": 122,
+      "value": 51,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ferritin",
-      "value": 169,
+      "value": 65,
       "unit": "us",
       "page": 1
     }

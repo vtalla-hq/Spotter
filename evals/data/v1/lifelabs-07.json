@@ -8,19 +8,19 @@
   "markers": [
     {
       "id": "hemoglobin",
-      "value": 170,
+      "value": 157,
       "unit": "si",
       "page": 1
     },
     {
       "id": "glucose",
-      "value": 6.7,
+      "value": 4.3,
       "unit": "si",
       "page": 2
     },
     {
       "id": "a1c",
-      "value": 7.3,
+      "value": 6.4,
       "unit": "si",
       "page": 2
     },
@@ -32,7 +32,7 @@
     },
     {
       "id": "urea",
-      "value": 2.1,
+      "value": 2.3,
       "unit": "si",
       "page": 2
     },
@@ -68,7 +68,7 @@
     },
     {
       "id": "ck",
-      "value": 19,
+      "value": 28,
       "unit": "si",
       "page": 2
     },
@@ -86,31 +86,31 @@
     },
     {
       "id": "hdl",
-      "value": 1.22,
+      "value": 1.7,
       "unit": "si",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 17.9,
+      "value": 18.8,
       "unit": "si",
       "page": 2
     },
     {
       "id": "estradiol",
-      "value": 88,
+      "value": 132,
       "unit": "si",
       "page": 2
     },
     {
       "id": "tsh",
-      "value": 2.24,
+      "value": 1.49,
       "unit": "si",
       "page": 2
     },
     {
       "id": "psa",
-      "value": 4.66,
+      "value": 1.45,
       "unit": "si",
       "page": 2
     },

@@ -8,85 +8,85 @@
   "markers": [
     {
       "id": "plt",
-      "value": 199,
+      "value": 556,
       "unit": "si",
       "page": 1
     },
     {
       "id": "cystatin",
-      "value": 1.39,
+      "value": 0.68,
       "unit": "si",
       "page": 1
     },
     {
       "id": "urea",
-      "value": 3.5,
+      "value": 1.9,
       "unit": "si",
       "page": 1
     },
     {
       "id": "bili",
-      "value": 2,
+      "value": 10,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alt",
-      "value": 26,
+      "value": 23,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ast",
-      "value": 33,
+      "value": 36,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ggt",
-      "value": 63,
+      "value": 97,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ck",
-      "value": 298,
+      "value": 24,
       "unit": "si",
       "page": 1
     },
     {
       "id": "tg",
-      "value": 0.96,
+      "value": 1.47,
       "unit": "si",
       "page": 2
     },
     {
       "id": "hdl",
-      "value": 2.37,
+      "value": 1.1,
       "unit": "si",
       "page": 2
     },
     {
       "id": "apob",
-      "value": 0.94,
+      "value": 0.3,
       "unit": "si",
       "page": 2
     },
     {
       "id": "estradiol",
-      "value": 12,
+      "value": 154,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ft4",
-      "value": 12.6,
+      "value": 25.3,
       "unit": "si",
       "page": 2
     },
     {
       "id": "psa",
-      "value": 2.18,
+      "value": 2.12,
       "unit": "si",
       "page": 2
     }

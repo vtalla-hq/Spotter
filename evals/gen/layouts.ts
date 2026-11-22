@@ -46,7 +46,7 @@ function lifelabs(c: Case): string {
     h1 { font-size: 17px; margin: 0 0 2px } .hd td { padding: 1px 6px 1px 0 } .sec td { font-weight: bold; padding-top: 10px }
     .res th { border-bottom: 1px solid #333; font-size: 11px } .flag { font-weight: bold }`;
   const header = `<h1>Maplewood Medical Laboratories</h1><div style="font-size:10px;margin-bottom:10px">Community Laboratory Services</div>
-    <table class="hd"><tr><td>Patient: SAMPLE, ALEX</td><td>Date of Birth: ${d.dob}</td><td>Sex: ${c.sex.toUpperCase()}</td></tr>
+    <table class="hd"><tr><td>Patient: DOE, JORDAN</td><td>Date of Birth: ${d.dob}</td><td>Sex: ${c.sex.toUpperCase()}</td></tr>
     <tr><td>Ordering: Dr. T. Placeholder</td><td>Collected: ${d.collected} 08:${String(10 + (d.collected.charCodeAt(9) % 40))}</td><td>Received: ${d.received}</td></tr>
     <tr><td>Accession: 26-${c.id.length}04${c.id.slice(-2)}</td><td>Reported: ${d.reported}</td><td>Printed: ${d.printed}</td></tr></table><br>`;
   const body = (secs: Section[]) =>
@@ -69,7 +69,7 @@ function dynacare(c: Case): string {
     .res { table-layout: fixed } .res td:nth-child(1), .res th:nth-child(1) { width: 2.6in } .res td:nth-child(2), .res th:nth-child(2) { width: 1.1in }
     .res td:nth-child(3), .res th:nth-child(3) { width: 1.1in }`;
   const header = `<table class="hd" style="margin-bottom:6px"><tr><td><h1>NORTHSHORE DIAGNOSTICS</h1></td><td>REPORT DATE: ${dMonY(d.reported)}</td></tr></table>
-    <table class="hd"><tr><td>NAME: SAMPLE, ALEX</td><td>DOB: ${dmy(d.dob)}</td><td>SEX: ${c.sex.toUpperCase()}</td></tr>
+    <table class="hd"><tr><td>NAME: DOE, JORDAN</td><td>DOB: ${dmy(d.dob)}</td><td>SEX: ${c.sex.toUpperCase()}</td></tr>
     <tr><td>COLLECTION DATE: ${dMonY(d.collected)} 07:45</td><td>DATE RECEIVED: ${dMonY(d.received)}</td><td>LAB NO: D${c.id.slice(-2)}7731</td></tr></table><br>`;
   const result = (r: Row) => esc(r.value) + (r.flag ? ` ${r.flag}` : "");
   const rowHtml = (r: Row) => `<tr><td>${esc(r.name)}</td><td>${result(r)}</td><td>${esc(r.unit)}</td><td>${esc(r.ref)}</td></tr>`;
@@ -97,7 +97,7 @@ function quest(c: Case): string {
     .res th { font-size: 10px; border-bottom: 1px solid #000 } .oor { font-weight: bold }`;
   const header = `<table class="hd"><tr><td><h1>Ridgeline Clinical Labs</h1></td><td style="text-align:right">Report Status: Final</td></tr></table>
     <table class="hd" style="margin-top:6px"><tr><td>Patient Information</td><td>Specimen Information</td><td>Client Information</td></tr>
-    <tr><td>SAMPLE, ALEX</td><td>Specimen: QR${c.id.slice(-2)}88213</td><td>Client #: 90210</td></tr>
+    <tr><td>DOE, JORDAN</td><td>Specimen: QR${c.id.slice(-2)}88213</td><td>Client #: 90210</td></tr>
     <tr><td>DOB: ${us(d.dob)} AGE: ${2026 - +d.dob.slice(0, 4)}</td><td>Collected: ${us(d.collected)} / 08:12 EDT</td><td>Dr. T. Placeholder</td></tr>
     <tr><td>Gender: ${c.sex.toUpperCase()}</td><td>Received: ${us(d.received)} / 10:02 EDT</td><td></td></tr>
     <tr><td>Fasting: Y</td><td>Reported: ${us(d.reported)} / 14:37 EDT</td><td></td></tr></table><br>`;
@@ -126,7 +126,7 @@ function labcorp(c: Case): string {
     .sec td { font-weight: bold; padding-top: 10px } .res th { font-size: 10px; border-bottom: 1px solid #000; white-space: normal } sup { font-size: 7px }`;
   const header = `<h1>Harborview Laboratory Services</h1><div style="font-size:10px;margin-bottom:8px">Patient Report</div>
     <table class="box"><tr class="lbl"><td>Patient Name</td><td>Patient ID</td><td>DOB</td><td>Age</td><td>Sex</td></tr>
-    <tr><td>SAMPLE, ALEX</td><td>${c.id.length}7${c.id.slice(-2)}511</td><td>${us(d.dob)}</td><td>${2026 - +d.dob.slice(0, 4)}</td><td>${c.sex === "m" ? "Male" : "Female"}</td></tr></table>
+    <tr><td>DOE, JORDAN</td><td>${c.id.length}7${c.id.slice(-2)}511</td><td>${us(d.dob)}</td><td>${2026 - +d.dob.slice(0, 4)}</td><td>${c.sex === "m" ? "Male" : "Female"}</td></tr></table>
     <table class="box" style="margin-top:6px"><tr class="lbl"><td>Specimen ID</td><td>Date Collected</td><td>Date Received</td><td>Date Reported</td><td>Fasting</td></tr>
     <tr><td>0${c.id.slice(-2)}-412-7781-0</td><td>${us(d.collected)}</td><td>${us(d.received)}</td><td>${us(d.reported)}</td><td>Yes</td></tr></table><br>`;
   const flag = (f: Row["flag"]) => (f === "H" ? "High" : f === "L" ? "Low" : "");

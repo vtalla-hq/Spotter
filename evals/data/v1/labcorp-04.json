@@ -8,7 +8,7 @@
   "markers": [
     {
       "id": "plt",
-      "value": 91,
+      "value": 116,
       "unit": "us",
       "page": 1
     },
@@ -20,7 +20,7 @@
     },
     {
       "id": "a1c",
-      "value": 2.2,
+      "value": 3.7,
       "unit": "us",
       "page": 1
     },
@@ -86,37 +86,37 @@
     },
     {
       "id": "apob",
-      "value": 103,
+      "value": 127,
       "unit": "us",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 728,
+      "value": 3167,
       "unit": "us",
       "page": 2
     },
     {
       "id": "lh",
-      "value": 4.2,
+      "value": 1.4,
       "unit": "us",
       "page": 2
     },
     {
       "id": "estradiol",
-      "value": 20.5,
+      "value": 76.2,
       "unit": "us",
       "page": 2
     },
     {
       "id": "tsh",
-      "value": 2.71,
+      "value": 4.97,
       "unit": "us",
       "page": 2
     },
     {
       "id": "ferritin",
-      "value": 49,
+      "value": 354,
       "unit": "us",
       "page": 2
     }

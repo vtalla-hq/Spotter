@@ -20,54 +20,54 @@
     },
     {
       "id": "potassium",
-      "value": 6.1,
+      "value": 5.4,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ggt",
-      "value": 5,
+      "value": 7,
       "unit": "us",
       "page": 1
     },
     {
       "id": "apob",
-      "value": 86,
+      "value": 128,
       "unit": "us",
       "page": 1
     },
     {
       "id": "testo",
-      "value": 1633,
+      "value": 590,
       "unit": "us",
       "page": 1
     },
     {
       "id": "lh",
-      "value": 0.2,
+      "value": 1.2,
       "unit": "us",
       "page": 1
     },
     {
       "id": "igf1",
-      "value": 745,
+      "value": 211,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ferritin",
-      "value": 195,
+      "value": 189,
       "unit": "us",
       "page": 1
     }
   ],
   "lookalikes": [
     {
-      "key": "non-hdl",
+      "key": "chol-hdl-ratio",
       "page": 1
     },
     {
-      "key": "chol-hdl-ratio",
+      "key": "non-hdl",
       "page": 1
     }
   ],

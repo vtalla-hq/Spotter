@@ -8,109 +8,109 @@
   "markers": [
     {
       "id": "hemoglobin",
-      "value": 156,
+      "value": 142,
       "unit": "si",
       "page": 1
     },
     {
       "id": "plt",
-      "value": 301,
+      "value": 481,
       "unit": "si",
       "page": 1
     },
     {
       "id": "glucose",
-      "value": 4.8,
+      "value": 4.5,
       "unit": "si",
       "page": 2
     },
     {
       "id": "creatinine",
-      "value": 126,
+      "value": 64,
       "unit": "si",
       "page": 2
     },
     {
       "id": "cystatin",
-      "value": 0.63,
+      "value": 0.84,
       "unit": "si",
       "page": 2
     },
     {
       "id": "urea",
-      "value": 5.3,
+      "value": 5,
       "unit": "si",
       "page": 2
     },
     {
       "id": "potassium",
-      "value": 4.3,
+      "value": 4.8,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ast",
-      "value": 36,
+      "value": 34,
       "unit": "si",
       "page": 2
     },
     {
       "id": "alp",
-      "value": 113,
+      "value": 105,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ggt",
-      "value": 53,
+      "value": 52,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ck",
-      "value": 237,
+      "value": 826,
       "unit": "si",
       "page": 2
     },
     {
       "id": "hdl",
-      "value": 2.47,
+      "value": 1.35,
       "unit": "si",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 17.9,
+      "value": 80.2,
       "unit": "si",
       "page": 2
     },
     {
       "id": "lh",
-      "value": 0.9,
+      "value": 0.2,
       "unit": "si",
       "page": 2
     },
     {
       "id": "estradiol",
-      "value": 65,
+      "value": 58,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ft4",
-      "value": 11.9,
+      "value": 18.1,
       "unit": "si",
       "page": 2
     },
     {
       "id": "igf1",
-      "value": 255,
+      "value": 176,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ferritin",
-      "value": 143,
+      "value": 56,
       "unit": "si",
       "page": 2
     }

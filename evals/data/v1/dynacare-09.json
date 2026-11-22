@@ -20,7 +20,7 @@
     },
     {
       "id": "cystatin",
-      "value": 1.39,
+      "value": 1.15,
       "unit": "si",
       "page": 1
     },
@@ -56,13 +56,13 @@
     },
     {
       "id": "testo",
-      "value": 21.6,
+      "value": 11.3,
       "unit": "si",
       "page": 1
     },
     {
       "id": "tsh",
-      "value": 5.12,
+      "value": 2.69,
       "unit": "si",
       "page": 1
     },

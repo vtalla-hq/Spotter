@@ -8,13 +8,13 @@
   "markers": [
     {
       "id": "hemoglobin",
-      "value": 19.7,
+      "value": 18.3,
       "unit": "us",
       "page": 1
     },
     {
       "id": "plt",
-      "value": 117,
+      "value": 131,
       "unit": "us",
       "page": 1
     },
@@ -38,7 +38,7 @@
     },
     {
       "id": "cystatin",
-      "value": 0.19,
+      "value": 0.48,
       "unit": "us",
       "page": 1
     },
@@ -62,7 +62,7 @@
     },
     {
       "id": "ft4",
-      "value": 2.16,
+      "value": 1.22,
       "unit": "us",
       "page": 1
     },

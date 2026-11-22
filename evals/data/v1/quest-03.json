@@ -8,7 +8,7 @@
   "markers": [
     {
       "id": "hematocrit",
-      "value": 56.5,
+      "value": 50.5,
       "unit": "us",
       "page": 1
     },
@@ -80,13 +80,13 @@
     },
     {
       "id": "ck",
-      "value": 155,
+      "value": 58,
       "unit": "us",
       "page": 2
     },
     {
       "id": "tg",
-      "value": 310,
+      "value": 118,
       "unit": "us",
       "page": 2
     },
@@ -98,25 +98,25 @@
     },
     {
       "id": "hdl",
-      "value": 74,
+      "value": 82,
       "unit": "us",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 275,
+      "value": 19,
       "unit": "us",
       "page": 2
     },
     {
       "id": "ft4",
-      "value": 0.61,
+      "value": 1.15,
       "unit": "us",
       "page": 2
     },
     {
       "id": "igf1",
-      "value": 145,
+      "value": 630,
       "unit": "us",
       "page": 2
     }

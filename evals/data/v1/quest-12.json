@@ -26,37 +26,37 @@
     },
     {
       "id": "ck",
-      "value": 244,
+      "value": 108,
       "unit": "us",
       "page": 1
     },
     {
       "id": "tg",
-      "value": 116,
+      "value": 163,
       "unit": "us",
       "page": 1
     },
     {
       "id": "estradiol",
-      "value": 109.3,
+      "value": 24.8,
       "unit": "us",
       "page": 1
     },
     {
       "id": "tsh",
-      "value": 3.4,
+      "value": 1.72,
       "unit": "us",
       "page": 1
     },
     {
       "id": "igf1",
-      "value": 303,
+      "value": 310,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ferritin",
-      "value": 321,
+      "value": 153,
       "unit": "us",
       "page": 1
     }

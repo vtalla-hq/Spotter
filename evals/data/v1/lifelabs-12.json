@@ -20,79 +20,79 @@
     },
     {
       "id": "creatinine",
-      "value": 74,
+      "value": 146,
       "unit": "si",
       "page": 2
     },
     {
       "id": "cystatin",
-      "value": 0.9,
+      "value": 0.76,
       "unit": "si",
       "page": 2
     },
     {
       "id": "potassium",
-      "value": 4.1,
+      "value": 4.8,
       "unit": "si",
       "page": 2
     },
     {
       "id": "bili",
-      "value": 19,
+      "value": 17,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ast",
-      "value": 34,
+      "value": 109,
       "unit": "si",
       "page": 2
     },
     {
       "id": "alp",
-      "value": 46,
+      "value": 53,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ck",
-      "value": 196,
+      "value": 294,
       "unit": "si",
       "page": 2
     },
     {
       "id": "tg",
-      "value": 0.87,
+      "value": 2.27,
       "unit": "si",
       "page": 2
     },
     {
       "id": "hdl",
-      "value": 1.54,
+      "value": 0.92,
       "unit": "si",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 26.8,
+      "value": 21.4,
       "unit": "si",
       "page": 2
     },
     {
       "id": "lh",
-      "value": 1.3,
+      "value": 0.2,
       "unit": "si",
       "page": 2
     },
     {
       "id": "estradiol",
-      "value": 115,
+      "value": 53,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ferritin",
-      "value": 69,
+      "value": 62,
       "unit": "si",
       "page": 2
     }

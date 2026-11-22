@@ -20,7 +20,7 @@ Layouts copy the table structure of four common report styles, with fictional la
 - `quest`: In Range / Out Of Range columns, units only inside the reference range, US dates
 - `labcorp`: a lab-code superscript after each test name, a previous-result column with its own date, dates in a labels row with the values on the row below, US units
 
-Mix (seed `20261122`): 674 labelled markers, about 30% outside the range, 5 `<0.2` LH results, 16 rows with no unit, 6 cases mixing SI and US, 184 look-alike rows (Non-HDL, Chol/HDL ratio, MCH/MCHC/MPV, free and bioavailable testosterone, eGFR, direct bilirubin, CK-MB, free PSA, urine creatinine/glucose/ACR), 25 two-page reports. Every page prints DOB, collected, received and reported dates (lifelabs adds printed).
+Mix (seed `20261122`): 674 labelled markers, about 30% outside the range, 8 `<0.2` LH results, 23 rows with no unit, 6 cases mixing SI and US, 184 look-alike rows, half placed above the real marker and printed whether or not it is present (Non-HDL, Chol/HDL ratio, MCH/MCHC/MPV, free and bioavailable testosterone, eGFR, direct bilirubin, CK-MB, free PSA, urine creatinine/glucose/ACR), 25 two-page reports. Every page prints DOB, collected, received and reported dates (lifelabs adds printed).
 
 ### Label format
 

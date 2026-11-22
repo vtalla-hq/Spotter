@@ -14,13 +14,13 @@
     },
     {
       "id": "plt",
-      "value": 312,
+      "value": 169,
       "unit": "si",
       "page": 1
     },
     {
       "id": "glucose",
-      "value": 4.1,
+      "value": 3.5,
       "unit": "si",
       "page": 1
     },
@@ -32,55 +32,55 @@
     },
     {
       "id": "potassium",
-      "value": 4.7,
+      "value": 3.6,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alt",
-      "value": 43,
+      "value": 41,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ldl",
-      "value": 4.22,
+      "value": 0.98,
       "unit": "si",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 16,
+      "value": 20.2,
       "unit": "si",
       "page": 2
     },
     {
       "id": "lh",
-      "value": 0.2,
+      "value": 7.5,
       "unit": "si",
       "page": 2
     },
     {
       "id": "estradiol",
-      "value": 31,
+      "value": 128,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ft4",
-      "value": 17.4,
+      "value": 20.2,
       "unit": "si",
       "page": 2
     },
     {
       "id": "igf1",
-      "value": 191,
+      "value": 758,
       "unit": "si",
       "page": 2
     },
     {
       "id": "psa",
-      "value": 3.1,
+      "value": 1.54,
       "unit": "si",
       "page": 2
     }

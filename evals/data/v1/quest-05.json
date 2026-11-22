@@ -8,55 +8,55 @@
   "markers": [
     {
       "id": "hematocrit",
-      "value": 58.7,
+      "value": 54.4,
       "unit": "us",
       "page": 1
     },
     {
       "id": "hemoglobin",
-      "value": 16.5,
+      "value": 15,
       "unit": "us",
       "page": 1
     },
     {
       "id": "glucose",
-      "value": 97,
+      "value": 101,
       "unit": "us",
       "page": 2
     },
     {
       "id": "creatinine",
-      "value": 0.98,
+      "value": 1.15,
       "unit": "us",
       "page": 2
     },
     {
       "id": "urea",
-      "value": 11,
+      "value": 18,
       "unit": "us",
       "page": 2
     },
     {
       "id": "potassium",
-      "value": 4.6,
+      "value": 4.5,
       "unit": "us",
       "page": 2
     },
     {
       "id": "bili",
-      "value": 1,
+      "value": 0.6,
       "unit": "us",
       "page": 2
     },
     {
       "id": "alt",
-      "value": 44,
+      "value": 17,
       "unit": "us",
       "page": 2
     },
     {
       "id": "alp",
-      "value": 158,
+      "value": 81,
       "unit": "us",
       "page": 2
     },

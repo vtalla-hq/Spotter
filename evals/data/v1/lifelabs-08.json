@@ -14,67 +14,67 @@
     },
     {
       "id": "a1c",
-      "value": 6.4,
-      "unit": "si",
-      "page": 1
-    },
-    {
-      "id": "cystatin",
-      "value": 0.75,
-      "unit": "si",
-      "page": 1
-    },
-    {
-      "id": "urea",
       "value": 6.6,
       "unit": "si",
       "page": 1
     },
     {
+      "id": "cystatin",
+      "value": 0.76,
+      "unit": "si",
+      "page": 1
+    },
+    {
+      "id": "urea",
+      "value": 6.1,
+      "unit": "si",
+      "page": 1
+    },
+    {
       "id": "alt",
-      "value": 40,
+      "value": 39,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alp",
-      "value": 105,
+      "value": 117,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ck",
-      "value": 1179,
+      "value": 271,
       "unit": "si",
       "page": 1
     },
     {
       "id": "tg",
-      "value": 2.56,
+      "value": 2.23,
       "unit": "si",
       "page": 1
     },
     {
       "id": "apob",
-      "value": 1.91,
+      "value": 1.09,
       "unit": "si",
       "page": 1
     },
     {
       "id": "testo",
-      "value": 22,
+      "value": 10.6,
       "unit": "si",
       "page": 1
     },
     {
       "id": "igf1",
-      "value": 425,
+      "value": 287,
       "unit": "si",
       "page": 1
     },
     {
       "id": "psa",
-      "value": 3.05,
+      "value": 5.56,
       "unit": "si",
       "page": 1
     }

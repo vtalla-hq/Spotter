@@ -8,73 +8,73 @@
   "markers": [
     {
       "id": "hemoglobin",
-      "value": 173,
+      "value": 170,
       "unit": "si",
       "page": 1
     },
     {
       "id": "glucose",
-      "value": 6.7,
+      "value": 4.3,
       "unit": "si",
       "page": 1
     },
     {
       "id": "creatinine",
-      "value": 87,
+      "value": 95,
       "unit": "si",
       "page": 1
     },
     {
       "id": "cystatin",
-      "value": 0.91,
+      "value": 0.89,
       "unit": "si",
       "page": 1
     },
     {
       "id": "urea",
-      "value": 6.5,
+      "value": 5.5,
       "unit": "si",
       "page": 1
     },
     {
       "id": "bili",
-      "value": 9,
+      "value": 10,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alp",
-      "value": 124,
+      "value": 86,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ck",
-      "value": 303,
+      "value": 239,
       "unit": "si",
       "page": 1
     },
     {
       "id": "hdl",
-      "value": 1.61,
+      "value": 1.28,
       "unit": "si",
       "page": 1
     },
     {
       "id": "lh",
-      "value": 6,
+      "value": 2.2,
       "unit": "si",
       "page": 1
     },
     {
       "id": "tsh",
-      "value": 1.98,
+      "value": 4.61,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ft4",
-      "value": 6.3,
+      "value": 19.6,
       "unit": "si",
       "page": 1
     }

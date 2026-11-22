@@ -20,7 +20,7 @@
     },
     {
       "id": "plt",
-      "value": 128,
+      "value": 353,
       "unit": "si",
       "page": 1
     },
@@ -62,7 +62,7 @@
     },
     {
       "id": "ast",
-      "value": 7,
+      "value": 8,
       "unit": "si",
       "page": 2
     },
@@ -92,37 +92,37 @@
     },
     {
       "id": "apob",
-      "value": 1.29,
+      "value": 0.96,
       "unit": "si",
       "page": 2
     },
     {
       "id": "estradiol",
-      "value": 84,
+      "value": 49,
       "unit": "si",
       "page": 2
     },
     {
       "id": "tsh",
-      "value": 0.28,
+      "value": 5.49,
       "unit": "si",
       "page": 2
     },
     {
       "id": "igf1",
-      "value": 122,
+      "value": 64,
       "unit": "si",
       "page": 2
     },
     {
       "id": "psa",
-      "value": 0.82,
+      "value": 2.58,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ferritin",
-      "value": 239,
+      "value": 106,
       "unit": "si",
       "page": 2
     }

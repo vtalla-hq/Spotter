@@ -44,61 +44,61 @@
     },
     {
       "id": "alt",
-      "value": 9,
+      "value": 128,
       "unit": "us",
       "page": 2
     },
     {
       "id": "ast",
-      "value": 28,
+      "value": 37,
       "unit": "us",
       "page": 2
     },
     {
       "id": "alp",
-      "value": 110,
+      "value": 99,
       "unit": "us",
       "page": 2
     },
     {
       "id": "tg",
-      "value": 228,
+      "value": 112,
       "unit": "us",
       "page": 2
     },
     {
       "id": "ldl",
-      "value": 225,
+      "value": 222,
       "unit": "us",
       "page": 2
     },
     {
       "id": "apob",
-      "value": 158,
+      "value": 191,
       "unit": "us",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 1.5,
+      "value": 1,
       "unit": "si",
       "page": 2
     },
     {
       "id": "tsh",
-      "value": 1.57,
+      "value": 3.68,
       "unit": "us",
       "page": 2
     },
     {
       "id": "ft4",
-      "value": 1.7,
+      "value": 1.38,
       "unit": "us",
       "page": 2
     },
     {
       "id": "ferritin",
-      "value": 126,
+      "value": 62,
       "unit": "us",
       "page": 2
     }

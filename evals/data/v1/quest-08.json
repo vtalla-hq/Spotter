@@ -8,7 +8,7 @@
   "markers": [
     {
       "id": "hemoglobin",
-      "value": 10.4,
+      "value": 12.5,
       "unit": "us",
       "page": 1
     },
@@ -38,7 +38,7 @@
     },
     {
       "id": "ggt",
-      "value": 5,
+      "value": 7,
       "unit": "us",
       "page": 1
     },
@@ -62,7 +62,7 @@
     },
     {
       "id": "testo",
-      "value": 767,
+      "value": 559,
       "unit": "us",
       "page": 1
     }

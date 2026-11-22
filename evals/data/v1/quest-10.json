@@ -8,25 +8,25 @@
   "markers": [
     {
       "id": "hematocrit",
-      "value": 70.7,
+      "value": 59,
       "unit": "us",
       "page": 1
     },
     {
       "id": "hemoglobin",
-      "value": 16.7,
+      "value": 16,
       "unit": "us",
       "page": 1
     },
     {
       "id": "plt",
-      "value": 271,
+      "value": 168,
       "unit": "us",
       "page": 1
     },
     {
       "id": "bili",
-      "value": 1.5,
+      "value": 0.7,
       "unit": "us",
       "page": 1
     },
@@ -38,19 +38,19 @@
     },
     {
       "id": "lh",
-      "value": 1.3,
+      "value": 0.2,
       "unit": "us",
       "page": 1
     },
     {
       "id": "igf1",
-      "value": 150,
+      "value": 277,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ferritin",
-      "value": 325,
+      "value": 537,
       "unit": "us",
       "page": 1
     }

@@ -14,7 +14,7 @@
     },
     {
       "id": "hemoglobin",
-      "value": 23.5,
+      "value": 19.7,
       "unit": "us",
       "page": 1
     },
@@ -32,7 +32,7 @@
     },
     {
       "id": "creatinine",
-      "value": 1.38,
+      "value": 0.43,
       "unit": "us",
       "page": 2
     },
@@ -86,25 +86,25 @@
     },
     {
       "id": "testo",
-      "value": 448,
+      "value": 439,
       "unit": "us",
       "page": 2
     },
     {
       "id": "lh",
-      "value": 0.2,
+      "value": 1,
       "unit": "us",
       "page": 2
     },
     {
       "id": "igf1",
-      "value": 391,
+      "value": 244,
       "unit": "us",
       "page": 2
     },
     {
       "id": "psa",
-      "value": 5.44,
+      "value": 0.55,
       "unit": "us",
       "page": 2
     }

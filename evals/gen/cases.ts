@@ -42,7 +42,7 @@ export type Rng = ReturnType<typeof rng>;
 
 // ---------- printed names per layout (structure of each lab's naming style, not copied reports)
 type Names = Record<string, string>;
-const NAMES: Record<Layout, Names> = {
+export const NAMES: Record<Layout, Names> = {
   lifelabs: {
     hematocrit: "Hematocrit", hemoglobin: "Hemoglobin", plt: "Platelets", alt: "ALT", ast: "AST", ggt: "GGT",
     bili: "Bilirubin Total", alp: "Alkaline Phosphatase", ck: "Creatine Kinase", creatinine: "Creatinine",
@@ -206,9 +206,11 @@ function sampleSI(r: Rng, id: string, sex: "m" | "f"): number {
   // shut-down LH on a cycle, below the assay limit
   if (id === "lh" && r.chance(0.3)) return 0.1;
   if (!r.chance(0.3)) return r.range(lo + (hi - lo) * 0.05, hi - (hi - lo) * 0.05);
+  // tightly regulated markers (normal distribution) only stray a little; enzymes and hormones can go far
+  const tight = BYID[id].dist === "norm";
   const big = ["ck", "alt", "ast", "testo", "estradiol", "igf1"].includes(id);
-  if (["lh"].includes(id) || r.chance(0.35)) return Math.max(lo * r.range(0.3, 0.92), lo * 0.05);
-  return hi * r.range(1.06, big ? 4 : 1.4);
+  if (["lh"].includes(id) || r.chance(0.35)) return lo * (tight ? r.range(0.8, 0.97) : r.range(0.6, 0.95));
+  return hi * (tight ? r.range(1.02, 1.15) : r.range(1.06, big ? 4 : 1.4));
 }
 
 const fmtNum = (v: number, dp: number) => v.toFixed(dp);
@@ -270,13 +272,15 @@ export function buildCase(layout: Layout, n: number): { c: Case; label: Label } 
   }
   // 2-6 look-alikes
   const las = r.shuffle(LOOKALIKES).slice(0, r.int(2, 6));
-  const laKeys = new Set(las.map((l) => l.key));
 
   const sections: Section[] = [];
   const labelMarkers: Omit<LabelMarker, "page">[] = [];
   for (const s of SECTIONS) {
     const rows: Row[] = [];
     for (const id of s.ids) {
+      // look-alikes print whether or not the real marker is there, above it half the time
+      const near = las.filter((l) => l.after === id).map((la) => ({ la, above: r.chance(0.5) }));
+      for (const { la } of near.filter((x) => x.above)) rows.push(laRow(r, la, layout, units));
       if (chosen.has(id)) {
         const sys: Units = flipped.has(id) ? (units === "si" ? "us" : "si") : units;
         const { row, value } = markerRow(r, { layout, sex }, id, sys);
@@ -284,9 +288,7 @@ export function buildCase(layout: Layout, n: number): { c: Case; label: Label } 
         rows.push(row);
         labelMarkers.push({ id, value, unit: sys });
       }
-      for (const la of las.filter((l) => l.after === id)) {
-        rows.push(laRow(r, la, layout, units));
-      }
+      for (const { la } of near.filter((x) => !x.above)) rows.push(laRow(r, la, layout, units));
     }
     if (rows.length) sections.push({ title: s.title, rows });
   }
@@ -296,9 +298,7 @@ export function buildCase(layout: Layout, n: number): { c: Case; label: Label } 
       title: "URINALYSIS",
       rows: urine.map((la) => laRow(r, la, layout, units)),
     });
-  // look-alikes placed after a marker that wasn't chosen are dropped from the page; keep labels truthful
   const printedLa = new Set(sections.flatMap((s) => s.rows.filter((x) => x.kind === "lookalike").map((x) => x.key)));
-  for (const k of laKeys) if (!printedLa.has(k)) laKeys.delete(k);
 
   // more than ~22 rows → two pages, split between sections
   const totalRows = sections.reduce((a, s) => a + s.rows.length + 1, 0);

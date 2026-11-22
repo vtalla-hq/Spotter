@@ -26,19 +26,19 @@
     },
     {
       "id": "a1c",
-      "value": 7.6,
+      "value": 6.5,
       "unit": "si",
       "page": 2
     },
     {
       "id": "creatinine",
-      "value": 31,
+      "value": 43,
       "unit": "si",
       "page": 2
     },
     {
       "id": "cystatin",
-      "value": 1.08,
+      "value": 1.03,
       "unit": "si",
       "page": 2
     },
@@ -68,7 +68,7 @@
     },
     {
       "id": "tg",
-      "value": 3.31,
+      "value": 0.92,
       "unit": "si",
       "page": 2
     },
@@ -80,13 +80,13 @@
     },
     {
       "id": "testo",
-      "value": 25.6,
+      "value": 9.6,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ft4",
-      "value": 28.5,
+      "value": 16.9,
       "unit": "si",
       "page": 2
     },

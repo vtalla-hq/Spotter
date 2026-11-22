@@ -14,43 +14,43 @@
     },
     {
       "id": "plt",
-      "value": 215,
+      "value": 104,
       "unit": "si",
       "page": 1
     },
     {
       "id": "a1c",
-      "value": 2.7,
+      "value": 5.5,
       "unit": "si",
       "page": 2
     },
     {
       "id": "creatinine",
-      "value": 102,
+      "value": 95,
       "unit": "si",
       "page": 2
     },
     {
       "id": "cystatin",
-      "value": 0.64,
+      "value": 0.53,
       "unit": "si",
       "page": 2
     },
     {
       "id": "urea",
-      "value": 9.5,
+      "value": 3.5,
       "unit": "si",
       "page": 2
     },
     {
       "id": "bili",
-      "value": 26,
+      "value": 11,
       "unit": "si",
       "page": 2
     },
     {
       "id": "alt",
-      "value": 8,
+      "value": 9,
       "unit": "si",
       "page": 2
     },
@@ -80,49 +80,49 @@
     },
     {
       "id": "hdl",
-      "value": 1.62,
+      "value": 0.63,
       "unit": "si",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 19.7,
+      "value": 20.9,
       "unit": "si",
       "page": 2
     },
     {
       "id": "lh",
-      "value": 3.2,
+      "value": 1.3,
       "unit": "si",
       "page": 2
     },
     {
       "id": "tsh",
-      "value": 1.02,
+      "value": 1.92,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ft4",
-      "value": 15,
+      "value": 13.8,
       "unit": "si",
       "page": 2
     },
     {
       "id": "igf1",
-      "value": 329,
+      "value": 244,
       "unit": "si",
       "page": 2
     },
     {
       "id": "psa",
-      "value": 5.04,
+      "value": 0.53,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ferritin",
-      "value": 428,
+      "value": 444,
       "unit": "si",
       "page": 2
     }

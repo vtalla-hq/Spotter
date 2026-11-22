@@ -26,7 +26,7 @@
     },
     {
       "id": "potassium",
-      "value": 5.4,
+      "value": 5.2,
       "unit": "si",
       "page": 1
     },
@@ -68,25 +68,25 @@
     },
     {
       "id": "tsh",
-      "value": 3.21,
+      "value": 3.15,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ft4",
-      "value": 5.9,
+      "value": 18.7,
       "unit": "si",
       "page": 1
     },
     {
       "id": "igf1",
-      "value": 320,
+      "value": 244,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ferritin",
-      "value": 118,
+      "value": 153,
       "unit": "si",
       "page": 1
     }
@@ -97,11 +97,11 @@
       "page": 1
     },
     {
-      "key": "non-hdl",
+      "key": "chol-hdl-ratio",
       "page": 1
     },
     {
-      "key": "chol-hdl-ratio",
+      "key": "non-hdl",
       "page": 1
     },
     {

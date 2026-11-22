@@ -8,49 +8,49 @@
   "markers": [
     {
       "id": "plt",
-      "value": 117,
+      "value": 291,
       "unit": "si",
       "page": 1
     },
     {
       "id": "glucose",
-      "value": 4.5,
+      "value": 7,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alt",
-      "value": 20,
+      "value": 16,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alp",
-      "value": 53,
+      "value": 47,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ggt",
-      "value": 75,
+      "value": 61,
       "unit": "si",
       "page": 1
     },
     {
       "id": "tg",
-      "value": 3.97,
+      "value": 1.09,
       "unit": "si",
       "page": 1
     },
     {
       "id": "testo",
-      "value": 20.7,
+      "value": 24.4,
       "unit": "si",
       "page": 1
     },
     {
       "id": "estradiol",
-      "value": 549,
+      "value": 96,
       "unit": "si",
       "page": 1
     }

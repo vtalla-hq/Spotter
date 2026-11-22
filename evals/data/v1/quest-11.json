@@ -8,49 +8,49 @@
   "markers": [
     {
       "id": "hemoglobin",
-      "value": 14.6,
+      "value": 11,
       "unit": "us",
       "page": 1
     },
     {
       "id": "cystatin",
-      "value": 1.17,
+      "value": 0.95,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ck",
-      "value": 183,
+      "value": 167,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ldl",
-      "value": 145,
+      "value": 178,
       "unit": "us",
       "page": 1
     },
     {
       "id": "apob",
-      "value": 107,
+      "value": 65,
       "unit": "us",
       "page": 1
     },
     {
       "id": "lh",
-      "value": 2.5,
+      "value": 0.2,
       "unit": "us",
       "page": 1
     },
     {
       "id": "estradiol",
-      "value": 4.9,
+      "value": 7.4,
       "unit": "us",
       "page": 1
     },
     {
       "id": "psa",
-      "value": 2.71,
+      "value": 3.74,
       "unit": "us",
       "page": 1
     }

@@ -8,7 +8,7 @@
   "markers": [
     {
       "id": "hemoglobin",
-      "value": 244,
+      "value": 201,
       "unit": "si",
       "page": 1
     },
@@ -38,7 +38,7 @@
     },
     {
       "id": "ast",
-      "value": 6,
+      "value": 8,
       "unit": "si",
       "page": 1
     },
@@ -56,7 +56,7 @@
     },
     {
       "id": "igf1",
-      "value": 37,
+      "value": 87,
       "unit": "si",
       "page": 1
     }

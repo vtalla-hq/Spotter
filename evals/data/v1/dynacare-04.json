@@ -14,103 +14,103 @@
     },
     {
       "id": "hemoglobin",
-      "value": 162,
+      "value": 185,
       "unit": "si",
       "page": 1
     },
     {
       "id": "glucose",
-      "value": 7.4,
+      "value": 5.2,
       "unit": "si",
       "page": 1
     },
     {
       "id": "a1c",
-      "value": 5.3,
+      "value": 6.4,
       "unit": "si",
       "page": 1
     },
     {
       "id": "cystatin",
-      "value": 1.23,
+      "value": 0.91,
       "unit": "si",
       "page": 1
     },
     {
       "id": "potassium",
-      "value": 4.7,
+      "value": 3.2,
       "unit": "si",
       "page": 1
     },
     {
       "id": "bili",
-      "value": 2,
+      "value": 16,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alt",
-      "value": 39,
+      "value": 33,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ggt",
-      "value": 40,
+      "value": 53,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ck",
-      "value": 79,
+      "value": 58,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ldl",
-      "value": 1.72,
+      "value": 6.04,
       "unit": "si",
       "page": 2
     },
     {
       "id": "apob",
-      "value": 0.9,
+      "value": 1.34,
       "unit": "si",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 27.7,
+      "value": 23.8,
       "unit": "si",
       "page": 2
     },
     {
       "id": "tsh",
-      "value": 3.74,
+      "value": 2.33,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ft4",
-      "value": 11,
+      "value": 15.2,
       "unit": "si",
       "page": 2
     },
     {
       "id": "igf1",
-      "value": 234,
+      "value": 172,
       "unit": "si",
       "page": 2
     },
     {
       "id": "psa",
-      "value": 1.72,
+      "value": 5.01,
       "unit": "si",
       "page": 2
     },
     {
       "id": "ferritin",
-      "value": 26,
+      "value": 263,
       "unit": "si",
       "page": 2
     }

@@ -8,73 +8,73 @@
   "markers": [
     {
       "id": "creatinine",
-      "value": 1.18,
+      "value": 0.61,
       "unit": "us",
       "page": 1
     },
     {
       "id": "cystatin",
-      "value": 1.32,
+      "value": 0.52,
       "unit": "us",
       "page": 1
     },
     {
       "id": "bili",
-      "value": 0.5,
+      "value": 1,
       "unit": "us",
       "page": 1
     },
     {
       "id": "alt",
-      "value": 42,
+      "value": 46,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ast",
-      "value": 24,
+      "value": 17,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ck",
-      "value": 104,
+      "value": 115,
       "unit": "us",
       "page": 1
     },
     {
       "id": "testo",
-      "value": 405,
+      "value": 604,
       "unit": "us",
       "page": 1
     },
     {
       "id": "lh",
-      "value": 7.7,
+      "value": 1.1,
       "unit": "us",
       "page": 1
     },
     {
       "id": "estradiol",
-      "value": 39.4,
+      "value": 32.8,
       "unit": "us",
       "page": 1
     },
     {
       "id": "tsh",
-      "value": 3.69,
+      "value": 0.71,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ft4",
-      "value": 1.63,
+      "value": 1.4,
       "unit": "us",
       "page": 1
     },
     {
       "id": "psa",
-      "value": 2.86,
+      "value": 0.54,
       "unit": "us",
       "page": 1
     }

@@ -14,13 +14,13 @@
     },
     {
       "id": "hemoglobin",
-      "value": 15.5,
+      "value": 18.8,
       "unit": "us",
       "page": 1
     },
     {
       "id": "plt",
-      "value": 125,
+      "value": 232,
       "unit": "us",
       "page": 1
     },
@@ -44,7 +44,7 @@
     },
     {
       "id": "cystatin",
-      "value": 0.35,
+      "value": 0.53,
       "unit": "us",
       "page": 1
     },
@@ -86,7 +86,7 @@
     },
     {
       "id": "estradiol",
-      "value": 4,
+      "value": 7,
       "unit": "us",
       "page": 1
     }

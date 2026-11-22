@@ -14,13 +14,13 @@
     },
     {
       "id": "a1c",
-      "value": 6.4,
+      "value": 6.1,
       "unit": "us",
       "page": 1
     },
     {
       "id": "potassium",
-      "value": 4.4,
+      "value": 4,
       "unit": "us",
       "page": 1
     },
@@ -50,25 +50,25 @@
     },
     {
       "id": "testo",
-      "value": 549,
+      "value": 208,
       "unit": "us",
       "page": 1
     },
     {
       "id": "lh",
-      "value": 2.6,
+      "value": 0.2,
       "unit": "us",
       "page": 1
     },
     {
       "id": "tsh",
-      "value": 0.29,
+      "value": 0.33,
       "unit": "us",
       "page": 1
     },
     {
       "id": "ferritin",
-      "value": 19,
+      "value": 457,
       "unit": "us",
       "page": 1
     }

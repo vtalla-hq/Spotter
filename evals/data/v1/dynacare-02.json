@@ -8,7 +8,7 @@
   "markers": [
     {
       "id": "glucose",
-      "value": 4.2,
+      "value": 6.5,
       "unit": "si",
       "page": 1
     },
@@ -20,61 +20,61 @@
     },
     {
       "id": "cystatin",
-      "value": 1.35,
+      "value": 0.58,
       "unit": "si",
       "page": 1
     },
     {
       "id": "potassium",
-      "value": 3.2,
+      "value": 5.6,
       "unit": "si",
       "page": 1
     },
     {
       "id": "alp",
-      "value": 111,
+      "value": 151,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ck",
-      "value": 166,
+      "value": 161,
       "unit": "si",
       "page": 1
     },
     {
       "id": "tg",
-      "value": 3.49,
+      "value": 2.52,
       "unit": "si",
       "page": 2
     },
     {
       "id": "hdl",
-      "value": 1.37,
+      "value": 1.79,
       "unit": "si",
       "page": 2
     },
     {
       "id": "apob",
-      "value": 1.26,
+      "value": 1.53,
       "unit": "si",
       "page": 2
     },
     {
       "id": "tsh",
-      "value": 0.9,
+      "value": 2,
       "unit": "si",
       "page": 2
     },
     {
       "id": "igf1",
-      "value": 833,
+      "value": 166,
       "unit": "si",
       "page": 2
     },
     {
       "id": "psa",
-      "value": 0.14,
+      "value": 3.5,
       "unit": "si",
       "page": 2
     }

@@ -20,13 +20,13 @@
     },
     {
       "id": "a1c",
-      "value": 7.6,
+      "value": 6.5,
       "unit": "si",
       "page": 1
     },
     {
       "id": "cystatin",
-      "value": 0.69,
+      "value": 1.09,
       "unit": "si",
       "page": 1
     },
@@ -38,37 +38,37 @@
     },
     {
       "id": "ast",
-      "value": 27,
+      "value": 21,
       "unit": "si",
       "page": 1
     },
     {
       "id": "hdl",
-      "value": 50,
+      "value": 36,
       "unit": "us",
       "page": 1
     },
     {
       "id": "apob",
-      "value": 0.68,
+      "value": 1.22,
       "unit": "si",
       "page": 1
     },
     {
       "id": "lh",
-      "value": 10.8,
+      "value": 0.2,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ft4",
-      "value": 12.3,
+      "value": 21.8,
       "unit": "si",
       "page": 1
     },
     {
       "id": "igf1",
-      "value": 327,
+      "value": 337,
       "unit": "si",
       "page": 1
     }

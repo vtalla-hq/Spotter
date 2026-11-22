@@ -8,13 +8,13 @@
   "markers": [
     {
       "id": "hematocrit",
-      "value": 15.6,
+      "value": 33,
       "unit": "us",
       "page": 1
     },
     {
       "id": "hemoglobin",
-      "value": 21.4,
+      "value": 17.1,
       "unit": "us",
       "page": 1
     },
@@ -74,55 +74,55 @@
     },
     {
       "id": "ldl",
-      "value": 50,
+      "value": 53,
       "unit": "us",
       "page": 2
     },
     {
       "id": "hdl",
-      "value": 40,
+      "value": 43,
       "unit": "us",
       "page": 2
     },
     {
       "id": "apob",
-      "value": 39,
+      "value": 187,
       "unit": "us",
       "page": 2
     },
     {
       "id": "testo",
-      "value": 601,
+      "value": 3275,
       "unit": "us",
       "page": 2
     },
     {
       "id": "lh",
-      "value": 7.5,
+      "value": 2.7,
       "unit": "us",
       "page": 2
     },
     {
       "id": "estradiol",
-      "value": 41.3,
+      "value": 22.5,
       "unit": "us",
       "page": 2
     },
     {
       "id": "tsh",
-      "value": 4.7,
+      "value": 3.82,
       "unit": "us",
       "page": 2
     },
     {
       "id": "ft4",
-      "value": 1.74,
+      "value": 1.83,
       "unit": "us",
       "page": 2
     },
     {
       "id": "igf1",
-      "value": 395,
+      "value": 265,
       "unit": "us",
       "page": 2
     }

@@ -1,0 +1,29 @@
+{
+  "dataset": "v1",
+  "tolerancePP": 0.5,
+  "overall": {
+    "recall": 91.79,
+    "precision": 99.62,
+    "value": 94.02,
+    "si": 94.02,
+    "unit": 99.33,
+    "date": 72.22
+  },
+  "method:pdf-text": {
+    "recall": 95.4,
+    "precision": 100,
+    "value": 100,
+    "si": 100,
+    "unit": 100,
+    "date": 77.08
+  },
+  "method:ocr": {
+    "recall": 89.49,
+    "precision": 99.37,
+    "value": 89.95,
+    "si": 89.95,
+    "unit": 98.88,
+    "date": 69.79
+  },
+  "endToEnd": 86.3
+}

@@ -8,7 +8,7 @@
   "markers": [
     {
       "id": "hemoglobin",
-      "value": 24.1,
+      "value": 16.4,
       "unit": "us",
       "page": 1
     },
@@ -38,49 +38,49 @@
     },
     {
       "id": "alp",
-      "value": 72,
+      "value": 119,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ggt",
-      "value": 34,
+      "value": 46,
       "unit": "si",
       "page": 1
     },
     {
       "id": "tg",
-      "value": 0.43,
+      "value": 3.98,
       "unit": "si",
       "page": 1
     },
     {
       "id": "testo",
-      "value": 447,
+      "value": 636,
       "unit": "us",
       "page": 1
     },
     {
       "id": "lh",
-      "value": 1.9,
+      "value": 1.4,
       "unit": "si",
       "page": 1
     },
     {
       "id": "estradiol",
-      "value": 72,
+      "value": 35,
       "unit": "si",
       "page": 1
     },
     {
       "id": "tsh",
-      "value": 5.37,
+      "value": 0.79,
       "unit": "si",
       "page": 1
     },
     {
       "id": "ferritin",
-      "value": 11,
+      "value": 24,
       "unit": "si",
       "page": 1
     }
