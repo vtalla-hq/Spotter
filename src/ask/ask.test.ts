@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ask, cleanCitations, contextLine, libraryLine } from "./agent";
+import { ask, cleanCitations, contextLine, libraryLine, redactDoses, SYSTEM } from "./agent";
 import { parseArticles, parseSummary } from "./pubmed";
 import { findStudies, hashKey, rankStudies, terms } from "./store";
 
@@ -128,6 +128,32 @@ describe("the ask loop", () => {
     const r = await ask("Anything?", { apiKey: "k", fetch: f });
     expect(r.answer).toBe("Not enough evidence.");
     expect(n).toBe(6);
+  });
+});
+
+describe("dose limits", () => {
+  it("strips dose amounts from sentences about drugs", () => {
+    expect(redactDoses("Trials used testosterone 200 mg/week. Hematocrit rose.")).toBe("Trials used testosterone [dose removed]. Hematocrit rose.");
+    expect(redactDoses("Anavar at 10–20 mg a day raised ALT; tamoxifen 20mg daily too.")).toBe("Anavar at [dose removed] raised ALT; tamoxifen [dose removed] daily too.");
+    expect(redactDoses("HCG 500 IU every week")).toBe("HCG [dose removed]");
+  });
+
+  it("leaves lab values and supplement intakes alone", () => {
+    const labs = "On TRT your testosterone was 25 nmol/L, hemoglobin 17 g/dL, eGFR 95 mL/min and LDL 3.4 mmol/L.";
+    expect(redactDoses(labs)).toBe(labs);
+    const creatine = "Creatine is usually taken at 3–5 g/day [PMID:12345678]. Vitamin D above 4000 IU a day isn't advised.";
+    expect(redactDoses(creatine)).toBe(creatine);
+  });
+
+  it("is applied to every answer", async () => {
+    const f = (async () =>
+      ({ ok: true, json: async () => ({ choices: [{ message: { content: "Studies gave nandrolone 300 mg per week." } }] }) }) as Response) as unknown as typeof fetch;
+    expect((await ask("Does deca lower HDL?", { apiKey: "k", fetch: f })).answer).toBe("Studies gave nandrolone [dose removed].");
+  });
+
+  it("allows cited supplement ranges but never drug doses in the prompt", () => {
+    expect(SYSTEM).toContain("Never give doses for drugs");
+    expect(SYSTEM).toMatch(/over-the-counter supplements.*usual intake range/s);
   });
 });
 
