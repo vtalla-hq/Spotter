@@ -14,7 +14,7 @@ Standard lab reports flag lifters for everything: high creatinine from creatine,
 
 - **Upload your report**: drop in a lab PDF or a phone photo. PDFs are read from their text layer, rebuilding table rows from word positions; scans and photos go through OCR (Tesseract, run in the browser). The parser finds each marker, skips look-alikes (Non-HDL, free testosterone, MCHC, urine tests), takes the result instead of the reference range, reads the unit off the line or infers it from what's plausible, fixes OCR slips, and finds the collection date. You review every value before it's used.
 - **Progress**: save each draw by date. An overview of every marker you track, a detailed chart with cycle phases shaded, a projection of when a trend crosses a line ("at this rate your hematocrit hits 54% around Dec 14"), recovery against your own pre-cycle baseline, and what changed since the last draw.
-- **Ask anything**: questions answered from PubMed. An AI model (Groq, OpenAI-compatible) searches PubMed, reads the abstracts, and answers with every claim cited; citations to anything it didn't read are dropped server-side. Every cited study is added to a shared library on the Sources tab, so the evidence base grows as people ask. Won't give doses, cycles or PCT.
+- **Ask anything**: questions answered from PubMed. An AI model (Groq, OpenAI-compatible) searches PubMed, reads the abstracts, and answers with every claim cited; citations to anything it didn't read are dropped server-side. Every cited study is added to a shared library on the Sources tab, and Ask starts from that library on later questions, so the evidence base grows as people ask (and through a human-approved offline builder, see [The study library](#the-study-library)). Won't give doses, cycles or PCT.
 - **Accounts**: sign in to see your progress on any device, end-to-end encrypted (see below).
 - 58 compounds: supplements, TRT, injectable and oral steroids, prohormones, SARMs and research chems, GH and secretagogues, GLP-1 drugs, peptides, ancillaries, fat burners, and other drugs lifters use
 - 27 lifter-relevant markers with typical adult ranges, SI/US units and sex-specific ranges, per-marker distribution curves and estimated percentiles
@@ -70,6 +70,15 @@ Off until configured. In Vercel → Settings → Environment Variables:
 - `GROQ_API_KEY` (Secret): free key from console.groq.com.
 - `SUPABASE_SERVICE_ROLE_KEY` (Secret, optional): turns on the shared study library and a database-backed rate limit. Run `supabase/ask.sql` first. Without it, Ask still works with a best-effort in-memory limit.
 - Optional: `AI_BASE_URL` (default `https://api.groq.com/openai/v1`), `AI_MODEL` (default `openai/gpt-oss-120b`, falls back to `openai/gpt-oss-20b` on error), `ASK_PER_DAY` (15 per person), `ASK_GLOBAL_PER_DAY` (400), `NCBI_API_KEY` (faster PubMed).
+
+### The study library
+
+`public.studies` grows two ways, both through the `add_studies` RPC with the service key:
+
+1. **From Ask.** Every study an answer cites is added (or its `cited` count goes up).
+2. **From the offline library builder**, [agent-orchestrator](https://github.com/vtalla-hq/agent-orchestrator). It researches a seed list of common questions in depth (plan, search PubMed, read abstracts, reflect), and its `save_to_library` tool pauses until a human approves each batch of studies. It never runs on the request path.
+
+Before answering, Ask looks up library studies whose titles match the question (`findStudies` in `src/ask/store.ts`, one full-text query on titles, 2.5 s timeout, skipped on any error) and lists up to five to the model as a starting point. They're a hint, not a shortcut: the model still has to read an abstract with `read_abstracts` before it can cite it, and the server still drops citations to anything it didn't read.
 
 Questions are never stored. Context from your results is opt-in and sends only compound names and which markers are high or low, never values.
 

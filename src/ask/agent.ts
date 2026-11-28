@@ -84,6 +84,13 @@ export function contextLine(c: AskContext | undefined): string {
   return parts.length ? `\n\n(About me: ${parts.join("; ")}.)` : "";
 }
 
+/** Library studies that match the question, as a hint: the model still reads an abstract before citing it. */
+export function libraryLine(lib: Study[] | undefined): string {
+  if (!lib?.length) return "";
+  const rows = lib.map((s) => `PMID ${s.pmid} | ${s.year ?? "?"} | ${s.journal} | ${s.types.join(", ") || "Article"} | ${s.title}`);
+  return `\n\n(Spotter's study library already has these on this topic. Read the abstracts of any that fit with read_abstracts before citing them, and search PubMed for anything they don't cover:\n${rows.join("\n")})`;
+}
+
 /** Normalise citation styles to [PMID:n] and drop any the model didn't actually read. */
 export function cleanCitations(text: string, read: Set<string>): { text: string; cited: string[] } {
   const cited: string[] = [];
@@ -111,6 +118,8 @@ export async function ask(
     /** earlier turns of this conversation, oldest first */
     history?: Turn[];
     context?: AskContext;
+    /** matching studies from the shared library (store.findStudies) */
+    library?: Study[];
     ncbiKey?: string;
     fetch?: Fetch;
     onStatus?: (msg: string) => void;
@@ -121,7 +130,7 @@ export async function ask(
   const q = question.trim().slice(0, MAX_QUESTION);
   const read = new Map<string, Study>();
   const searches: string[] = [];
-  const messages: any[] = [{ role: "system", content: SYSTEM }, ...(opts.history ?? []).slice(-10), { role: "user", content: q + contextLine(opts.context) }];
+  const messages: any[] = [{ role: "system", content: SYSTEM }, ...(opts.history ?? []).slice(-10), { role: "user", content: q + contextLine(opts.context) + libraryLine(opts.library) }];
   const url = (opts.baseUrl ?? "https://api.groq.com/openai/v1").replace(/\/$/, "") + "/chat/completions";
   const models = [opts.model ?? "openai/gpt-oss-120b", FALLBACK_MODEL];
 

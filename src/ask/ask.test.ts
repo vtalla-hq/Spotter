@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { ask, cleanCitations, contextLine } from "./agent";
+import { ask, cleanCitations, contextLine, libraryLine } from "./agent";
 import { parseArticles, parseSummary } from "./pubmed";
-import { hashKey } from "./store";
+import { findStudies, hashKey, rankStudies, terms } from "./store";
 
 const XML = `<?xml version="1.0"?><PubmedArticleSet>
 <PubmedArticle><MedlineCitation><PMID Version="1">11111111</PMID><Article>
@@ -128,6 +128,53 @@ describe("the ask loop", () => {
     const r = await ask("Anything?", { apiKey: "k", fetch: f });
     expect(r.answer).toBe("Not enough evidence.");
     expect(n).toBe(6);
+  });
+});
+
+describe("the shared library", () => {
+  const lib = [
+    { pmid: "12345678", title: "Creatine supplementation and kidney function: a meta-analysis", journal: "J Ren Nutr", year: 2019, types: ["Meta-Analysis"], url: "https://pubmed.ncbi.nlm.nih.gov/12345678/", cited: 1 },
+    { pmid: "23456789", title: "Kidney outcomes in creatine users", journal: "X", year: 2021, types: [], url: "https://pubmed.ncbi.nlm.nih.gov/23456789/", cited: 9 },
+    { pmid: "34567890", title: "Creatine and sprint performance", journal: "Y", year: 2020, types: [], url: "https://pubmed.ncbi.nlm.nih.gov/34567890/", cited: 50 },
+  ];
+
+  it("turns a question into safe search terms", () => {
+    expect(terms("Does creatine harm my kidneys?")).toEqual(["creatine", "harm", "kidneys"]);
+    expect(terms("x' | !! & (y)")).toEqual([]);
+    expect(terms("ALT/AST after deadlifts; anti-inflammatory?").every((t) => /^[a-z0-9]+$/.test(t))).toBe(true);
+  });
+
+  it("keeps titles matching two or more terms, best match then most cited", () => {
+    const ts = terms("Does creatine harm my kidneys?");
+    expect(rankStudies(lib, ts).map((s) => s.pmid)).toEqual(["23456789", "12345678"]);
+    expect(rankStudies(lib, ["creatine"]).map((s) => s.pmid)).toEqual(["34567890", "23456789", "12345678"]);
+  });
+
+  it("reads matches from Supabase with an OR'd full-text query", async () => {
+    let seen = "";
+    const f = (async (url: string) => {
+      seen = url;
+      return { ok: true, json: async () => lib } as Response;
+    }) as unknown as typeof fetch;
+    const out = await findStudies({ url: "https://db.example", serviceKey: "k", fetch: f }, "Does creatine harm my kidneys?");
+    const u = new URL(seen);
+    expect(u.pathname).toBe("/rest/v1/studies");
+    expect(u.searchParams.get("title")).toBe("fts(english).creatine | harm | kidneys");
+    expect(out.map((s) => s.pmid)).toEqual(["23456789", "12345678"]);
+    expect(out[0]).not.toHaveProperty("cited");
+  });
+
+  it("offers library studies to the model, which still has to read them to cite", async () => {
+    let body: any;
+    const f = (async (_url: string, init?: RequestInit) => {
+      body = JSON.parse(String(init!.body));
+      return { ok: true, json: async () => ({ choices: [{ message: { content: "Fine [PMID:12345678]." } }] }) } as Response;
+    }) as unknown as typeof fetch;
+    const r = await ask("Does creatine harm my kidneys?", { apiKey: "k", fetch: f, library: lib.slice(0, 1) });
+    expect(body.messages.at(-1).content).toContain("PMID 12345678 | 2019 | J Ren Nutr | Meta-Analysis | Creatine supplementation");
+    // never read in this conversation, so the citation is dropped
+    expect(r.answer).toBe("Fine.");
+    expect(libraryLine([])).toBe("");
   });
 });
 
