@@ -138,6 +138,18 @@ describe("dose limits", () => {
     expect(redactDoses("HCG 500 IU every week")).toBe("HCG [dose removed]");
   });
 
+  it("catches a dose a few sentences after the drug is named (seen live)", () => {
+    const live =
+      "Weekly testosterone enanthate doses from 25 mg to 600 mg raised hematocrit.\n- **Hematocrit rise is predictable:** every ~ 100 mg increase per week tends to raise hematocrit by ~ 1–2 %.";
+    expect(redactDoses(live)).toBe(
+      "Weekly testosterone enanthate doses from [dose removed] raised hematocrit.\n- **Hematocrit rise is predictable:** every ~ [dose removed] increase per week tends to raise hematocrit by ~ 1–2 %.",
+    );
+    // the question alone is enough to put the whole answer in drug mode
+    expect(redactDoses("Most people use 250 mg a week.", "first cycle?")).toBe("Most people use [dose removed].");
+    // a supplement sentence keeps its range even then
+    expect(redactDoses("Creatine at 3–5 g/day is fine.", "I'm on TRT")).toBe("Creatine at 3–5 g/day is fine.");
+  });
+
   it("leaves lab values and supplement intakes alone", () => {
     const labs = "On TRT your testosterone was 25 nmol/L, hemoglobin 17 g/dL, eGFR 95 mL/min and LDL 3.4 mmol/L.";
     expect(redactDoses(labs)).toBe(labs);
