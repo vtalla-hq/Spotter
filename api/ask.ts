@@ -1,7 +1,7 @@
 // Vercel function: POST /api/ask
 // Streams newline-delimited JSON: {t:"status",m} … then {t:"done",answer,studies,searches} or {t:"error",m}.
 import { ask, MAX_QUESTION, type AskContext, type Turn } from "../src/ask/agent.js";
-import { addStudies, bump, hashKey, type StoreCfg } from "../src/ask/store.js";
+import { addStudies, bump, findStudies, hashKey, type StoreCfg } from "../src/ask/store.js";
 
 export const config = { maxDuration: 60 };
 
@@ -65,12 +65,15 @@ export async function POST(req: Request): Promise<Response> {
     async start(ctrl) {
       const send = (o: unknown) => ctrl.enqueue(enc.encode(JSON.stringify(o) + "\n"));
       try {
+        // a missing or slow library never blocks an answer
+        const library = store ? await findStudies(store, q).catch(() => []) : [];
         const res = await ask(q, {
           apiKey,
           baseUrl: process.env.AI_BASE_URL || undefined,
           model: process.env.AI_MODEL || undefined,
           history,
           context: ctx,
+          library,
           ncbiKey: process.env.NCBI_API_KEY,
           onStatus: (m) => send({ t: "status", m }),
         });
