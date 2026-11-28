@@ -99,12 +99,21 @@ const DRUG =
 const AMOUNT =
   /(?:~|≈|about |around |up to )?\d+(?:[.,]\d+)?(?:\s*(?:[-‑–—]|to)\s*\d+(?:[.,]\d+)?)?\s*(?:mg|mcg|µg|μg|g|iu|ml|cc|units?)\b(?!\s*\/\s*(?:d?l|min|mmol)\b)(?:\s*(?:\/|per|a|an|every)\s*(?:day|week|wk|d|kg|dose|injection))?/gi;
 
-/** Belt and braces for the hard limit: strip dose amounts from any sentence that mentions a drug. */
-export function redactDoses(text: string): string {
+// supplements Ask may give a cited intake range for
+const SUPPLEMENT = /\b(creatine|caffeine|vitamin|fish oil|omega-?3|protein|magnesium|zinc|iron|beta-?alanine|citrulline|electrolytes?|sodium|potassium|fibre|fiber)\b/i;
+
+/**
+ * Belt and braces for the hard limit. A sentence naming a drug loses its dose amounts. Once a drug
+ * comes up anywhere (question or answer), so does every other sentence unless it's about a supplement,
+ * because the model often gives the number a bullet or two later ("every 100 mg a week raises…").
+ */
+export function redactDoses(text: string, question = ""): string {
+  const drugTalk = DRUG.test(question) || DRUG.test(text);
   return text
     .split(/(?<=[.!?])(?=\s)|(?=\n)/)
-    .map((s) => (DRUG.test(s) ? s.replace(AMOUNT, "[dose removed]") : s))
-    .join("");
+    .map((s) => (DRUG.test(s) || (drugTalk && !SUPPLEMENT.test(s)) ? s.replace(AMOUNT, "[dose removed]") : s))
+    .join("")
+    .replace(/\[dose removed\](?:\s*(?:[-‑–—,]|to|and|or)?\s*\[dose removed\])+/g, "[dose removed]");
 }
 
 /** Normalise citation styles to [PMID:n] and drop any the model didn't actually read. */
@@ -180,7 +189,7 @@ export async function ask(
     messages.push({ role: "assistant", content: msg.content ?? "", ...(uses.length && { tool_calls: uses }) });
     if (!uses.length) {
       const { text: answer, cited } = cleanCitations(String(msg.content ?? "").trim(), new Set(read.keys()));
-      return { answer: redactDoses(answer), studies: cited.map((id) => read.get(id)!).filter(Boolean), searches };
+      return { answer: redactDoses(answer, q), studies: cited.map((id) => read.get(id)!).filter(Boolean), searches };
     }
     for (const u of uses) {
       let content: string;
