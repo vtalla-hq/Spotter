@@ -33,6 +33,7 @@ type Fetch = typeof fetch;
 
 export const MAX_QUESTION = 2000;
 export const FALLBACK_MODEL = "openai/gpt-oss-20b";
+export const EMPTY = "Couldn't put an answer together for that one. Try asking it a different way.";
 const MAX_TURNS = 6;
 
 export const SYSTEM = `You are the research assistant inside Spotter, a bloodwork interpreter for lifters. People ask about lab results, training, creatine and other supplements, TRT, anabolic steroids, peptides and other drugs lifters use, and what those do to bloodwork and health. You explain lab markers in that context. This is education, not medical advice.
@@ -95,9 +96,9 @@ export function libraryLine(lib: Study[] | undefined): string {
 // drugs Spotter never doses (supplements like creatine or vitamin D are allowed a cited intake range)
 const DRUG =
   /\b(testosterone|trt|steroids?|anabolics?|aas|nandrolone|deca|trenbolone|tren|oxandrolone|anavar|oxymetholone|anadrol|dianabol|methandrostenolone|stanozolol|winstrol|boldenone|equipoise|masteron|drostanolone|primobolan|methenolone|sarms?|ostarine|enobosarm|ligandrol|lgd-?4033|rad-?140|testolone|cardarine|gw-?501516|mk-?677|ibutamoren|peptides?|bpc-?157|tb-?500|hgh|growth hormone|somatropin|insulin|clenbuterol|liothyronine|cytomel|levothyroxine|clomiphene|clomid|enclomiphene|tamoxifen|nolvadex|raloxifene|anastrozole|arimidex|letrozole|exemestane|aromasin|hcg|gonadotropin|cabergoline|diuretics?|furosemide|pct|cycles?)\b/i;
-// an amount in a dose unit; lab units (mg/dL, nmol/L, mL/min, IU/L) are left alone
+// an amount in a dose unit; lab units (mg/dL, nmol/L, mL/min, IU/L) and blood volumes (500 mL of blood) are left alone
 const AMOUNT =
-  /(?:~|≈|about |around |up to )?\d+(?:[.,]\d+)?(?:\s*(?:[-‑–—]|to)\s*\d+(?:[.,]\d+)?)?\s*(?:mg|mcg|µg|μg|g|iu|ml|cc|units?)\b(?!\s*\/\s*(?:d?l|min|mmol)\b)(?:\s*(?:\/|per|a|an|every)\s*(?:day|week|wk|d|kg|dose|injection))?/gi;
+  /(?:~|≈|about |around |up to )?\d+(?:[.,]\d+)?(?:\s*(?:[-‑–—]|to)\s*\d+(?:[.,]\d+)?)?\s*(?:mg|mcg|µg|μg|g|iu|ml|cc|units?)\b(?!\s*\/\s*(?:d?l|min|mmol)\b)(?!\s*(?:of\s+)?(?:whole\s+)?(?:blood|plasma)\b)(?:\s*(?:\/|per|a|an|every)\s*(?:day|week|wk|d|kg|dose|injection))?/gi;
 
 // supplements Ask may give a cited intake range for
 const SUPPLEMENT = /\b(creatine|caffeine|vitamin|fish oil|omega-?3|protein|magnesium|zinc|iron|beta-?alanine|citrulline|electrolytes?|sodium|potassium|fibre|fiber)\b/i;
@@ -189,6 +190,12 @@ export async function ask(
     messages.push({ role: "assistant", content: msg.content ?? "", ...(uses.length && { tool_calls: uses }) });
     if (!uses.length) {
       const { text: answer, cited } = cleanCitations(String(msg.content ?? "").trim(), new Set(read.keys()));
+      // gpt-oss sometimes replies with nothing at all (seen live on a dosing question): ask once more
+      if (!answer && !last) {
+        messages.push({ role: "user", content: "(Your last reply was empty. Answer the question now, within the rules above.)" });
+        continue;
+      }
+      if (!answer) return { answer: EMPTY, studies: [], searches };
       return { answer: redactDoses(answer, q), studies: cited.map((id) => read.get(id)!).filter(Boolean), searches };
     }
     for (const u of uses) {
