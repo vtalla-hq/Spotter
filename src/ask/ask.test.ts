@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ask, cleanCitations, contextLine, libraryLine, redactDoses, SYSTEM } from "./agent";
+import { ask, cleanCitations, contextLine, EMPTY, libraryLine, redactDoses, SYSTEM } from "./agent";
 import { parseArticles, parseSummary } from "./pubmed";
 import { findStudies, hashKey, rankStudies, terms } from "./store";
 
@@ -148,6 +148,29 @@ describe("dose limits", () => {
     expect(redactDoses("Most people use 250 mg a week.", "first cycle?")).toBe("Most people use [dose removed].");
     // a supplement sentence keeps its range even then
     expect(redactDoses("Creatine at 3–5 g/day is fine.", "I'm on TRT")).toBe("Creatine at 3–5 g/day is fine.");
+  });
+
+  it("keeps blood volumes in drug answers", () => {
+    expect(redactDoses("On testosterone, phlebotomy removing 500 mL of blood brings hematocrit down.")).toBe(
+      "On testosterone, phlebotomy removing 500 mL of blood brings hematocrit down.",
+    );
+  });
+
+  it("asks again after an empty reply, then falls back to a message (seen live)", async () => {
+    const run = async (replies: string[]) => {
+      const bodies: any[] = [];
+      const f = (async (_u: string, init?: RequestInit) => {
+        bodies.push(JSON.parse(String(init!.body)));
+        return { ok: true, json: async () => ({ choices: [{ message: { content: replies.shift() ?? "" } }] }) } as Response;
+      }) as unknown as typeof fetch;
+      return { r: await ask("How much test for a first cycle?", { apiKey: "k", fetch: f }), bodies };
+    };
+    const once = await run(["", "Spotter doesn't give doses. Watch your hematocrit."]);
+    expect(once.r.answer).toBe("Spotter doesn't give doses. Watch your hematocrit.");
+    expect(once.bodies[1].messages.at(-1).content).toContain("last reply was empty");
+    const never = await run([]);
+    expect(never.r.answer).toBe(EMPTY);
+    expect(never.bodies).toHaveLength(6);
   });
 
   it("leaves lab values and supplement intakes alone", () => {
